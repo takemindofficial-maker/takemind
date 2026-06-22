@@ -437,7 +437,7 @@
 const API = 'https://script.google.com/macros/s/AKfycbzem4LtAbrTcvpnQLVKkxZ_zT4tUrHfvjmgHbuysstYZ_tho30YwNTyZ3366_GzTQj5cg/exec';
 const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','최종 확인','재수정','최종 컨펌','제작/발주','완료'];
 const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
-const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7'];
+const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7','mainCheck','orderer','contactDate','extra'];
 
 let clients = [];
 let currentId = null;
@@ -812,9 +812,19 @@ function renderTabProgress(c) {
 }
 
 function renderTabOrder(c) {
-  document.getElementById('tab-order').innerHTML=`<div class="form-grid">
+  const mainChecked = c.mainCheck==='true'||c.mainCheck===true;
+  document.getElementById('tab-order').innerHTML=`
+  <div style="background:rgba(200,169,126,0.08);border:1px solid rgba(200,169,126,0.25);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+    <input type="checkbox" id="od-mainCheck" ${mainChecked?'checked':''} style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent);">
+    <div>
+      <div style="font-size:13px;font-weight:500;color:var(--accent)">메인 체크</div>
+      <div style="font-size:12px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능 상태</div>
+    </div>
+  </div>
+  <div class="form-grid">
     <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
-    <div class="form-group"><label>발송 예정일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
+    <div class="form-group"><label>발주자</label><input type="text" id="od-orderer" value="${c.orderer||''}" placeholder="담당자 이름"></div>
+    <div class="form-group"><label>배송일 / 방문일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
     <div class="form-group"><label>운송 방법</label>
       <select id="od-delivery" style="width:100%">
         <option ${c.delivery==='방문 수령'?'selected':''}>방문 수령</option>
@@ -822,8 +832,12 @@ function renderTabOrder(c) {
         <option ${c.delivery==='퀵'?'selected':''}>퀵</option>
       </select>
     </div>
+    <div class="form-group"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="택배 운송장 번호"></div>
+    <div class="form-group"><label>신랑신부 연락 날짜</label><input type="date" id="od-contactDate" value="${c.contactDate||''}"></div>
+    <div class="form-group"><label>앨범</label><input type="text" id="od-album2" value="${c.album||''}" placeholder="예: 1/20"></div>
+    <div class="form-group"><label>액자</label><input type="text" id="od-frame2" value="${c.frame||''}" placeholder="예: 12x18"></div>
     <div class="form-group"><label>인화 수량</label><input type="text" id="od-print" value="${c.print||''}" placeholder="예: 20장"></div>
-    <div class="form-group full"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="운송장 번호"></div>
+    <div class="form-group"><label>기타 제작물</label><input type="text" id="od-extra" value="${c.extra||''}" placeholder="예: 스냅합본 등"></div>
     <div class="form-group full"><label>발주 메모</label><textarea id="od-orderMemo">${c.orderMemo||''}</textarea></div>
   </div>
   <div style="margin-top:16px;display:flex;justify-content:flex-end">
@@ -880,11 +894,17 @@ async function saveSendDate(id) {
 
 async function saveOrderData(id) {
   const c=clients.find(x=>x.id===id); if(!c) return;
+  c.mainCheck=document.getElementById('od-mainCheck').checked;
   c.orderDate=document.getElementById('od-orderDate').value;
+  c.orderer=document.getElementById('od-orderer').value;
   c.shipDate=document.getElementById('od-shipDate').value;
   c.delivery=document.getElementById('od-delivery').value;
-  c.print=document.getElementById('od-print').value;
   c.tracking=document.getElementById('od-tracking').value;
+  c.contactDate=document.getElementById('od-contactDate').value;
+  c.album=document.getElementById('od-album2').value;
+  c.frame=document.getElementById('od-frame2').value;
+  c.print=document.getElementById('od-print').value;
+  c.extra=document.getElementById('od-extra').value;
   c.orderMemo=document.getElementById('od-orderMemo').value;
   await saveToSheet(c);
   alert('저장되었습니다.');

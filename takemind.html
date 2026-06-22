@@ -379,11 +379,11 @@
         <div class="form-group"><label>앨범</label>
           <select id="f-album" style="width:100%">
             <option value="">없음</option>
-            <option value="1/20">1권 20p</option>
-            <option value="1/24">1권 24p</option>
-            <option value="1/30">1권 30p</option>
-            <option value="2/20">2권 20p</option>
-            <option value="3/100">3권 100p</option>
+            <option value="1권20p">1권 20p</option>
+            <option value="1권24p">1권 24p</option>
+            <option value="1권30p">1권 30p</option>
+            <option value="2권20p">2권 20p</option>
+            <option value="3권100p">3권 100p</option>
           </select>
         </div>
         <div class="form-group"><label>액자</label>
@@ -492,8 +492,10 @@ async function deleteFromSheet(id) {
 function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
 
 function calcDeadline(c) {
-  const base = c.sendDate || c.shootDate;
-  if (!base) return '';
+  const raw = c.sendDate || c.shootDate;
+  if (!raw) return '';
+  const base = String(raw).length > 10 ? String(raw).slice(0,10) : String(raw);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(base)) return '';
   const months = c.type === '본식' ? 2 : 1;
   const d = new Date(base);
   d.setMonth(d.getMonth() + months);
@@ -506,7 +508,14 @@ function daysUntil(s) {
   return Math.round((new Date(s) - t) / 86400000);
 }
 
-function fDate(s) { return s ? s.replace(/-/g,'.').slice(2) : '-'; }
+function fDate(s) {
+  if (!s) return '-';
+  const str = String(s);
+  // ISO 형식 (2026-06-21T15:00:00.000Z) 처리
+  const clean = str.length > 10 ? str.slice(0, 10) : str;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(clean)) return '-';
+  return clean.replace(/-/g, '.').slice(2);
+}
 
 function ddayStr(n) {
   if (n === null) return '-';

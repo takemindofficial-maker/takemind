@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAKEMIND 워크플로우</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  :root {
+    --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e; --bg4: #262626;
+    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
+    --text: #f0f0f0; --text2: #999; --text3: #666;
+    --accent: #c8a97e; --accent2: #e8c99e;
+    --danger: #e05252; --warning: #e8a530; --success: #52b788; --info: #5b9bd5;
+    --radius: 8px; --radius-lg: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; font-size: 14px; line-height: 1.6; }
+
+  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; height: 56px; gap: 24px; position: sticky; top: 0; z-index: 100; }
+  .logo { font-family: 'Georgia',serif; font-size: 16px; letter-spacing: 0.15em; color: var(--accent); white-space: nowrap; }
+  .logo span { color: var(--text3); font-size: 11px; letter-spacing: 0.05em; display: block; margin-top: -2px; }
+  .header-tabs { display: flex; gap: 4px; flex: 1; }
+  .header-tab { padding: 6px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; color: var(--text2); border: none; background: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .header-tab:hover { color: var(--text); background: var(--bg3); }
+  .header-tab.active { color: var(--accent); background: rgba(200,169,126,0.1); }
+  .header-right { display: flex; gap: 8px; align-items: center; }
+  .sync-status { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+  .sync-dot.syncing { background: var(--warning); animation: pulse 1s infinite; }
+  .sync-dot.error { background: var(--danger); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .btn { padding: 7px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: var(--bg3); color: var(--text); transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { background: var(--bg4); }
+  .btn-primary { background: var(--accent); color: #1a1008; border-color: var(--accent); font-weight: 600; }
+  .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .btn-ghost { background: none; border-color: transparent; color: var(--text2); }
+  .btn-ghost:hover { background: var(--bg3); color: var(--text); border-color: var(--border); }
+  .btn-danger { background: rgba(224,82,82,0.1); border-color: rgba(224,82,82,0.3); color: var(--danger); }
+
+  .app { display: flex; height: calc(100vh - 56px); overflow: hidden; }
+  .sidebar { width: 210px; background: var(--bg2); border-right: 1px solid var(--border); padding: 16px 12px; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
+  .main { flex: 1; overflow-y: auto; padding: 24px; }
+
+  .sidebar-section { font-size: 10px; letter-spacing: 0.1em; color: var(--text3); padding: 8px 8px 4px; text-transform: uppercase; margin-top: 8px; }
+  .sidebar-item { padding: 8px 10px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text2); font-size: 13px; transition: all 0.15s; }
+  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
+  .sidebar-item.active { background: rgba(200,169,126,0.12); color: var(--accent); }
+  .sidebar-item i { font-size: 16px; }
+  .sidebar-badge { margin-left: auto; font-size: 11px; background: var(--danger); color: #fff; border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
+  .sidebar-badge.warn { background: var(--warning); color: #1a1008; }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
+  .stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; margin-bottom: 6px; }
+  .stat-value { font-size: 24px; font-weight: 500; }
+  .stat-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
+  .stat-value.danger { color: var(--danger); }
+  .stat-value.warn { color: var(--warning); }
+  .stat-value.ok { color: var(--success); }
+
+  .filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-bar input[type=text] { background: var(--bg2); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 7px 12px; font-size: 13px; width: 200px; outline: none; }
+  .filter-bar input[type=text]:focus { border-color: var(--accent); }
+  .filter-bar input[type=text]::placeholder { color: var(--text3); }
+  select { background: var(--bg2); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 7px 10px; font-size: 13px; outline: none; cursor: pointer; }
+  select:focus { border-color: var(--accent); }
+  .filter-sep { flex: 1; }
+
+  .table-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  thead th { background: var(--bg3); color: var(--text3); font-weight: 500; padding: 10px 12px; text-align: left; font-size: 11px; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--bg3); }
+  tbody td { padding: 10px 12px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .stage-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .s0{background:rgba(91,155,213,0.15);color:var(--info)}
+  .s1{background:rgba(200,169,126,0.15);color:var(--accent)}
+  .s2{background:rgba(232,165,48,0.15);color:var(--warning)}
+  .s3{background:rgba(232,165,48,0.15);color:var(--warning)}
+  .s4{background:rgba(82,183,136,0.12);color:var(--success)}
+  .s5{background:rgba(224,82,82,0.15);color:var(--danger)}
+  .s6{background:rgba(82,183,136,0.2);color:var(--success)}
+  .s7{background:rgba(91,155,213,0.15);color:var(--info)}
+  .s8{background:rgba(82,183,136,0.25);color:var(--success)}
+  .type-badge { display:inline-block; padding:2px 7px; border-radius:4px; font-size:11px; }
+  .type-ss{background:rgba(91,155,213,0.12);color:var(--info)}
+  .type-ws{background:rgba(200,169,126,0.12);color:var(--accent)}
+  .type-both{background:rgba(82,183,136,0.12);color:var(--success)}
+  .dday{font-size:12px;font-weight:500}
+  .dday.overdue{color:var(--danger)}
+  .dday.urgent{color:var(--warning)}
+  .dday.safe{color:var(--success)}
+  .dday.na{color:var(--text3)}
+
+  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:200; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; }
+  .modal-bg.open { display:flex; }
+  .modal { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-lg); width:100%; max-width:720px; }
+  .modal-header { padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .modal-title { font-size:16px; font-weight:500; }
+  .modal-body { padding:24px; display:flex; flex-direction:column; gap:20px; }
+  .modal-footer { padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
+  .modal-tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); padding:0 24px; }
+  .modal-tab { padding:10px 14px; font-size:13px; cursor:pointer; color:var(--text2); border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.15s; }
+  .modal-tab:hover{color:var(--text)}
+  .modal-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-group { display:flex; flex-direction:column; gap:6px; }
+  .form-group.full { grid-column:1/-1; }
+  label { font-size:12px; color:var(--text2); }
+  input[type=text],input[type=date],input[type=tel],textarea { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:var(--radius); padding:8px 12px; font-size:13px; outline:none; width:100%; font-family:inherit; }
+  input[type=text]:focus,input[type=date]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--accent)}
+  input[type=date]{color-scheme:dark}
+  textarea{resize:vertical;min-height:60px}
+
+  .timeline { display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding-bottom:4px; }
+  .tl-step { display:flex; align-items:center; flex-shrink:0; }
+  .tl-dot-wrap { display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .tl-dot { width:28px; height:28px; border-radius:50%; border:2px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--text3); background:var(--bg3); cursor:pointer; transition:all 0.15s; flex-shrink:0; }
+  .tl-dot.done{background:var(--success);border-color:var(--success);color:#fff}
+  .tl-dot.current{background:var(--accent);border-color:var(--accent);color:#1a1008;box-shadow:0 0 0 3px rgba(200,169,126,0.25)}
+  .tl-label{font-size:10px;color:var(--text3);text-align:center;max-width:56px;line-height:1.3}
+  .tl-label.current{color:var(--accent)}
+  .tl-line{width:24px;height:2px;background:var(--border);margin-top:-20px;flex-shrink:0}
+  .tl-line.done{background:var(--success)}
+
+  .detail-section{border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+  .detail-section-title{font-size:11px;letter-spacing:0.08em;color:var(--text3);margin-bottom:12px;text-transform:uppercase}
+  .detail-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .detail-row:last-child{border-bottom:none}
+  .detail-key{color:var(--text3);min-width:100px;flex-shrink:0}
+  .detail-val{color:var(--text);flex:1}
+
+  .alert-box{background:rgba(224,82,82,0.08);border:1px solid rgba(224,82,82,0.25);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+  .alert-box.warn{background:rgba(232,165,48,0.08);border-color:rgba(232,165,48,0.25)}
+  .alert-box i{color:var(--danger);font-size:16px;flex-shrink:0;margin-top:1px}
+  .alert-box.warn i{color:var(--warning)}
+  .alert-box p{font-size:13px}
+  .alert-box p strong{display:block;margin-bottom:3px}
+
+  .msg-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;position:relative}
+  .copy-btn{position:absolute;top:8px;right:8px}
+
+  .notify-list{display:flex;flex-direction:column;gap:8px}
+  .notify-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+  .notify-item.urgent{border-color:rgba(224,82,82,0.3)}
+  .notify-item.warn{border-color:rgba(232,165,48,0.3)}
+  .notify-icon{width:32px;height:32px;border-radius:50%;background:rgba(224,82,82,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .notify-icon.warn{background:rgba(232,165,48,0.1)}
+  .notify-icon i{font-size:16px;color:var(--danger)}
+  .notify-icon.warn i{color:var(--warning)}
+  .notify-info{flex:1}
+  .notify-title{font-size:13px;font-weight:500}
+  .notify-desc{font-size:12px;color:var(--text2);margin-top:2px}
+
+  .empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
+  .empty-state i{font-size:32px;margin-bottom:12px;opacity:0.4}
+  .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+  .loading-overlay p{font-size:13px;color:var(--text2)}
+  .spinner{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <p>구글 시트에서 데이터 불러오는 중…</p>
+</div>
+
+<header>
+  <div class="logo">TAKEMIND <span>PHOTOGRAPHY</span></div>
+  <div class="header-tabs">
+    <button class="header-tab active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> 대시보드</button>
+    <button class="header-tab" onclick="showPage('clients')"><i class="ti ti-users"></i> 고객 관리</button>
+    <button class="header-tab" onclick="showPage('orders')"><i class="ti ti-package"></i> 발주 관리</button>
+    <button class="header-tab" onclick="showPage('alerts')"><i class="ti ti-bell"></i> 알람 <span id="alert-header-badge" style="display:none;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:11px;margin-left:4px;"></span></button>
+  </div>
+  <div class="header-right">
+    <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">연결됨</span></div>
+    <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()" title="새로고침"><i class="ti ti-refresh"></i></button>
+    <button class="btn btn-primary" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
+  </div>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-section">진행 단계</div>
+    <div class="sidebar-item active" onclick="filterStage('all',this)"><i class="ti ti-list"></i> 전체 <span class="sidebar-badge" id="sb-all">0</span></div>
+    <div class="sidebar-item" onclick="filterStage(0,this)"><i class="ti ti-camera"></i> 원본 전달 대기</div>
+    <div class="sidebar-item" onclick="filterStage(1,this)"><i class="ti ti-cursor-text"></i> 셀렉 대기 <span class="sidebar-badge warn" id="sb-1">0</span></div>
+    <div class="sidebar-item" onclick="filterStage(2,this)"><i class="ti ti-palette"></i> 색보정 중</div>
+    <div class="sidebar-item" onclick="filterStage(3,this)"><i class="ti ti-wand"></i> 리터칭 중</div>
+    <div class="sidebar-item" onclick="filterStage(4,this)"><i class="ti ti-eye"></i> 최종 확인</div>
+    <div class="sidebar-item" onclick="filterStage(5,this)"><i class="ti ti-refresh"></i> 재수정</div>
+    <div class="sidebar-item" onclick="filterStage(6,this)"><i class="ti ti-check"></i> 최종 컨펌</div>
+    <div class="sidebar-item" onclick="filterStage(7,this)"><i class="ti ti-truck"></i> 제작/발주</div>
+    <div class="sidebar-item" onclick="filterStage(8,this)"><i class="ti ti-circle-check"></i> 완료</div>
+    <div class="sidebar-section">알람</div>
+    <div class="sidebar-item" onclick="showPage('alerts')"><i class="ti ti-alert-triangle"></i> 기한 임박/초과 <span class="sidebar-badge" id="sb-alert">0</span></div>
+  </aside>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <div id="page-dashboard">
+      <div class="stats-bar" id="stats-bar"></div>
+      <div class="filter-bar">
+        <input type="text" id="search-input" placeholder="신부/신랑 이름 검색…" oninput="renderTable()">
+        <select id="filter-stage" onchange="renderTable()">
+          <option value="all">전체 단계</option>
+          <option value="0">원본 전달 대기</option>
+          <option value="1">셀렉 대기</option>
+          <option value="2">색보정 중</option>
+          <option value="3">리터칭 중</option>
+          <option value="4">최종 확인</option>
+          <option value="5">재수정</option>
+          <option value="6">최종 컨펌</option>
+          <option value="7">제작/발주</option>
+          <option value="8">완료</option>
+        </select>
+        <select id="filter-type" onchange="renderTable()">
+          <option value="all">전체 상품</option>
+          <option value="스촬">스드메 촬영</option>
+          <option value="본식">본식</option>
+        </select>
+        <select id="sort-col" onchange="renderTable()">
+          <option value="shootDate">촬영일순</option>
+          <option value="weddingDate">본식일순</option>
+          <option value="selectDeadline">셀렉마감순</option>
+          <option value="created">등록순</option>
+        </select>
+        <div class="filter-sep"></div>
+        <label style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="hide-done" onchange="renderTable()" style="width:auto;"> 완료 숨기기
+        </label>
+        <span id="row-count" style="font-size:12px;color:var(--text3);"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:40px;">#</th>
+            <th style="width:120px;">신부 · 신랑</th>
+            <th style="width:75px;">상품</th>
+            <th style="width:90px;">촬영일</th>
+            <th style="width:90px;">본식일</th>
+            <th style="width:140px;">진행 단계</th>
+            <th style="width:100px;">셀렉 마감</th>
+            <th style="width:75px;">D-Day</th>
+            <th style="width:85px;">담당 작가</th>
+            <th style="width:60px;">앨범</th>
+            <th style="width:55px;">액자</th>
+          </tr></thead>
+          <tbody id="client-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLIENTS -->
+    <div id="page-clients" style="display:none">
+      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
+        <h2 style="font-size:18px;font-weight:500;">전체 고객 목록</h2>
+        <button class="btn btn-primary" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
+      </div>
+      <div class="filter-bar">
+        <input type="text" id="search-input2" placeholder="이름 검색…" oninput="renderTable2()">
+        <select id="filter-year" onchange="renderTable2()">
+          <option value="all">전체 연도</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+        </select>
+        <div class="filter-sep"></div>
+        <span id="row-count2" style="font-size:12px;color:var(--text3);"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:40px;">#</th>
+            <th style="width:130px;">신부 · 신랑</th>
+            <th style="width:75px;">상품</th>
+            <th style="width:100px;">촬영일</th>
+            <th style="width:100px;">본식일</th>
+            <th style="width:150px;">진행 단계</th>
+            <th style="width:90px;">담당 작가</th>
+            <th style="width:110px;">연락처</th>
+            <th style="width:85px;">등록일</th>
+          </tr></thead>
+          <tbody id="client-tbody2"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="page-orders" style="display:none">
+      <div style="margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:500;">발주 관리</h2>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:120px;">신부 · 신랑</th>
+            <th style="width:95px;">발주 날짜</th>
+            <th style="width:75px;">앨범</th>
+            <th style="width:65px;">액자</th>
+            <th style="width:70px;">인화</th>
+            <th style="width:100px;">제작 상태</th>
+            <th style="width:95px;">발송 예정일</th>
+            <th style="width:90px;">운송</th>
+            <th style="width:110px;">운송장</th>
+            <th style="width:140px;">참고사항</th>
+          </tr></thead>
+          <tbody id="order-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="page-alerts" style="display:none">
+      <div style="margin-bottom:20px;">
+        <h2 style="font-size:18px;font-weight:500;margin-bottom:6px;">알람 센터</h2>
+        <p style="font-size:13px;color:var(--text3);">셀렉 기한 D-2부터 알람 발생. 기한 초과 시 임의 셀렉 후 진행.</p>
+      </div>
+      <div class="notify-list" id="notify-list"></div>
+    </div>
+  </main>
+</div>
+
+<!-- NEW/EDIT CLIENT MODAL -->
+<div class="modal-bg" id="modal-client">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-client-title">신규 고객 등록</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-client')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group"><label>신부 이름 *</label><input type="text" id="f-bride" placeholder="홍길순"></div>
+        <div class="form-group"><label>신랑 이름 *</label><input type="text" id="f-groom" placeholder="홍길동"></div>
+        <div class="form-group"><label>상품 종류 *</label>
+          <select id="f-type" style="width:100%">
+            <option value="스촬">스드메 촬영 (셀렉 1개월)</option>
+            <option value="본식">본식 (셀렉 2개월)</option>
+            <option value="스촬+본식">스촬 + 본식</option>
+          </select>
+        </div>
+        <div class="form-group"><label>담당 작가 *</label><input type="text" id="f-artist" placeholder="작가 이름"></div>
+        <div class="form-group"><label>촬영일</label><input type="date" id="f-shoot"></div>
+        <div class="form-group"><label>본식일</label><input type="date" id="f-wedding"></div>
+        <div class="form-group"><label>연락처 (신부)</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
+        <div class="form-group"><label>이메일</label><input type="text" id="f-email" placeholder="example@email.com"></div>
+        <div class="form-group"><label>앨범</label>
+          <select id="f-album" style="width:100%">
+            <option value="">없음</option>
+            <option value="1/20">1권 20p</option>
+            <option value="1/24">1권 24p</option>
+            <option value="1/30">1권 30p</option>
+            <option value="2/20">2권 20p</option>
+            <option value="3/100">3권 100p</option>
+          </select>
+        </div>
+        <div class="form-group"><label>액자</label>
+          <select id="f-frame" style="width:100%">
+            <option value="">없음</option>
+            <option value="12x18">12x18</option>
+            <option value="30x46">30x46</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>메모</label><textarea id="f-memo" placeholder="특이사항, 요청사항 등"></textarea></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-client')">취소</button>
+      <button class="btn btn-primary" onclick="saveClient()"><i class="ti ti-device-floppy"></i> 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-bg" id="modal-detail">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-header">
+      <div class="modal-title" id="detail-title">고객 상세</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="editCurrentClient()"><i class="ti ti-edit"></i> 수정</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-detail')"><i class="ti ti-x"></i></button>
+      </div>
+    </div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchTab('info')">기본 정보</div>
+      <div class="modal-tab" onclick="switchTab('progress')">진행 관리</div>
+      <div class="modal-tab" onclick="switchTab('order')">발주 관리</div>
+      <div class="modal-tab" onclick="switchTab('message')">메시지 자동완성</div>
+    </div>
+    <div class="modal-body">
+      <div class="tab-content active" id="tab-info"></div>
+      <div class="tab-content" id="tab-progress"></div>
+      <div class="tab-content" id="tab-order"></div>
+      <div class="tab-content" id="tab-message"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteCurrentClient()"><i class="ti ti-trash"></i> 삭제</button>
+      <div style="flex:1"></div>
+      <button class="btn" onclick="closeModal('modal-detail')">닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbyC8y8N3UFpDqyAVGszqCgUc20M8uAUssg262M1Sd1RCN3R4VNAts7O94AyEvIXCDXy3g/exec';
+const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','최종 확인','재수정','최종 컨펌','제작/발주','완료'];
+const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
+const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7'];
+
+let clients = [];
+let currentId = null;
+let currentPage = 'dashboard';
+
+function setSyncStatus(state) {
+  const dot = document.getElementById('sync-dot');
+  const txt = document.getElementById('sync-text');
+  dot.className = 'sync-dot' + (state==='syncing'?' syncing':state==='error'?' error':'');
+  txt.textContent = state==='syncing'?'동기화 중…':state==='error'?'연결 오류':'구글 시트 연동됨';
+}
+
+async function loadFromSheet() {
+  setSyncStatus('syncing');
+  try {
+    const res = await fetch(API + '?action=getAll');
+    const json = await res.json();
+    if (json.status === 'ok' && json.data.length > 1) {
+      const rows = json.data.slice(1);
+      clients = rows.map(r => {
+        const obj = {};
+        HEADERS.forEach((h,i) => obj[h] = r[i] !== undefined ? String(r[i]) : '');
+        obj.stage = parseInt(obj.stage) || 0;
+        return obj;
+      }).filter(c => c.id);
+    }
+    setSyncStatus('ok');
+  } catch(e) {
+    setSyncStatus('error');
+    alert('구글 시트 연결 오류. 잠시 후 다시 시도해주세요.');
+  }
+  document.getElementById('loading-overlay').style.display = 'none';
+  renderDashboard();
+}
+
+async function saveToSheet(client) {
+  setSyncStatus('syncing');
+  try {
+    await fetch(API + '?action=save&row=' + encodeURIComponent(JSON.stringify(client)));
+    setSyncStatus('ok');
+  } catch(e) { setSyncStatus('error'); }
+}
+
+async function deleteFromSheet(id) {
+  setSyncStatus('syncing');
+  try {
+    await fetch(API + '?action=delete&id=' + id);
+    setSyncStatus('ok');
+  } catch(e) { setSyncStatus('error'); }
+}
+
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+function calcDeadline(c) {
+  const base = c.sendDate || c.shootDate;
+  if (!base) return '';
+  const months = c.type === '본식' ? 2 : 1;
+  const d = new Date(base);
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0,10);
+}
+
+function daysUntil(s) {
+  if (!s) return null;
+  const t = new Date(); t.setHours(0,0,0,0);
+  return Math.round((new Date(s) - t) / 86400000);
+}
+
+function fDate(s) { return s ? s.replace(/-/g,'.').slice(2) : '-'; }
+
+function ddayStr(n) {
+  if (n === null) return '-';
+  if (n < 0) return 'D+'+Math.abs(n);
+  if (n === 0) return 'D-Day';
+  return 'D-'+n;
+}
+
+function ddayCls(n, stage) {
+  if (n === null || stage !== 1) return 'na';
+  if (n < 0) return 'overdue';
+  if (n <= 2) return 'urgent';
+  return 'safe';
+}
+
+// ── PAGES ──────────────────────────────────────────
+
+function showPage(name) {
+  currentPage = name;
+  ['dashboard','clients','orders','alerts'].forEach(p => {
+    document.getElementById('page-'+p).style.display = p===name ? '' : 'none';
+  });
+  document.querySelectorAll('.header-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['dashboard','clients','orders','alerts'][i] === name);
+  });
+  if (name==='dashboard') renderDashboard();
+  if (name==='clients') renderTable2();
+  if (name==='orders') renderOrders();
+  if (name==='alerts') renderAlerts();
+}
+
+function filterStage(stage, el) {
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('filter-stage').value = stage === 'all' ? 'all' : String(stage);
+  showPage('dashboard');
+}
+
+// ── DASHBOARD ──────────────────────────────────────
+
+function renderDashboard() {
+  renderStats();
+  renderTable();
+  renderBadges();
+}
+
+function renderStats() {
+  const active = clients.filter(c=>c.stage<8).length;
+  const waiting = clients.filter(c=>c.stage===1).length;
+  const overdue = clients.filter(c=>{
+    if(c.stage!==1) return false;
+    return (daysUntil(calcDeadline(c))??1) < 0;
+  }).length;
+  const urgent = clients.filter(c=>{
+    if(c.stage!==1) return false;
+    const d=daysUntil(calcDeadline(c));
+    return d!==null && d>=0 && d<=2;
+  }).length;
+  const prod = clients.filter(c=>c.stage===7).length;
+  document.getElementById('stats-bar').innerHTML = `
+    <div class="stat-card"><div class="stat-label">전체 진행 중</div><div class="stat-value">${active}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">셀렉 대기</div><div class="stat-value ${waiting?'warn':''}">${waiting}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">기한 초과</div><div class="stat-value ${overdue?'danger':'ok'}">${overdue}</div><div class="stat-sub">즉시 조치 필요</div></div>
+    <div class="stat-card"><div class="stat-label">기한 임박 D-2</div><div class="stat-value ${urgent?'warn':'ok'}">${urgent}</div><div class="stat-sub">건</div></div>
+    <div class="stat-card"><div class="stat-label">제작/발주 중</div><div class="stat-value">${prod}</div><div class="stat-sub">건</div></div>
+  `;
+}
+
+function renderBadges() {
+  document.getElementById('sb-all').textContent = clients.length;
+  const sel = clients.filter(c=>c.stage===1).length;
+  const el1 = document.getElementById('sb-1');
+  el1.textContent = sel; el1.style.display = sel ? '' : 'none';
+  const alerts = getAlertClients().length;
+  const el2 = document.getElementById('sb-alert');
+  el2.textContent = alerts; el2.style.display = alerts ? '' : 'none';
+  const hb = document.getElementById('alert-header-badge');
+  hb.textContent = alerts; hb.style.display = alerts ? '' : 'none';
+}
+
+function getAlertClients() {
+  return clients.filter(c => {
+    if (c.stage !== 1) return false;
+    const d = daysUntil(calcDeadline(c));
+    return d !== null && d <= 2;
+  });
+}
+
+function renderTable() {
+  const search = document.getElementById('search-input').value.toLowerCase();
+  const stageVal = document.getElementById('filter-stage').value;
+  const typeVal = document.getElementById('filter-type').value;
+  const sortCol = document.getElementById('sort-col').value;
+  const hideDone = document.getElementById('hide-done').checked;
+
+  let list = clients.slice();
+  if (search) list = list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
+  if (stageVal !== 'all') list = list.filter(c=>c.stage===parseInt(stageVal));
+  if (typeVal !== 'all') list = list.filter(c=>c.type&&c.type.includes(typeVal));
+  if (hideDone) list = list.filter(c=>c.stage<8);
+
+  list.sort((a,b)=>(a[sortCol]||'').localeCompare(b[sortCol]||''));
+
+  document.getElementById('row-count').textContent = list.length+'건';
+  const tbody = document.getElementById('client-tbody');
+  if (!list.length) { tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>등록된 고객이 없습니다</p></div></td></tr>'; return; }
+
+  tbody.innerHTML = list.map((c,i) => {
+    const dl = calcDeadline(c);
+    const days = c.stage===1 ? daysUntil(dl) : null;
+    const dc = ddayCls(days, c.stage);
+    const rowBg = dc==='overdue'?'background:rgba(224,82,82,0.04)':dc==='urgent'?'background:rgba(232,165,48,0.04)':'';
+    return `<tr style="${rowBg}" onclick="openDetail('${c.id}')">
+      <td style="color:var(--text3)">${i+1}</td>
+      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
+      <td><span class="type-badge ${c.type==='스촬'?'type-ss':c.type==='본식'?'type-ws':'type-both'}">${c.type||'-'}</span></td>
+      <td style="color:var(--text2)">${fDate(c.shootDate)}</td>
+      <td style="color:var(--text2)">${fDate(c.weddingDate)}</td>
+      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
+      <td style="color:var(--text2)">${c.stage===1?fDate(dl):'-'}</td>
+      <td><span class="dday ${dc}">${c.stage===1?ddayStr(days):'-'}</span></td>
+      <td style="color:var(--text2)">${c.artist||'-'}</td>
+      <td style="color:var(--text2)">${c.album||'-'}</td>
+      <td style="color:var(--text2)">${c.frame||'-'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTable2() {
+  const search = (document.getElementById('search-input2')?.value||'').toLowerCase();
+  const year = document.getElementById('filter-year')?.value||'all';
+  let list = clients.slice();
+  if (search) list=list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
+  if (year!=='all') list=list.filter(c=>(c.shootDate||c.weddingDate||'').startsWith(year));
+  list.sort((a,b)=>(b.created||'').localeCompare(a.created||''));
+  document.getElementById('row-count2').textContent=list.length+'건';
+  const tbody=document.getElementById('client-tbody2');
+  if(!list.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>없습니다</p></div></td></tr>';return;}
+  tbody.innerHTML=list.map((c,i)=>`
+    <tr onclick="openDetail('${c.id}')">
+      <td style="color:var(--text3)">${i+1}</td>
+      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
+      <td><span class="type-badge ${c.type==='스촬'?'type-ss':c.type==='본식'?'type-ws':'type-both'}">${c.type||'-'}</span></td>
+      <td>${fDate(c.shootDate)}</td><td>${fDate(c.weddingDate)}</td>
+      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
+      <td style="color:var(--text2)">${c.artist||'-'}</td>
+      <td style="color:var(--text2)">${c.phone||'-'}</td>
+      <td style="color:var(--text3)">${fDate(c.created)}</td>
+    </tr>`).join('');
+}
+
+function renderOrders() {
+  const list = clients.filter(c=>c.stage>=6).sort((a,b)=>(a.orderDate||'').localeCompare(b.orderDate||''));
+  const tbody=document.getElementById('order-tbody');
+  if(!list.length){tbody.innerHTML='<tr><td colspan="10"><div class="empty-state"><i class="ti ti-package" style="display:block"></i><p>발주 건 없음</p></div></td></tr>';return;}
+  tbody.innerHTML=list.map(c=>`
+    <tr onclick="openDetail('${c.id}')">
+      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
+      <td>${fDate(c.orderDate)}</td>
+      <td>${c.album||'-'}</td><td>${c.frame||'-'}</td><td>${c.print||'-'}</td>
+      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
+      <td>${fDate(c.shipDate)}</td>
+      <td>${c.delivery||'방문 수령'}</td>
+      <td style="font-size:12px;color:var(--text2)">${c.tracking||'-'}</td>
+      <td style="font-size:12px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis">${c.orderMemo||'-'}</td>
+    </tr>`).join('');
+}
+
+function renderAlerts() {
+  const list = getAlertClients().sort((a,b)=>(calcDeadline(a)||'').localeCompare(calcDeadline(b)||''));
+  const nl=document.getElementById('notify-list');
+  if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off" style="display:block"></i><p>현재 알람 없음. 모든 일정이 정상입니다.</p></div>';return;}
+  nl.innerHTML=list.map(c=>{
+    const dl=calcDeadline(c); const days=daysUntil(dl);
+    const isOver=days<0;
+    return `<div class="notify-item ${isOver?'urgent':'warn'}">
+      <div class="notify-icon ${isOver?'':'warn'}"><i class="ti ${isOver?'ti-alert-circle':'ti-clock'}"></i></div>
+      <div class="notify-info">
+        <div class="notify-title">${c.bride} · ${c.groom} — ${isOver?'셀렉 기한 초과':'셀렉 기한 D-'+days}</div>
+        <div class="notify-desc">마감: ${fDate(dl)} · 상품: ${c.type} · 담당: ${c.artist||'-'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="btn btn-sm" onclick="openDetailTab('${c.id}','message')"><i class="ti ti-message"></i> 메시지</button>
+        <button class="btn btn-sm btn-primary" onclick="openDetailTab('${c.id}','progress')"><i class="ti ti-arrow-right"></i> 진행</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODALS ──────────────────────────────────────────
+
+function openNewClient() {
+  currentId = null;
+  document.getElementById('modal-client-title').textContent = '신규 고객 등록';
+  ['bride','groom','artist','phone','email','memo'].forEach(f=>document.getElementById('f-'+f).value='');
+  document.getElementById('f-type').value='스촬';
+  document.getElementById('f-shoot').value='';
+  document.getElementById('f-wedding').value='';
+  document.getElementById('f-album').value='';
+  document.getElementById('f-frame').value='';
+  document.getElementById('modal-client').classList.add('open');
+}
+
+function editCurrentClient() {
+  const c=clients.find(x=>x.id===currentId); if(!c) return;
+  closeModal('modal-detail');
+  document.getElementById('modal-client-title').textContent='고객 정보 수정';
+  document.getElementById('f-bride').value=c.bride||'';
+  document.getElementById('f-groom').value=c.groom||'';
+  document.getElementById('f-type').value=c.type||'스촬';
+  document.getElementById('f-artist').value=c.artist||'';
+  document.getElementById('f-shoot').value=c.shootDate||'';
+  document.getElementById('f-wedding').value=c.weddingDate||'';
+  document.getElementById('f-phone').value=c.phone||'';
+  document.getElementById('f-email').value=c.email||'';
+  document.getElementById('f-album').value=c.album||'';
+  document.getElementById('f-frame').value=c.frame||'';
+  document.getElementById('f-memo').value=c.memo||'';
+  document.getElementById('modal-client').classList.add('open');
+}
+
+async function saveClient() {
+  const bride=document.getElementById('f-bride').value.trim();
+  const groom=document.getElementById('f-groom').value.trim();
+  if(!bride||!groom){alert('신부/신랑 이름을 입력해주세요');return;}
+  const data={bride,groom,type:document.getElementById('f-type').value,artist:document.getElementById('f-artist').value.trim(),shootDate:document.getElementById('f-shoot').value,weddingDate:document.getElementById('f-wedding').value,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),album:document.getElementById('f-album').value,frame:document.getElementById('f-frame').value,memo:document.getElementById('f-memo').value.trim()};
+  if (currentId) {
+    const idx=clients.findIndex(x=>x.id===currentId);
+    clients[idx]={...clients[idx],...data};
+    await saveToSheet(clients[idx]);
+  } else {
+    const newC={...data,id:genId(),stage:0,created:new Date().toISOString().slice(0,10),selectDeadline:'',sendDate:'',orderDate:'',shipDate:'',delivery:'',print:'',tracking:'',orderMemo:''};
+    STAGES.forEach((_,i)=>newC['stageDate_'+i]='');
+    clients.push(newC);
+    await saveToSheet(newC);
+  }
+  closeModal('modal-client');
+  renderDashboard();
+}
+
+async function deleteCurrentClient() {
+  if(!confirm('삭제하시겠습니까? 구글 시트에서도 삭제됩니다.')) return;
+  await deleteFromSheet(currentId);
+  clients=clients.filter(c=>c.id!==currentId);
+  closeModal('modal-detail');
+  renderDashboard();
+}
+
+function openDetail(id) {
+  currentId=id;
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  document.getElementById('detail-title').textContent=c.bride+' · '+c.groom;
+  renderTabInfo(c); renderTabProgress(c); renderTabOrder(c); renderTabMessage(c);
+  switchTab('info');
+  document.getElementById('modal-detail').classList.add('open');
+}
+
+function openDetailTab(id, tab) {
+  openDetail(id);
+  setTimeout(()=>switchTab(tab),50);
+}
+
+function renderTabInfo(c) {
+  const dl=calcDeadline(c); const days=daysUntil(dl); const dc=ddayCls(days,c.stage);
+  let alert='';
+  if(c.stage===1&&days!==null&&days<=2) alert=`<div class="alert-box ${days<0?'':'warn'}" style="margin-bottom:12px"><i class="ti ${days<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days<0?'셀렉 기한 초과 — 임의 셀렉 후 진행':'셀렉 기한 '+ddayStr(days)}</strong>${days<0?'담당 작가가 직접 셀렉하여 작업 진행하세요.':'이틀 이내 마감입니다. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
+  document.getElementById('tab-info').innerHTML=alert+`<div class="detail-section">
+    <div class="detail-section-title">기본 정보</div>
+    <div class="detail-row"><span class="detail-key">신부</span><span class="detail-val">${c.bride}</span></div>
+    <div class="detail-row"><span class="detail-key">신랑</span><span class="detail-val">${c.groom}</span></div>
+    <div class="detail-row"><span class="detail-key">상품</span><span class="detail-val">${c.type||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">담당 작가</span><span class="detail-val">${c.artist||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">촬영일</span><span class="detail-val">${fDate(c.shootDate)}</span></div>
+    <div class="detail-row"><span class="detail-key">본식일</span><span class="detail-val">${fDate(c.weddingDate)}</span></div>
+    <div class="detail-row"><span class="detail-key">연락처</span><span class="detail-val">${c.phone||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">이메일</span><span class="detail-val">${c.email||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">앨범</span><span class="detail-val">${c.album||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">액자</span><span class="detail-val">${c.frame||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val" style="color:${dc==='overdue'?'var(--danger)':dc==='urgent'?'var(--warning)':dc==='safe'?'var(--success)':'var(--text2)'}">${c.stage===1?(dl||'-')+' ('+ddayStr(days)+')':'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">메모</span><span class="detail-val" style="white-space:pre-wrap">${c.memo||'-'}</span></div>
+  </div>`;
+}
+
+function renderTabProgress(c) {
+  const tl=STAGES.map((s,i)=>{
+    const done=i<c.stage, curr=i===c.stage;
+    const line=i<STAGES.length-1?`<div class="tl-line ${done?'done':''}"></div>`:'';
+    return `<div class="tl-step"><div class="tl-dot-wrap"><div class="tl-dot ${done?'done':curr?'current':''}" onclick="setStage('${c.id}',${i})" title="${s}">${done?'<i class="ti ti-check" style="font-size:12px"></i>':i+1}</div><div class="tl-label ${curr?'current':''}">${s}</div></div>${line}</div>`;
+  }).join('');
+  document.getElementById('tab-progress').innerHTML=`
+    <div style="margin-bottom:20px"><div class="detail-section-title" style="margin-bottom:12px">진행 단계 — 클릭하면 해당 단계로 이동</div><div class="timeline">${tl}</div></div>
+    <div class="form-group" style="margin-bottom:20px">
+      <label>원본 전달 날짜 (셀렉 기한 기산점)</label>
+      <div style="display:flex;gap:8px"><input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1"><button class="btn" onclick="saveSendDate('${c.id}')"><i class="ti ti-device-floppy"></i> 저장</button></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      ${c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
+      ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
+    </div>
+    <div class="detail-section"><div class="detail-section-title">단계별 날짜 기록</div>
+      ${STAGES.map((s,i)=>`<div class="detail-row"><span class="detail-key">${s}</span><span class="detail-val" style="font-size:12px;color:var(--text2)">${c['stageDate_'+i]||'-'}</span></div>`).join('')}
+    </div>`;
+}
+
+function renderTabOrder(c) {
+  document.getElementById('tab-order').innerHTML=`<div class="form-grid">
+    <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
+    <div class="form-group"><label>발송 예정일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
+    <div class="form-group"><label>운송 방법</label>
+      <select id="od-delivery" style="width:100%">
+        <option ${c.delivery==='방문 수령'?'selected':''}>방문 수령</option>
+        <option ${c.delivery==='택배'?'selected':''}>택배</option>
+        <option ${c.delivery==='퀵'?'selected':''}>퀵</option>
+      </select>
+    </div>
+    <div class="form-group"><label>인화 수량</label><input type="text" id="od-print" value="${c.print||''}" placeholder="예: 20장"></div>
+    <div class="form-group full"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="운송장 번호"></div>
+    <div class="form-group full"><label>발주 메모</label><textarea id="od-orderMemo">${c.orderMemo||''}</textarea></div>
+  </div>
+  <div style="margin-top:16px;display:flex;justify-content:flex-end">
+    <button class="btn btn-primary" onclick="saveOrderData('${c.id}')"><i class="ti ti-device-floppy"></i> 발주 정보 저장</button>
+  </div>`;
+}
+
+function renderTabMessage(c) {
+  const dl=calcDeadline(c);
+  const months=c.type==='본식'?2:1;
+  const m1=`안녕하세요, ${c.bride}님 😊\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 다가오고 있어 안내 드립니다.\n\n계약 시 안내드린 대로, ${dl?dl.replace(/-/g,'.'):'기한'} 까지 셀렉이 도착하지 않을 경우 담당 작가가 직접 셀렉하여 작업을 진행하게 됩니다.\n\n빠른 확인 부탁드립니다 🙏\n감사합니다.\nTAKEMIND`;
+  const m2=`안녕하세요, ${c.bride}님.\nTAKEMIND입니다.\n\n원본 사진을 전달해 드린 지 ${months}개월이 경과하였습니다.\n계약 조건에 따라 담당 작가가 직접 셀렉하여 작업을 진행하게 되었음을 안내 드립니다.\n\n작업 완료 후 다시 연락드리겠습니다.\n감사합니다.\nTAKEMIND`;
+  const m3=`안녕하세요,\n\n다음 파일 리터칭 작업 요청 드립니다.\n\n고객명: ${c.bride} · ${c.groom}\n촬영일: ${fDate(c.shootDate)}\n상품: ${c.type}\n\n색보정 파일 기준으로 진행해 주세요.\n감사합니다.\nTAKEMIND ${c.artist||''}`;
+  document.getElementById('tab-message').innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">
+    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 셀렉 기한 임박</div><div class="msg-box" id="msg1">${m1}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg1')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 기한 초과 (임의 셀렉 진행)</div><div class="msg-box" id="msg2">${m2}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg2')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">리터쳐 작업 의뢰</div><div class="msg-box" id="msg3">${m3}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg3')"><i class="ti ti-copy"></i></button></div></div>
+  </div>`;
+}
+
+function copyMsg(id) {
+  const el=document.getElementById(id);
+  const btn=el.querySelector('.copy-btn');
+  const text=el.childNodes[0].textContent.trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.innerHTML='<i class="ti ti-check"></i>';
+    setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);
+  });
+}
+
+async function advanceStage(id) {
+  const c=clients.find(x=>x.id===id); if(!c||c.stage>=8) return;
+  c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);
+  c.stage++;
+  if(c.stage===7) c.orderDate=new Date().toISOString().slice(0,10);
+  await saveToSheet(c);
+  renderTabProgress(c); renderTabInfo(c); renderDashboard();
+}
+
+async function setStage(id, stage) {
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  c.stage=stage;
+  await saveToSheet(c);
+  renderTabProgress(c); renderTabInfo(c); renderDashboard();
+}
+
+async function saveSendDate(id) {
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  c.sendDate=document.getElementById('send-date-inp').value;
+  c.selectDeadline=calcDeadline(c);
+  await saveToSheet(c);
+  renderTabInfo(c); renderDashboard();
+}
+
+async function saveOrderData(id) {
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  c.orderDate=document.getElementById('od-orderDate').value;
+  c.shipDate=document.getElementById('od-shipDate').value;
+  c.delivery=document.getElementById('od-delivery').value;
+  c.print=document.getElementById('od-print').value;
+  c.tracking=document.getElementById('od-tracking').value;
+  c.orderMemo=document.getElementById('od-orderMemo').value;
+  await saveToSheet(c);
+  alert('저장되었습니다.');
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.modal-tab').forEach((t,i)=>{
+    t.classList.toggle('active',['info','progress','order','message'][i]===tab);
+  });
+  ['info','progress','order','message'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
+  });
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── INIT ────────────────────────────────────────────
+loadFromSheet();
+</script>
+</body>
+</html>

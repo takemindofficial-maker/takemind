@@ -17,6 +17,14 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; font-size: 14px; line-height: 1.6; }
 
+  .lock-screen { position: fixed; inset: 0; background: var(--bg); z-index: 999; display: flex; align-items: center; justify-content: center; }
+  .lock-box { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 40px; width: 340px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .lock-logo { font-family: 'Georgia',serif; font-size: 20px; letter-spacing: 0.2em; color: var(--accent); text-align: center; }
+  .lock-logo span { display: block; font-size: 11px; letter-spacing: 0.08em; color: var(--text3); margin-top: 4px; font-family: sans-serif; }
+  .lock-box input[type=password] { background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; outline: none; width: 100%; text-align: center; letter-spacing: 0.1em; }
+  .lock-box input[type=password]:focus { border-color: var(--accent); }
+  .lock-error { font-size: 12px; color: var(--danger); min-height: 16px; }
+
   header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; height: 56px; gap: 24px; position: sticky; top: 0; z-index: 100; }
   .logo { font-family: 'Georgia',serif; font-size: 16px; letter-spacing: 0.15em; color: var(--accent); white-space: nowrap; }
   .logo span { color: var(--text3); font-size: 11px; letter-spacing: 0.05em; display: block; margin-top: -2px; }
@@ -174,7 +182,16 @@
 </head>
 <body>
 
-<div class="loading-overlay" id="loading-overlay">
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-box">
+    <div class="lock-logo">TAKEMIND <span>PHOTOGRAPHY · WORKFLOW</span></div>
+    <input type="password" id="lock-input" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')checkPassword()">
+    <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="checkPassword()"><i class="ti ti-lock-open"></i> 입장</button>
+    <div class="lock-error" id="lock-error"></div>
+  </div>
+</div>
+
+<div class="loading-overlay" id="loading-overlay" style="display:none;">
   <div class="spinner"></div>
   <p>구글 시트에서 데이터 불러오는 중…</p>
 </div>
@@ -417,7 +434,7 @@
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbyC8y8N3UFpDqyAVGszqCgUc20M8uAUssg262M1Sd1RCN3R4VNAts7O94AyEvIXCDXy3g/exec';
+const API = 'https://script.google.com/macros/s/AKfycbzem4LtAbrTcvpnQLVKkxZ_zT4tUrHfvjmgHbuysstYZ_tho30YwNTyZ3366_GzTQj5cg/exec';
 const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','최종 확인','재수정','최종 컨펌','제작/발주','완료'];
 const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
 const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7'];
@@ -884,8 +901,23 @@ function switchTab(tab) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+const PW = 'sdgkjFfjsf12';
+
+function checkPassword() {
+  const val = document.getElementById('lock-input').value;
+  if (val === PW) {
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('loading-overlay').style.display = 'flex';
+    loadFromSheet();
+  } else {
+    document.getElementById('lock-error').textContent = '비밀번호가 틀렸습니다';
+    document.getElementById('lock-input').value = '';
+    document.getElementById('lock-input').focus();
+  }
+}
+
 // ── INIT ────────────────────────────────────────────
-loadFromSheet();
+// loadFromSheet called after password check
 </script>
 </body>
 </html>

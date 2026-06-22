@@ -502,6 +502,17 @@ function calcDeadline(c) {
   return d.toISOString().slice(0,10);
 }
 
+function calcDeadlineSecond(c) {
+  if (c.type !== '스촬+본식') return '';
+  const raw = c.sendDate || c.shootDate;
+  if (!raw) return '';
+  const base = String(raw).length > 10 ? String(raw).slice(0,10) : String(raw);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(base)) return '';
+  const d = new Date(base);
+  d.setMonth(d.getMonth() + 2);
+  return d.toISOString().slice(0,10);
+}
+
 function daysUntil(s) {
   if (!s) return null;
   const t = new Date(); t.setHours(0,0,0,0);
@@ -597,11 +608,15 @@ function renderBadges() {
 }
 
 function getAlertClients() {
-  return clients.filter(c => {
-    if (c.stage !== 1) return false;
+  const result = [];
+  clients.forEach(c => {
+    if (c.stage !== 1) return;
     const d = daysUntil(calcDeadline(c));
-    return d !== null && d <= 2;
+    if (d !== null && d <= 2) result.push({...c, _alertType:'스촬', _days:d, _dl:calcDeadline(c)});
+    const d2 = daysUntil(calcDeadlineSecond(c));
+    if (d2 !== null && d2 <= 2) result.push({...c, _alertType:'본식', _days:d2, _dl:calcDeadlineSecond(c)});
   });
+  return result;
 }
 
 function renderTable() {
@@ -625,9 +640,16 @@ function renderTable() {
 
   tbody.innerHTML = list.map((c,i) => {
     const dl = calcDeadline(c);
+    const dl2 = calcDeadlineSecond(c);
     const days = c.stage===1 ? daysUntil(dl) : null;
+    const days2 = (c.stage===1 && dl2) ? daysUntil(dl2) : null;
     const dc = ddayCls(days, c.stage);
-    const rowBg = dc==='overdue'?'background:rgba(224,82,82,0.04)':dc==='urgent'?'background:rgba(232,165,48,0.04)':'';
+    const dc2 = ddayCls(days2, c.stage);
+    const isAlert = dc==='overdue'||dc==='urgent';
+    const isAlert2 = dc2==='overdue'||dc2==='urgent';
+    const rowBg = (isAlert||isAlert2) ? (dc==='overdue'||dc2==='overdue'?'background:rgba(224,82,82,0.04)':'background:rgba(232,165,48,0.04)') : '';
+    const deadlineCell = c.stage===1 ? (dl2 ? `<div style="font-size:11px">스촬 ${fDate(dl)}</div><div style="font-size:11px">본식 ${fDate(dl2)}</div>` : fDate(dl)) : '-';
+    const ddayCell = c.stage===1 ? (dl2 ? `<div><span class="dday ${dc}" style="font-size:11px">${ddayStr(days)}</span></div><div><span class="dday ${dc2}" style="font-size:11px">${ddayStr(days2)}</span></div>` : `<span class="dday ${dc}">${ddayStr(days)}</span>`) : '-';
     return `<tr style="${rowBg}" onclick="openDetail('${c.id}')">
       <td style="color:var(--text3)">${i+1}</td>
       <td style="font-weight:500">${c.bride} · ${c.groom}</td>
@@ -635,8 +657,8 @@ function renderTable() {
       <td style="color:var(--text2)">${fDate(c.shootDate)}</td>
       <td style="color:var(--text2)">${fDate(c.weddingDate)}</td>
       <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
-      <td style="color:var(--text2)">${c.stage===1?fDate(dl):'-'}</td>
-      <td><span class="dday ${dc}">${c.stage===1?ddayStr(days):'-'}</span></td>
+      <td style="color:var(--text2)">${deadlineCell}</td>
+      <td>${ddayCell}</td>
       <td style="color:var(--text2)">${c.artist||'-'}</td>
       <td style="color:var(--text2)">${c.album||'-'}</td>
       <td style="color:var(--text2)">${c.frame||'-'}</td>
@@ -685,16 +707,18 @@ function renderOrders() {
 }
 
 function renderAlerts() {
-  const list = getAlertClients().sort((a,b)=>(calcDeadline(a)||'').localeCompare(calcDeadline(b)||''));
+  const list = getAlertClients().sort((a,b)=>(a._dl||'').localeCompare(b._dl||''));
   const nl=document.getElementById('notify-list');
   if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off" style="display:block"></i><p>현재 알람 없음. 모든 일정이 정상입니다.</p></div>';return;}
   nl.innerHTML=list.map(c=>{
-    const dl=calcDeadline(c); const days=daysUntil(dl);
+    const days=c._days;
+    const dl=c._dl;
+    const alertType=c._alertType||'';
     const isOver=days<0;
     return `<div class="notify-item ${isOver?'urgent':'warn'}">
       <div class="notify-icon ${isOver?'':'warn'}"><i class="ti ${isOver?'ti-alert-circle':'ti-clock'}"></i></div>
       <div class="notify-info">
-        <div class="notify-title">${c.bride} · ${c.groom} — ${isOver?'셀렉 기한 초과':'셀렉 기한 D-'+days}</div>
+        <div class="notify-title">${c.bride} · ${c.groom} ${alertType?'('+alertType+')':''} — ${isOver?'셀렉 기한 초과':'셀렉 기한 D-'+days}</div>
         <div class="notify-desc">마감: ${fDate(dl)} · 상품: ${c.type} · 담당: ${c.artist||'-'}</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:6px">
@@ -779,9 +803,18 @@ function openDetailTab(id, tab) {
 }
 
 function renderTabInfo(c) {
-  const dl=calcDeadline(c); const days=daysUntil(dl); const dc=ddayCls(days,c.stage);
+  const dl=calcDeadline(c);
+  const dl2=calcDeadlineSecond(c);
+  const days=daysUntil(dl);
+  const days2=dl2?daysUntil(dl2):null;
+  const dc=ddayCls(days,c.stage);
+  const dc2=ddayCls(days2,c.stage);
   let alert='';
-  if(c.stage===1&&days!==null&&days<=2) alert=`<div class="alert-box ${days<0?'':'warn'}" style="margin-bottom:12px"><i class="ti ${days<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days<0?'셀렉 기한 초과 — 임의 셀렉 후 진행':'셀렉 기한 '+ddayStr(days)}</strong>${days<0?'담당 작가가 직접 셀렉하여 작업 진행하세요.':'이틀 이내 마감입니다. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
+  if(c.stage===1&&days!==null&&days<=2) alert+=`<div class="alert-box ${days<0?'':'warn'}" style="margin-bottom:8px"><i class="ti ${days<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days<0?'스촬 셀렉 기한 초과':'스촬 셀렉 기한 '+ddayStr(days)}</strong>${days<0?'담당 작가가 직접 셀렉하여 진행하세요.':'이틀 이내 마감. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
+  if(dl2&&c.stage===1&&days2!==null&&days2<=2) alert+=`<div class="alert-box ${days2<0?'':'warn'}" style="margin-bottom:12px"><i class="ti ${days2<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days2<0?'본식 셀렉 기한 초과':'본식 셀렉 기한 '+ddayStr(days2)}</strong>${days2<0?'담당 작가가 직접 셀렉하여 진행하세요.':'이틀 이내 마감. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
+  const deadlineVal = c.stage===1 ? (dl2
+    ? `<div style="font-size:12px">스촬: ${dl||'-'} (${ddayStr(days)})</div><div style="font-size:12px">본식: ${dl2} (${ddayStr(days2)})</div>`
+    : `${dl||'-'} (${ddayStr(days)})`) : '-';
   document.getElementById('tab-info').innerHTML=alert+`<div class="detail-section">
     <div class="detail-section-title">기본 정보</div>
     <div class="detail-row"><span class="detail-key">신부</span><span class="detail-val">${c.bride}</span></div>
@@ -794,7 +827,7 @@ function renderTabInfo(c) {
     <div class="detail-row"><span class="detail-key">이메일</span><span class="detail-val">${c.email||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">앨범</span><span class="detail-val">${c.album||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">액자</span><span class="detail-val">${c.frame||'-'}</span></div>
-    <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val" style="color:${dc==='overdue'?'var(--danger)':dc==='urgent'?'var(--warning)':dc==='safe'?'var(--success)':'var(--text2)'}">${c.stage===1?(dl||'-')+' ('+ddayStr(days)+')':'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val">${deadlineVal}</span></div>
     <div class="detail-row"><span class="detail-key">메모</span><span class="detail-val" style="white-space:pre-wrap">${c.memo||'-'}</span></div>
   </div>`;
 }

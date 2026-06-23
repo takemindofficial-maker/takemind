@@ -433,7 +433,7 @@
       <div class="tab-content" id="tab-message"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-danger btn-sm" onclick="deleteCurrentClient()"><i class="ti ti-trash"></i> 삭제</button>
+      <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteCurrentClient()" style="display:none"><i class="ti ti-trash"></i> 삭제</button>
       <div style="flex:1"></div>
       <button class="btn" onclick="closeModal('modal-detail')">닫기</button>
     </div>
@@ -799,6 +799,7 @@ function openDetail(id) {
   currentId=id;
   const c=clients.find(x=>x.id===id); if(!c) return;
   document.getElementById('detail-title').textContent=c.bride+' · '+c.groom;
+  document.getElementById('delete-btn').style.display = isAdmin ? '' : 'none';
   renderTabInfo(c); renderTabProgress(c); renderTabOrder(c); renderTabMessage(c);
   switchTab('info');
   document.getElementById('modal-detail').classList.add('open');
@@ -970,11 +971,19 @@ function switchTab(tab) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-const PW = 'sdgkjFfjsf12';
+const PW_ADMIN = 'sdgkjFfjsf12';
+const PW_STAFF = 'dsgadgkeE23!';
+let isAdmin = false;
 
 function checkPassword() {
   const val = document.getElementById('lock-input').value;
-  if (val === PW) {
+  if (val === PW_ADMIN) {
+    isAdmin = true;
+    document.getElementById('lock-screen').style.display = 'none';
+    document.getElementById('loading-overlay').style.display = 'flex';
+    loadFromSheet();
+  } else if (val === PW_STAFF) {
+    isAdmin = false;
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('loading-overlay').style.display = 'flex';
     loadFromSheet();

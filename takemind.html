@@ -846,9 +846,11 @@ function renderTabInfo(c) {
 
 function renderTabProgress(c) {
   const tl=STAGES.map((s,i)=>{
-    const done=i<c.stage, curr=i===c.stage;
+    const skipped = i===5 && c.stage>=6 && !c['stageDate_5'];
+    const done=i<c.stage && !skipped, curr=i===c.stage;
     const line=i<STAGES.length-1?`<div class="tl-line ${done?'done':''}"></div>`:'';
-    return `<div class="tl-step"><div class="tl-dot-wrap"><div class="tl-dot ${done?'done':curr?'current':''}" onclick="setStage('${c.id}',${i})" title="${s}">${done?'<i class="ti ti-check" style="font-size:12px"></i>':i+1}</div><div class="tl-label ${curr?'current':''}">${s}</div></div>${line}</div>`;
+    const dotStyle = skipped ? 'background:var(--bg4);border-color:var(--border2);color:var(--text3)' : '';
+    return `<div class="tl-step"><div class="tl-dot-wrap"><div class="tl-dot ${done?'done':curr?'current':''}" style="${dotStyle}" onclick="setStage('${c.id}',${i})" title="${s}">${done?'<i class="ti ti-check" style="font-size:12px"></i>':skipped?'—':i+1}</div><div class="tl-label ${curr?'current':''}" style="${skipped?'color:var(--text3);text-decoration:line-through':''}">${s}</div></div>${line}</div>`;
   }).join('');
   document.getElementById('tab-progress').innerHTML=`
     <div style="margin-bottom:20px"><div class="detail-section-title" style="margin-bottom:12px">진행 단계 — 클릭하면 해당 단계로 이동</div><div class="timeline">${tl}</div></div>
@@ -867,7 +869,7 @@ function renderTabProgress(c) {
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
       ${c.stage===4 ? `
         <button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-refresh"></i> 재수정 있음</button>
-        <button class="btn btn-primary" style="background:var(--success);border-color:var(--success)" onclick="setStage('${c.id}',6)"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
+        <button class="btn btn-primary" style="background:var(--success);border-color:var(--success)" onclick="skipToConfirm('${c.id}')"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
       ` : c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
       ${c.stage===8?`<div style="font-size:13px;color:var(--success);font-weight:500;padding:8px 0">✓ 완료된 건입니다</div>`:''}
       ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
@@ -932,6 +934,16 @@ function copyMsg(id) {
     btn.innerHTML='<i class="ti ti-check"></i>';
     setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);
   });
+}
+
+async function skipToConfirm(id) {
+  const c=clients.find(x=>x.id===id); if(!c) return;
+  // 재수정 중(5단계) 날짜 기록 없이 컨펌 완료(6단계)로 바로 이동
+  c['stageDate_5'] = '';
+  c['stageDate_6'] = new Date().toISOString().slice(0,10);
+  c.stage = 6;
+  await saveToSheet(c);
+  renderTabProgress(c); renderTabInfo(c); renderDashboard();
 }
 
 async function advanceStage(id) {

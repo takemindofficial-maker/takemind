@@ -222,9 +222,9 @@
     <div class="sidebar-item" onclick="filterStage(1,this)"><i class="ti ti-cursor-text"></i> 셀렉 대기 <span class="sidebar-badge warn" id="sb-1">0</span></div>
     <div class="sidebar-item" onclick="filterStage(2,this)"><i class="ti ti-palette"></i> 색보정 중</div>
     <div class="sidebar-item" onclick="filterStage(3,this)"><i class="ti ti-wand"></i> 리터칭 중</div>
-    <div class="sidebar-item" onclick="filterStage(4,this)"><i class="ti ti-eye"></i> 최종 확인</div>
-    <div class="sidebar-item" onclick="filterStage(5,this)"><i class="ti ti-refresh"></i> 재수정</div>
-    <div class="sidebar-item" onclick="filterStage(6,this)"><i class="ti ti-check"></i> 최종 컨펌</div>
+    <div class="sidebar-item" onclick="filterStage(4,this)"><i class="ti ti-eye"></i> 고객 확인 중</div>
+    <div class="sidebar-item" onclick="filterStage(5,this)"><i class="ti ti-refresh"></i> 재수정 중</div>
+    <div class="sidebar-item" onclick="filterStage(6,this)"><i class="ti ti-check"></i> 컨펌 완료</div>
     <div class="sidebar-item" onclick="filterStage(7,this)"><i class="ti ti-truck"></i> 제작/발주</div>
     <div class="sidebar-item" onclick="filterStage(8,this)"><i class="ti ti-circle-check"></i> 완료</div>
     <div class="sidebar-section">알람</div>
@@ -243,9 +243,9 @@
           <option value="1">셀렉 대기</option>
           <option value="2">색보정 중</option>
           <option value="3">리터칭 중</option>
-          <option value="4">최종 확인</option>
-          <option value="5">재수정</option>
-          <option value="6">최종 컨펌</option>
+          <option value="4">고객 확인 중</option>
+          <option value="5">재수정 중</option>
+          <option value="6">컨펌 완료</option>
           <option value="7">제작/발주</option>
           <option value="8">완료</option>
         </select>
@@ -446,7 +446,7 @@
 
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbzem4LtAbrTcvpnQLVKkxZ_zT4tUrHfvjmgHbuysstYZ_tho30YwNTyZ3366_GzTQj5cg/exec';
-const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','최종 확인','재수정','최종 컨펌','제작/발주','완료'];
+const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','고객 확인 중','재수정 중','컨펌 완료','제작/발주','완료'];
 const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
 const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7','mainCheck','orderer','contactDate','extra'];
 
@@ -865,7 +865,10 @@ function renderTabProgress(c) {
       <div style="display:flex;gap:8px"><input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1"><button class="btn" onclick="saveSendDate('${c.id}')"><i class="ti ti-device-floppy"></i> 저장</button></div>
     </div>`}
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      ${c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
+      ${c.stage===4 ? `
+        <button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-refresh"></i> 재수정 있음</button>
+        <button class="btn btn-primary" style="background:var(--success);border-color:var(--success)" onclick="setStage('${c.id}',6)"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
+      ` : c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
       ${c.stage===8?`<div style="font-size:13px;color:var(--success);font-weight:500;padding:8px 0">✓ 완료된 건입니다</div>`:''}
       ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
     </div>

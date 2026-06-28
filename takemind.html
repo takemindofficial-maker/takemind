@@ -942,6 +942,12 @@ async function advanceStage(id) {
 
 async function setStage(id, stage) {
   const c=clients.find(x=>x.id===id); if(!c) return;
+  // 이전 단계로 돌릴 때 해당 단계 이후 날짜 기록 삭제
+  if(stage < c.stage) {
+    for(let i=stage; i<STAGES.length; i++) {
+      c['stageDate_'+i] = '';
+    }
+  }
   c.stage=stage;
   await saveToSheet(c);
   renderTabProgress(c); renderTabInfo(c); renderDashboard();
@@ -955,7 +961,7 @@ async function saveSendDateAndAdvance(id) {
   if(btn){ btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…'; }
   c.sendDate = dateVal;
   c.selectDeadline = calcDeadline(c);
-  c['stageDate_0'] = new Date().toISOString().slice(0,10);
+  c['stageDate_0'] = dateVal;
   c.stage = 1;
   await saveToSheet(c);
   renderTabProgress(c); renderTabInfo(c); renderDashboard();

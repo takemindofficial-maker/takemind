@@ -220,7 +220,6 @@ textarea{resize:vertical;min-height:60px;}
   <div class="header-right">
     <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">연결됨</span></div>
     <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()"><i class="ti ti-refresh"></i></button>
-    <button class="btn btn-primary btn-sm" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
   </div>
 </header>
 
@@ -299,6 +298,29 @@ textarea{resize:vertical;min-height:60px;}
         </tr>
       </thead>
       <tbody id="main-tbody"></tbody>
+      <tfoot>
+        <tr id="new-row" style="background:rgba(200,169,126,0.04);border-top:2px solid rgba(200,169,126,0.2);">
+          <td style="color:var(--accent);font-size:11px;padding:6px 8px;">+</td>
+          <td><select id="nr-artist" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
+            <option value="설민">설민</option><option value="이광민">이광민</option><option value="홍진석">홍진석</option><option value="신성진">신성진</option><option value="양선호">양선호</option>
+          </select></td>
+          <td><input type="text" id="nr-bride" placeholder="신부" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
+          <td><input type="text" id="nr-groom" placeholder="신랑" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
+          <td><select id="nr-type" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
+            <option value="스촬">스촬</option><option value="본식">본식</option><option value="스촬+본식">스촬+본식</option><option value="가족사진">가족사진</option><option value="리마인드">리마인드</option><option value="돌스냅">돌스냅</option>
+          </select></td>
+          <td><input type="date" id="nr-shoot" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;color-scheme:dark;"></td>
+          <td><input type="date" id="nr-wedding" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;color-scheme:dark;"></td>
+          <td colspan="4" style="color:var(--text3);font-size:11px;">신부/신랑 입력 후 Enter</td>
+          <td><input type="text" id="nr-album" placeholder="앨범" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
+          <td><select id="nr-frame" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
+            <option value="">-</option><option value="12x18inch">12x18</option><option value="20x30inch">20x30</option><option value="30x46cm">30x46</option>
+          </select></td>
+          <td><input type="text" id="nr-print" placeholder="인화" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
+          <td colspan="9"></td>
+          <td><input type="text" id="nr-memo" placeholder="참고사항" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;" onkeydown="if(event.key==='Enter')saveNewRow()"></td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
@@ -344,20 +366,13 @@ textarea{resize:vertical;min-height:60px;}
         <div class="form-group"><label>연락처 (신부)</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
         <div class="form-group"><label>이메일</label><input type="text" id="f-email" placeholder="example@email.com"></div>
         <div class="form-group"><label>앨범</label>
-          <select id="f-album" style="width:100%">
-            <option value="">없음</option>
-            <option value="1권15p">1권 15p</option>
-            <option value="1권20p">1권 20p</option>
-            <option value="1권24p">1권 24p</option>
-            <option value="1권30p">1권 30p</option>
-            <option value="2권20p">2권 20p</option>
-            <option value="3권100p">3권 100p</option>
-          </select>
+          <input type="text" id="f-album" placeholder="예: 1권20p, 3권100p">
         </div>
         <div class="form-group"><label>액자</label>
           <select id="f-frame" style="width:100%">
             <option value="">없음</option>
             <option value="12x18inch">12x18 inch</option>
+            <option value="20x30inch">20x30 inch</option>
             <option value="30x46cm">30x46 cm</option>
           </select>
         </div>
@@ -655,6 +670,38 @@ async function toggleMainCheck(id){
 }
 
 // ── MODALS ──────────────────────────────────
+async function saveNewRow(){
+  const bride=document.getElementById('nr-bride').value.trim();
+  const groom=document.getElementById('nr-groom').value.trim();
+  if(!bride||!groom){alert('신부/신랑 이름을 입력해주세요');return;}
+  const nc={
+    id:genId(),
+    bride,groom,
+    type:document.getElementById('nr-type').value,
+    artist:document.getElementById('nr-artist').value,
+    shootDate:document.getElementById('nr-shoot').value,
+    weddingDate:document.getElementById('nr-wedding').value,
+    album:document.getElementById('nr-album').value,
+    frame:document.getElementById('nr-frame').value,
+    print:document.getElementById('nr-print').value,
+    memo:document.getElementById('nr-memo').value,
+    phone:'',email:'',stage:0,
+    created:new Date().toISOString().slice(0,10),
+    sendDate:'',selectDeadline:'',orderDate:'',shipDate:'',delivery:'',
+    tracking:'',orderMemo:'',mainCheck:'',orderer:'',contactDate:'',extra:''
+  };
+  STAGES.forEach((_,i)=>nc['stageDate_'+i]='');
+  clients.push(nc);
+  await saveToSheet(nc);
+  // 입력 초기화
+  ['bride','groom','album','print','memo'].forEach(f=>document.getElementById('nr-'+f).value='');
+  document.getElementById('nr-shoot').value='';
+  document.getElementById('nr-wedding').value='';
+  document.getElementById('nr-frame').value='';
+  document.getElementById('nr-bride').focus();
+  renderAll();
+}
+
 function openNewClient(){
   currentId=null;
   document.getElementById('modal-client-title').textContent='신규 고객 등록';

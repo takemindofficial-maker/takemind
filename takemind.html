@@ -7,19 +7,37 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
 :root {
-  --bg:#0e0e0e; --bg2:#161616; --bg3:#1e1e1e; --bg4:#262626;
-  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
-  --text:#f0f0f0; --text2:#999; --text3:#555;
-  --accent:#c8a97e; --accent2:#e8c99e;
-  --danger:#e05252; --warning:#e8a530; --success:#52b788; --info:#5b9bd5;
-  --radius:6px; --radius-lg:10px;
+  --bg:#f5f4f2;
+  --bg2:#ffffff;
+  --bg3:#f0eeeb;
+  --bg4:#e8e5e0;
+  --border:#ddd9d3;
+  --border2:#c8c3bb;
+  --text:#1a1814;
+  --text2:#6b6560;
+  --text3:#9e9890;
+  --accent:#8b6914;
+  --accent-bg:rgba(139,105,20,0.08);
+  --accent2:#a07c20;
+  --danger:#c0392b;
+  --danger-bg:rgba(192,57,43,0.08);
+  --warning:#c47a1a;
+  --warning-bg:rgba(196,122,26,0.08);
+  --success:#2d7a4f;
+  --success-bg:rgba(45,122,79,0.08);
+  --info:#1a5fa8;
+  --info-bg:rgba(26,95,168,0.08);
+  --radius:5px;
+  --radius-lg:9px;
+  --shadow:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg:0 4px 12px rgba(0,0,0,0.1);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;line-height:1.5;}
 
 /* LOCK */
 .lock-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;}
-.lock-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px;width:320px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.lock-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;width:320px;display:flex;flex-direction:column;align-items:center;gap:16px;box-shadow:var(--shadow-lg);}
 .lock-logo{font-family:'Georgia',serif;font-size:18px;letter-spacing:0.2em;color:var(--accent);text-align:center;}
 .lock-logo span{display:block;font-size:10px;letter-spacing:0.1em;color:var(--text3);margin-top:4px;font-family:sans-serif;}
 .lock-box input[type=password]{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:9px 12px;font-size:13px;outline:none;width:100%;text-align:center;letter-spacing:0.1em;}
@@ -27,12 +45,12 @@ body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','N
 .lock-error{font-size:12px;color:var(--danger);min-height:16px;}
 
 /* HEADER */
-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;height:48px;gap:16px;position:sticky;top:0;z-index:100;}
+header{background:var(--bg2);border-bottom:2px solid var(--border);padding:0 16px;display:flex;align-items:center;height:48px;gap:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow);}
 .logo{font-family:'Georgia',serif;font-size:14px;letter-spacing:0.15em;color:var(--accent);white-space:nowrap;}
 .header-tabs{display:flex;gap:2px;flex:1;}
 .htab{padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;color:var(--text2);border:none;background:none;transition:all 0.15s;display:inline-flex;align-items:center;gap:5px;}
 .htab:hover{color:var(--text);background:var(--bg3);}
-.htab.active{color:var(--accent);background:rgba(200,169,126,0.1);}
+.htab.active{color:var(--accent);background:var(--accent-bg);font-weight:600;}
 .header-right{display:flex;gap:6px;align-items:center;}
 .sync-status{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;}
 .sync-dot{width:5px;height:5px;border-radius:50%;background:var(--success);}
@@ -41,91 +59,108 @@ header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16p
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
 /* BUTTONS */
-.btn{padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text);transition:all 0.12s;display:inline-flex;align-items:center;gap:5px;}
-.btn:hover{background:var(--bg4);}
-.btn:active{transform:scale(0.96);}
-.btn-primary{background:var(--accent);color:#1a1008;border-color:var(--accent);font-weight:600;}
+.btn{padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text);transition:all 0.12s;display:inline-flex;align-items:center;gap:5px;box-shadow:var(--shadow);}
+.btn:hover{background:var(--bg3);}
+.btn:active{transform:scale(0.96);box-shadow:none;}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;box-shadow:0 1px 3px rgba(139,105,20,0.3);}
 .btn-primary:hover{background:var(--accent2);}
 .btn-sm{padding:3px 8px;font-size:11px;}
-.btn-ghost{background:none;border-color:transparent;color:var(--text2);}
+.btn-ghost{background:none;border-color:transparent;color:var(--text2);box-shadow:none;}
 .btn-ghost:hover{background:var(--bg3);color:var(--text);}
-.btn-danger{background:rgba(224,82,82,0.1);border-color:rgba(224,82,82,0.3);color:var(--danger);}
-.btn-success{background:rgba(82,183,136,0.15);border-color:rgba(82,183,136,0.4);color:var(--success);}
+.btn-danger{background:var(--danger-bg);border-color:rgba(192,57,43,0.3);color:var(--danger);box-shadow:none;}
+.btn-success{background:var(--success-bg);border-color:rgba(45,122,79,0.3);color:var(--success);box-shadow:none;}
 
 /* LOADING */
-.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+.loading-overlay{position:fixed;inset:0;background:rgba(245,244,242,0.85);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
 .loading-overlay p{font-size:12px;color:var(--text2);}
 .spinner{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* STATS */
-.stats-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;}
-.stat-label{font-size:10px;color:var(--text3);margin-bottom:4px;}
-.stat-value{font-size:20px;font-weight:500;}
+.stats-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;}
+.stat-label{font-size:10px;color:var(--text3);margin-bottom:3px;}
+.stat-value{font-size:18px;font-weight:600;color:var(--text);}
 .stat-value.danger{color:var(--danger);}
 .stat-value.warn{color:var(--warning);}
 .stat-value.ok{color:var(--success);}
 
 /* TOOLBAR */
-.toolbar{display:flex;gap:6px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.toolbar input[type=text]{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 10px;font-size:12px;width:180px;outline:none;}
+.toolbar{display:flex;gap:6px;align-items:center;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--bg2);flex-wrap:wrap;}
+.toolbar input[type=text]{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 10px;font-size:12px;width:160px;outline:none;}
 .toolbar input[type=text]:focus{border-color:var(--accent);}
 .toolbar input::placeholder{color:var(--text3);}
-select{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 8px;font-size:12px;outline:none;cursor:pointer;}
+select{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 8px;font-size:12px;outline:none;cursor:pointer;}
 select:focus{border-color:var(--accent);}
 .tsep{flex:1;}
 
-/* MAIN TABLE */
-.table-container{overflow:auto;height:calc(100vh - 48px - 80px - 44px);}
-table{width:100%;border-collapse:collapse;font-size:12px;}
+/* TABLE */
+.table-container{overflow:auto;height:calc(100vh - 48px - 74px - 42px);}
+table{width:max-content;min-width:100%;border-collapse:collapse;font-size:12px;}
 thead{position:sticky;top:0;z-index:10;}
-thead th{background:var(--bg3);color:var(--text3);font-weight:500;padding:7px 8px;text-align:left;font-size:10px;letter-spacing:0.04em;border-bottom:1px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
-thead th:hover{color:var(--text);}
+
+/* 헤더 그룹 */
+.th-group{background:#2c2825;color:#d4cfc8;font-size:9px;letter-spacing:0.06em;text-align:center;padding:4px 8px;border-right:2px solid #444;text-transform:uppercase;}
+.th-group:first-child{border-left:none;}
+
+thead tr:last-child th{background:var(--bg3);color:var(--text2);font-weight:600;padding:6px 8px;text-align:left;font-size:10px;letter-spacing:0.03em;border-bottom:2px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+thead tr:last-child th:hover{color:var(--accent);}
+thead tr:last-child th.group-start{border-left:2px solid var(--border2);}
+
 tbody tr{border-bottom:1px solid var(--border);transition:background 0.08s;cursor:pointer;}
-tbody tr:hover{background:rgba(255,255,255,0.03);}
-tbody tr.row-done{opacity:0.4;}
-tbody td{padding:6px 8px;vertical-align:middle;border-right:1px solid var(--border);white-space:nowrap;overflow:hidden;max-width:200px;text-overflow:ellipsis;}
-tbody td.editable:hover{background:rgba(200,169,126,0.06);}
+tbody tr:hover{background:rgba(139,105,20,0.04);}
+tbody tr:nth-child(even){background:rgba(0,0,0,0.015);}
+tbody tr:nth-child(even):hover{background:rgba(139,105,20,0.04);}
+tbody tr.row-done{opacity:0.35;}
+tbody td{padding:5px 8px;vertical-align:middle;border-right:1px solid var(--border);white-space:nowrap;overflow:hidden;max-width:200px;text-overflow:ellipsis;}
+tbody td.group-start{border-left:2px solid var(--border2);}
+
+tfoot tr{background:rgba(139,105,20,0.05);border-top:2px solid rgba(139,105,20,0.25);}
+tfoot td{padding:4px 6px;border-right:1px solid var(--border);vertical-align:middle;}
+tfoot td.group-start{border-left:2px solid var(--border2);}
+tfoot .nr-input{width:100%;background:transparent;border:1px solid transparent;border-radius:3px;color:var(--text);font-size:12px;outline:none;padding:3px 5px;font-family:inherit;}
+tfoot .nr-input:focus{border-color:var(--accent);background:var(--bg2);}
+tfoot select.nr-input{cursor:pointer;}
+.col-label{font-size:9px;color:var(--text3);display:block;margin-bottom:1px;line-height:1;}
 
 /* BADGES */
-.stage-pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500;white-space:nowrap;}
-.s0{background:rgba(91,155,213,0.15);color:var(--info);}
-.s1{background:rgba(200,169,126,0.15);color:var(--accent);}
-.s2{background:rgba(232,165,48,0.15);color:var(--warning);}
-.s3{background:rgba(232,165,48,0.15);color:var(--warning);}
-.s4{background:rgba(82,183,136,0.12);color:var(--success);}
-.s5{background:rgba(224,82,82,0.12);color:var(--danger);}
-.s6{background:rgba(82,183,136,0.2);color:var(--success);}
-.s7{background:rgba(91,155,213,0.15);color:var(--info);}
-.s8{background:rgba(82,183,136,0.25);color:var(--success);}
+.stage-pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:600;white-space:nowrap;}
+.s0{background:var(--info-bg);color:var(--info);}
+.s1{background:var(--accent-bg);color:var(--accent);}
+.s2{background:var(--warning-bg);color:var(--warning);}
+.s3{background:var(--warning-bg);color:var(--warning);}
+.s4{background:var(--success-bg);color:var(--success);}
+.s5{background:var(--danger-bg);color:var(--danger);}
+.s6{background:var(--success-bg);color:var(--success);}
+.s7{background:var(--info-bg);color:var(--info);}
+.s8{background:#e8f5ec;color:var(--success);}
 
-.type-pill{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;}
-.tp-ss{background:rgba(91,155,213,0.12);color:var(--info);}
-.tp-ws{background:rgba(200,169,126,0.12);color:var(--accent);}
-.tp-both{background:rgba(82,183,136,0.12);color:var(--success);}
-.tp-other{background:var(--bg4);color:var(--text2);}
+.type-pill{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:500;}
+.tp-ss{background:var(--info-bg);color:var(--info);}
+.tp-ws{background:var(--accent-bg);color:var(--accent);}
+.tp-both{background:var(--success-bg);color:var(--success);}
+.tp-other{background:var(--bg3);color:var(--text2);}
 
-.dday{font-size:11px;font-weight:600;}
+.dday{font-size:11px;font-weight:700;}
 .dday.overdue{color:var(--danger);}
 .dday.urgent{color:var(--warning);}
 .dday.safe{color:var(--success);}
 .dday.na{color:var(--text3);}
 
-.check-circle{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.12s;}
+.check-circle{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.12s;background:var(--bg2);}
 .check-circle.on{background:var(--success);border-color:var(--success);}
-.check-circle i{font-size:10px;color:#fff;}
+.check-circle i{font-size:9px;color:#fff;}
 
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;}
 .modal-bg.open{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:100%;max-width:680px;}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow-lg);}
 .modal-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.modal-title{font-size:15px;font-weight:500;}
+.modal-title{font-size:15px;font-weight:600;color:var(--text);}
 .modal-body{padding:20px;display:flex;flex-direction:column;gap:16px;}
-.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:6px;}
-.modal-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);padding:0 20px;}
-.mtab{padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.12s;}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:6px;background:var(--bg3);border-radius:0 0 var(--radius-lg) var(--radius-lg);}
+.modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px;background:var(--bg3);}
+.mtab{padding:8px 14px;font-size:12px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.12s;font-weight:500;}
 .mtab:hover{color:var(--text);}
 .mtab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .tab-content{display:none;}
@@ -135,10 +170,9 @@ tbody td.editable:hover{background:rgba(200,169,126,0.06);}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .form-group{display:flex;flex-direction:column;gap:5px;}
 .form-group.full{grid-column:1/-1;}
-label{font-size:11px;color:var(--text2);}
+label{font-size:11px;color:var(--text2);font-weight:500;}
 input[type=text],input[type=date],input[type=tel],textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:7px 10px;font-size:12px;outline:none;width:100%;font-family:inherit;}
-input[type=text]:focus,input[type=date]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--accent);}
-input[type=date]{color-scheme:dark;}
+input[type=text]:focus,input[type=date]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--accent);background:var(--bg2);}
 textarea{resize:vertical;min-height:60px;}
 
 /* TIMELINE */
@@ -147,24 +181,24 @@ textarea{resize:vertical;min-height:60px;}
 .tl-dot-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;}
 .tl-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3);background:var(--bg3);cursor:pointer;transition:all 0.12s;flex-shrink:0;}
 .tl-dot.done{background:var(--success);border-color:var(--success);color:#fff;}
-.tl-dot.current{background:var(--accent);border-color:var(--accent);color:#1a1008;box-shadow:0 0 0 3px rgba(200,169,126,0.2);}
+.tl-dot.current{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 3px rgba(139,105,20,0.2);}
 .tl-dot.skipped{background:var(--bg4);border-color:var(--border);color:var(--text3);}
 .tl-label{font-size:9px;color:var(--text3);text-align:center;max-width:52px;line-height:1.3;}
-.tl-label.current{color:var(--accent);}
+.tl-label.current{color:var(--accent);font-weight:600;}
 .tl-line{width:20px;height:2px;background:var(--border);margin-top:-18px;flex-shrink:0;}
 .tl-line.done{background:var(--success);}
 
 /* DETAIL */
-.detail-section{border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
-.detail-section-title{font-size:10px;letter-spacing:0.08em;color:var(--text3);margin-bottom:10px;text-transform:uppercase;}
+.detail-section{border:1px solid var(--border);border-radius:var(--radius);padding:12px;background:var(--bg3);}
+.detail-section-title{font-size:10px;letter-spacing:0.08em;color:var(--text3);margin-bottom:10px;text-transform:uppercase;font-weight:600;}
 .detail-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;}
 .detail-row:last-child{border-bottom:none;}
-.detail-key{color:var(--text3);min-width:90px;flex-shrink:0;font-size:11px;}
+.detail-key{color:var(--text2);min-width:90px;flex-shrink:0;font-size:11px;font-weight:500;}
 .detail-val{color:var(--text);flex:1;}
 
 /* ALERT */
-.alert-box{background:rgba(224,82,82,0.08);border:1px solid rgba(224,82,82,0.2);border-radius:var(--radius);padding:10px 12px;display:flex;gap:8px;align-items:flex-start;}
-.alert-box.warn{background:rgba(232,165,48,0.08);border-color:rgba(232,165,48,0.2);}
+.alert-box{background:var(--danger-bg);border:1px solid rgba(192,57,43,0.2);border-radius:var(--radius);padding:10px 12px;display:flex;gap:8px;align-items:flex-start;}
+.alert-box.warn{background:var(--warning-bg);border-color:rgba(196,122,26,0.2);}
 .alert-box i{color:var(--danger);font-size:14px;flex-shrink:0;margin-top:1px;}
 .alert-box.warn i{color:var(--warning);}
 .alert-box p{font-size:12px;}
@@ -176,23 +210,24 @@ textarea{resize:vertical;min-height:60px;}
 
 /* NOTIFY */
 .notify-list{display:flex;flex-direction:column;gap:8px;padding:16px;}
-.notify-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;gap:10px;align-items:flex-start;}
-.notify-item.urgent{border-color:rgba(224,82,82,0.3);}
-.notify-item.warn{border-color:rgba(232,165,48,0.3);}
-.notify-icon{width:28px;height:28px;border-radius:50%;background:rgba(224,82,82,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.notify-icon.warn{background:rgba(232,165,48,0.1);}
+.notify-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;gap:10px;align-items:flex-start;box-shadow:var(--shadow);}
+.notify-item.urgent{border-color:rgba(192,57,43,0.3);background:var(--danger-bg);}
+.notify-item.warn{border-color:rgba(196,122,26,0.3);background:var(--warning-bg);}
+.notify-icon{width:28px;height:28px;border-radius:50%;background:var(--danger-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.notify-icon.warn{background:var(--warning-bg);}
 .notify-icon i{font-size:14px;color:var(--danger);}
 .notify-icon.warn i{color:var(--warning);}
 .notify-info{flex:1;}
-.notify-title{font-size:12px;font-weight:500;}
+.notify-title{font-size:12px;font-weight:600;}
 .notify-desc{font-size:11px;color:var(--text2);margin-top:2px;}
 
 .empty-state{text-align:center;padding:48px;color:var(--text3);}
-.empty-state i{font-size:28px;margin-bottom:10px;opacity:0.3;}
+.empty-state i{font-size:28px;margin-bottom:10px;opacity:0.3;display:block;}
 
 ::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
+::-webkit-scrollbar-track{background:var(--bg3);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text3);}
 </style>
 </head>
 <body>
@@ -219,7 +254,7 @@ textarea{resize:vertical;min-height:60px;}
   </div>
   <div class="header-right">
     <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">연결됨</span></div>
-    <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()"><i class="ti ti-refresh"></i></button>
+    <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()" title="새로고침"><i class="ti ti-refresh"></i></button>
   </div>
 </header>
 
@@ -265,60 +300,85 @@ textarea{resize:vertical;min-height:60px;}
     </select>
     <div class="tsep"></div>
     <label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer;">
-      <input type="checkbox" id="hide-done" onchange="renderMain()" style="width:auto;"> 완료 숨기기
+      <input type="checkbox" id="hide-done" onchange="renderMain()" style="width:auto;accent-color:var(--accent);"> 완료 숨기기
     </label>
     <span id="row-count" style="font-size:11px;color:var(--text3);"></span>
   </div>
   <div class="table-container">
     <table>
       <thead>
+        <!-- 그룹 헤더 -->
         <tr>
-          <th style="width:32px;">#</th>
-          <th style="width:70px;">담당</th>
-          <th style="width:65px;">신부</th>
-          <th style="width:65px;">신랑</th>
-          <th style="width:60px;">상품</th>
-          <th style="width:75px;" onclick="setSort('shootDate')">촬영일 ↕</th>
-          <th style="width:75px;" onclick="setSort('weddingDate')">본식일 ↕</th>
-          <th style="width:110px;">진행 단계</th>
-          <th style="width:38px;" title="메인체크">메인</th>
-          <th style="width:38px;" title="발주여부">발주</th>
-          <th style="width:55px;">앨범</th>
-          <th style="width:55px;">액자</th>
-          <th style="width:40px;">인화</th>
-          <th style="width:80px;" onclick="setSort('selectDeadline')">셀렉마감 ↕</th>
-          <th style="width:55px;">D-Day</th>
-          <th style="width:75px;">발주날짜</th>
-          <th style="width:60px;">발주자</th>
-          <th style="width:75px;">제송일</th>
-          <th style="width:70px;">운송</th>
-          <th style="width:80px;">운송장</th>
-          <th style="width:75px;">연락날짜</th>
+          <th class="th-group" colspan="2">기본</th>
+          <th class="th-group" colspan="2">고객</th>
+          <th class="th-group" colspan="3">일정</th>
+          <th class="th-group" colspan="2">진행</th>
+          <th class="th-group" colspan="3">제작물</th>
+          <th class="th-group" colspan="2">셀렉 D-day</th>
+          <th class="th-group" colspan="5">발주/배송</th>
+          <th class="th-group" colspan="2">참고</th>
+        </tr>
+        <!-- 컬럼 헤더 -->
+        <tr>
+          <th style="width:28px;">#</th>
+          <th style="width:68px;">담당작가</th>
+          <th style="width:62px;" class="group-start">신부</th>
+          <th style="width:62px;">신랑</th>
+          <th style="width:58px;" class="group-start">상품</th>
+          <th style="width:72px;" onclick="setSort('shootDate')">촬영일↕</th>
+          <th style="width:72px;" onclick="setSort('weddingDate')">본식일↕</th>
+          <th style="width:100px;" class="group-start">진행 단계</th>
+          <th style="width:36px;" title="메인체크 — NAS 확인 완료">메인✓</th>
+          <th style="width:36px;" class="group-start" title="앨범 권수">앨범</th>
+          <th style="width:44px;">앨범<br><span style="font-size:9px;font-weight:400;">페이지수</span></th>
+          <th style="width:44px;">액자<br><span style="font-size:9px;font-weight:400;">크기</span></th>
+          <th style="width:44px;">인화<br><span style="font-size:9px;font-weight:400;">장수</span></th>
+          <th style="width:72px;" class="group-start" onclick="setSort('selectDeadline')">셀렉마감↕</th>
+          <th style="width:50px;">D-Day</th>
+          <th style="width:70px;" class="group-start">발주날짜</th>
+          <th style="width:55px;">발주자</th>
+          <th style="width:70px;">제송일</th>
+          <th style="width:60px;">운송</th>
+          <th style="width:80px;">운송장번호</th>
+          <th style="width:70px;" class="group-start">연락날짜</th>
           <th style="width:200px;">참고사항</th>
         </tr>
       </thead>
       <tbody id="main-tbody"></tbody>
       <tfoot>
-        <tr id="new-row" style="background:rgba(200,169,126,0.04);border-top:2px solid rgba(200,169,126,0.2);">
-          <td style="color:var(--accent);font-size:11px;padding:6px 8px;">+</td>
-          <td><select id="nr-artist" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
-            <option value="설민">설민</option><option value="이광민">이광민</option><option value="홍진석">홍진석</option><option value="신성진">신성진</option><option value="양선호">양선호</option>
+        <tr>
+          <td style="color:var(--accent);font-size:10px;font-weight:600;white-space:nowrap;padding:5px 6px;">+ 신규</td>
+          <td><select class="nr-input" id="nr-artist">
+            <option>설민</option><option>이광민</option><option>홍진석</option><option>신성진</option><option>양선호</option>
           </select></td>
-          <td><input type="text" id="nr-bride" placeholder="신부" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
-          <td><input type="text" id="nr-groom" placeholder="신랑" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
-          <td><select id="nr-type" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
-            <option value="스촬">스촬</option><option value="본식">본식</option><option value="스촬+본식">스촬+본식</option><option value="가족사진">가족사진</option><option value="리마인드">리마인드</option><option value="돌스냅">돌스냅</option>
+          <td class="group-start"><input class="nr-input" type="text" id="nr-bride" placeholder="신부 이름"></td>
+          <td><input class="nr-input" type="text" id="nr-groom" placeholder="신랑 이름"></td>
+          <td class="group-start"><select class="nr-input" id="nr-type">
+            <option>스촬</option><option>본식</option><option>스촬+본식</option><option>가족사진</option><option>리마인드</option><option>돌스냅</option>
           </select></td>
-          <td><input type="date" id="nr-shoot" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;color-scheme:dark;"></td>
-          <td><input type="date" id="nr-wedding" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;color-scheme:dark;"></td>
-          <td colspan="4" style="color:var(--text3);font-size:11px;">신부/신랑 입력 후 Enter</td>
-          <td><input type="text" id="nr-album" placeholder="앨범" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
-          <td><select id="nr-frame" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;">
-            <option value="">-</option><option value="12x18inch">12x18</option><option value="20x30inch">20x30</option><option value="30x46cm">30x46</option>
-          </select></td>
-          <td><input type="text" id="nr-print" placeholder="인화" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;"></td>
-          <td colspan="9"></td>
-          <td><input type="text" id="nr-memo" placeholder="참고사항" style="width:100%;background:transparent;border:none;color:var(--text);font-size:12px;outline:none;" onkeydown="if(event.key==='Enter')saveNewRow()"></td>
+          <td>
+            <span class="col-label">촬영일</span>
+            <input class="nr-input" type="date" id="nr-shoot" style="color-scheme:light;">
+          </td>
+          <td>
+            <span class="col-label">본식일</span>
+            <input class="nr-input" type="date" id="nr-wedding" style="color-scheme:light;">
+          </td>
+          <td class="group-start" colspan="2" style="color:var(--text3);font-size:10px;">진행단계는 자동 시작</td>
+          <td class="group-start"><input class="nr-input" type="text" id="nr-albumqty" placeholder="권수"></td>
+          <td><input class="nr-input" type="text" id="nr-albump" placeholder="페이지수"></td>
+          <td>
+            <select class="nr-input" id="nr-frame">
+              <option value="">없음</option>
+              <option value="12x18inch">12x18</option>
+              <option value="20x30inch">20x30</option>
+              <option value="30x46cm">30x46</option>
+            </select>
+          </td>
+          <td><input class="nr-input" type="text" id="nr-print" placeholder="장수"></td>
+          <td class="group-start" colspan="7"></td>
+          <td class="group-start"><input class="nr-input" type="text" id="nr-memo" placeholder="참고사항"></td>
+          <td><button class="btn btn-primary btn-sm" onclick="saveNewRow()" style="white-space:nowrap"><i class="ti ti-plus"></i> 추가</button></td>
         </tr>
       </tfoot>
     </table>
@@ -327,21 +387,21 @@ textarea{resize:vertical;min-height:60px;}
 
 <!-- ALERTS PAGE -->
 <div id="page-alerts" style="display:none">
-  <div style="padding:16px 16px 0;font-size:14px;font-weight:500;">알람 센터</div>
+  <div style="padding:16px 16px 0;font-size:14px;font-weight:600;">알람 센터</div>
   <div class="notify-list" id="notify-list"></div>
 </div>
 
-<!-- NEW/EDIT MODAL -->
+<!-- EDIT MODAL -->
 <div class="modal-bg" id="modal-client">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title" id="modal-client-title">신규 고객 등록</div>
+      <div class="modal-title" id="modal-client-title">고객 정보 수정</div>
       <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-client')"><i class="ti ti-x"></i></button>
     </div>
     <div class="modal-body">
       <div class="form-grid">
-        <div class="form-group"><label>신부 이름 *</label><input type="text" id="f-bride" placeholder="홍길순"></div>
-        <div class="form-group"><label>신랑 이름 *</label><input type="text" id="f-groom" placeholder="홍길동"></div>
+        <div class="form-group"><label>신부 이름 *</label><input type="text" id="f-bride"></div>
+        <div class="form-group"><label>신랑 이름 *</label><input type="text" id="f-groom"></div>
         <div class="form-group"><label>상품 *</label>
           <select id="f-type" style="width:100%">
             <option value="스촬">스촬 (1개월)</option>
@@ -365,9 +425,7 @@ textarea{resize:vertical;min-height:60px;}
         <div class="form-group"><label>본식일</label><input type="date" id="f-wedding"></div>
         <div class="form-group"><label>연락처 (신부)</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
         <div class="form-group"><label>이메일</label><input type="text" id="f-email" placeholder="example@email.com"></div>
-        <div class="form-group"><label>앨범</label>
-          <input type="text" id="f-album" placeholder="예: 1권20p, 3권100p">
-        </div>
+        <div class="form-group"><label>앨범 (예: 1권20p, 3권100p)</label><input type="text" id="f-album" placeholder="자유 입력"></div>
         <div class="form-group"><label>액자</label>
           <select id="f-frame" style="width:100%">
             <option value="">없음</option>
@@ -376,6 +434,8 @@ textarea{resize:vertical;min-height:60px;}
             <option value="30x46cm">30x46 cm</option>
           </select>
         </div>
+        <div class="form-group"><label>인화 (장수)</label><input type="text" id="f-print" placeholder="예: 20장"></div>
+        <div class="form-group"></div>
         <div class="form-group full"><label>참고사항 / 메모</label><textarea id="f-memo" placeholder="특이사항, 요청사항 등"></textarea></div>
       </div>
     </div>
@@ -417,36 +477,22 @@ textarea{resize:vertical;min-height:60px;}
 </div>
 
 <script>
-const API = 'https://script.google.com/macros/s/AKfycbzem4LtAbrTcvpnQLVKkxZ_zT4tUrHfvjmgHbuysstYZ_tho30YwNTyZ3366_GzTQj5cg/exec';
-const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','고객 확인 중','재수정 중','컨펌 완료','제작/발주','완료'];
-const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
-const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7','mainCheck','orderer','contactDate','extra'];
+const API='https://script.google.com/macros/s/AKfycbzem4LtAbrTcvpnQLVKkxZ_zT4tUrHfvjmgHbuysstYZ_tho30YwNTyZ3366_GzTQj5cg/exec';
+const STAGES=['원본 전달 대기','셀렉 대기','색보정 중','리터칭 중','고객 확인 중','재수정 중','컨펌 완료','제작/발주','완료'];
+const SC=['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
+const HEADERS=['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7','mainCheck','orderer','contactDate','extra'];
 
-const PW_ADMIN = 'sdgkjFfjsf12';
-const PW_STAFF = 'dsgadgkeE23!';
-let isAdmin = false;
-let clients = [];
-let currentId = null;
-let sortCol = 'shootDate';
+const PW_ADMIN='sdgkjFfjsf12';
+const PW_STAFF='dsgadgkeE23!';
+let isAdmin=false,clients=[],currentId=null,sortCol='shootDate';
 
-// 클릭 사운드
-function playClick() {
-  try {
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value=800; o.type='sine';
-    g.gain.setValueAtTime(0.12,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.07);
-    o.start(ctx.currentTime); o.stop(ctx.currentTime+0.07);
-  } catch(e){}
-}
+function playClick(){try{const ctx=new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=900;o.type='sine';g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.06);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.06);}catch(e){}}
 document.addEventListener('click',e=>{if(e.target.closest('.btn,.mtab,.htab,.tl-dot,.check-circle'))playClick();});
 
-function checkPassword() {
-  const val = document.getElementById('lock-input').value;
-  if(val===PW_ADMIN){isAdmin=true;}
-  else if(val===PW_STAFF){isAdmin=false;}
+function checkPassword(){
+  const val=document.getElementById('lock-input').value;
+  if(val===PW_ADMIN)isAdmin=true;
+  else if(val===PW_STAFF)isAdmin=false;
   else{document.getElementById('lock-error').textContent='비밀번호가 틀렸습니다';document.getElementById('lock-input').value='';return;}
   document.getElementById('lock-screen').style.display='none';
   document.getElementById('loading-overlay').style.display='flex';
@@ -466,10 +512,8 @@ async function loadFromSheet(){
     const json=await res.json();
     if(json.status==='ok'&&json.data.length>1){
       clients=json.data.slice(1).map(r=>{
-        const o={};
-        HEADERS.forEach((h,i)=>o[h]=r[i]!==undefined?String(r[i]):'');
-        o.stage=parseInt(o.stage)||0;
-        return o;
+        const o={};HEADERS.forEach((h,i)=>o[h]=r[i]!==undefined?String(r[i]):'');
+        o.stage=parseInt(o.stage)||0;return o;
       }).filter(c=>c.id);
     }
     setSyncStatus('ok');
@@ -478,51 +522,27 @@ async function loadFromSheet(){
   renderAll();
 }
 
-async function saveToSheet(c){
-  setSyncStatus('syncing');
-  try{await fetch(API+'?action=save&row='+encodeURIComponent(JSON.stringify(c)));setSyncStatus('ok');}
-  catch(e){setSyncStatus('error');}
-}
-async function deleteFromSheet(id){
-  setSyncStatus('syncing');
-  try{await fetch(API+'?action=delete&id='+id);setSyncStatus('ok');}
-  catch(e){setSyncStatus('error');}
-}
-
+async function saveToSheet(c){setSyncStatus('syncing');try{await fetch(API+'?action=save&row='+encodeURIComponent(JSON.stringify(c)));setSyncStatus('ok');}catch(e){setSyncStatus('error');}}
+async function deleteFromSheet(id){setSyncStatus('syncing');try{await fetch(API+'?action=delete&id='+id);setSyncStatus('ok');}catch(e){setSyncStatus('error');}}
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
-function fDate(s){
-  if(!s)return'-';
-  const str=String(s);
-  const clean=str.length>10?str.slice(0,10):str;
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(clean))return'-';
-  return clean.replace(/-/g,'.').slice(2);
-}
+function fDate(s){if(!s)return'-';const str=String(s);const clean=str.length>10?str.slice(0,10):str;if(!/^\d{4}-\d{2}-\d{2}$/.test(clean))return'-';return clean.replace(/-/g,'.').slice(2);}
 
 function calcDeadline(c){
-  const raw=c.sendDate||c.shootDate;
-  if(!raw)return'';
+  const raw=c.sendDate||c.shootDate;if(!raw)return'';
   const base=String(raw).length>10?String(raw).slice(0,10):String(raw);
   if(!/^\d{4}-\d{2}-\d{2}$/.test(base))return'';
   const months=c.type==='본식'?2:1;
-  const d=new Date(base);
-  d.setMonth(d.getMonth()+months);
-  return d.toISOString().slice(0,10);
+  const d=new Date(base);d.setMonth(d.getMonth()+months);return d.toISOString().slice(0,10);
 }
 function calcDeadline2(c){
   if(c.type!=='스촬+본식')return'';
-  const raw=c.sendDate||c.shootDate;
-  if(!raw)return'';
+  const raw=c.sendDate||c.shootDate;if(!raw)return'';
   const base=String(raw).length>10?String(raw).slice(0,10):String(raw);
   if(!/^\d{4}-\d{2}-\d{2}$/.test(base))return'';
-  const d=new Date(base);d.setMonth(d.getMonth()+2);
-  return d.toISOString().slice(0,10);
+  const d=new Date(base);d.setMonth(d.getMonth()+2);return d.toISOString().slice(0,10);
 }
-function daysUntil(s){
-  if(!s)return null;
-  const t=new Date();t.setHours(0,0,0,0);
-  return Math.round((new Date(s)-t)/86400000);
-}
+function daysUntil(s){if(!s)return null;const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(s)-t)/86400000);}
 function ddayStr(n){if(n===null)return'-';if(n<0)return'D+'+Math.abs(n);if(n===0)return'D-Day';return'D-'+n;}
 function ddayCls(n,stage){if(n===null||stage!==1)return'na';if(n<0)return'overdue';if(n<=2)return'urgent';return'safe';}
 
@@ -530,23 +550,18 @@ function getAlerts(){
   const r=[];
   clients.forEach(c=>{
     if(c.stage!==1)return;
-    const d=daysUntil(calcDeadline(c));
-    if(d!==null&&d<=2)r.push({...c,_type:'스촬',_days:d,_dl:calcDeadline(c)});
-    const d2=daysUntil(calcDeadline2(c));
-    if(d2!==null&&d2<=2)r.push({...c,_type:'본식',_days:d2,_dl:calcDeadline2(c)});
+    const d=daysUntil(calcDeadline(c));if(d!==null&&d<=2)r.push({...c,_t:'스촬',_d:d,_dl:calcDeadline(c)});
+    const d2=daysUntil(calcDeadline2(c));if(d2!==null&&d2<=2)r.push({...c,_t:'본식',_d:d2,_dl:calcDeadline2(c)});
   });
   return r;
 }
 
-// ── PAGES ──────────────────────────────────
 function showPage(name){
   ['main','alerts'].forEach(p=>document.getElementById('page-'+p).style.display=p===name?'':'none');
   document.querySelectorAll('.htab').forEach((t,i)=>t.classList.toggle('active',['main','alerts'][i]===name));
   if(name==='alerts')renderAlerts();
 }
-
 function setSort(col){sortCol=col;document.getElementById('f-sort').value=col;renderMain();}
-
 function renderAll(){renderStats();renderMain();renderAlertBadge();}
 
 function renderStats(){
@@ -565,11 +580,7 @@ function renderStats(){
     <div class="stat-card"><div class="stat-label">완료</div><div class="stat-value ok">${done}</div></div>`;
 }
 
-function renderAlertBadge(){
-  const n=getAlerts().length;
-  const el=document.getElementById('alert-badge');
-  el.textContent=n;el.style.display=n?'':'none';
-}
+function renderAlertBadge(){const n=getAlerts().length;const el=document.getElementById('alert-badge');el.textContent=n;el.style.display=n?'':'none';}
 
 function renderMain(){
   const search=document.getElementById('search').value.toLowerCase();
@@ -578,7 +589,6 @@ function renderMain(){
   const fa=document.getElementById('f-artist').value;
   const sc=document.getElementById('f-sort').value;
   const hideDone=document.getElementById('hide-done').checked;
-
   let list=clients.slice();
   if(search)list=list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
   if(fs!=='all')list=list.filter(c=>c.stage===parseInt(fs));
@@ -586,58 +596,59 @@ function renderMain(){
   if(fa!=='all')list=list.filter(c=>c.artist===fa);
   if(hideDone)list=list.filter(c=>c.stage<8);
   list.sort((a,b)=>(a[sc]||'').localeCompare(b[sc]||''));
-
   document.getElementById('row-count').textContent=list.length+'건';
   const tbody=document.getElementById('main-tbody');
-  if(!list.length){tbody.innerHTML=`<tr><td colspan="22"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>데이터 없음</p></div></td></tr>`;return;}
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="23"><div class="empty-state"><i class="ti ti-users"></i><p>데이터 없음 — 아래 행에서 신규 등록하세요</p></div></td></tr>`;return;}
 
   tbody.innerHTML=list.map((c,i)=>{
-    const dl=calcDeadline(c);
-    const dl2=calcDeadline2(c);
+    const dl=calcDeadline(c),dl2=calcDeadline2(c);
     const days=c.stage===1?daysUntil(dl):null;
     const dc=ddayCls(days,c.stage);
     const isOver=dc==='overdue',isUrg=dc==='urgent';
-    const rowBg=isOver?'background:rgba(224,82,82,0.04)':isUrg?'background:rgba(232,165,48,0.04)':'';
+    const rowBg=isOver?'background:#fdf0ef':isUrg?'background:#fdf7ef':'';
     const isDone=c.stage===8;
+    const mainCheck=c.mainCheck==='true'||c.mainCheck===true;
+    const orderDone=c.orderDate&&c.orderDate!==''&&c.orderDate!=='-';
+
+    // 앨범 파싱 (album 필드에서 권수/페이지수 분리 시도)
+    const albumStr=c.album||'';
+    let albumQty='',albumPage='';
+    const m=albumStr.match(/(\d+)권.*?(\d+)p/);
+    if(m){albumQty=m[1]+'권';albumPage=m[2]+'p';}
+    else if(albumStr){albumQty=albumStr;}
 
     const ddayCell=c.stage===1?(dl2?
       `<div><span class="dday ${dc}" style="font-size:10px">${ddayStr(days)}</span></div><div><span class="dday ${ddayCls(daysUntil(dl2),1)}" style="font-size:10px">${ddayStr(daysUntil(dl2))}</span></div>`:
       `<span class="dday ${dc}">${ddayStr(days)}</span>`):'-';
-
     const deadlineCell=c.stage===1?(dl2?
       `<div style="font-size:10px">${fDate(dl)}</div><div style="font-size:10px">${fDate(dl2)}</div>`:
       fDate(dl)):'-';
 
-    const mainCheck=c.mainCheck==='true'||c.mainCheck===true;
-    const orderDone=c.orderDate&&c.orderDate!==''&&c.orderDate!=='-';
-
     return `<tr style="${rowBg}" class="${isDone?'row-done':''}" onclick="openDetail('${c.id}')">
-      <td style="color:var(--text3)">${i+1}</td>
+      <td style="color:var(--text3);text-align:center">${i+1}</td>
       <td style="color:var(--text2)">${c.artist||'-'}</td>
-      <td style="font-weight:500">${c.bride}</td>
-      <td style="font-weight:500">${c.groom}</td>
-      <td><span class="type-pill ${c.type==='스촬'?'tp-ss':c.type==='본식'?'tp-ws':c.type==='스촬+본식'?'tp-both':'tp-other'}">${c.type||'-'}</span></td>
+      <td class="group-start" style="font-weight:600">${c.bride}</td>
+      <td style="font-weight:600">${c.groom}</td>
+      <td class="group-start"><span class="type-pill ${c.type==='스촬'?'tp-ss':c.type==='본식'?'tp-ws':c.type==='스촬+본식'?'tp-both':'tp-other'}">${c.type||'-'}</span></td>
       <td style="color:var(--text2)">${fDate(c.shootDate)}</td>
       <td style="color:var(--text2)">${fDate(c.weddingDate)}</td>
-      <td><span class="stage-pill ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
+      <td class="group-start"><span class="stage-pill ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
       <td style="text-align:center" onclick="event.stopPropagation();toggleMainCheck('${c.id}')">
         <div class="check-circle ${mainCheck?'on':''}">${mainCheck?'<i class="ti ti-check"></i>':''}</div>
       </td>
-      <td style="text-align:center">
-        <div class="check-circle ${orderDone?'on':''}">${orderDone?'<i class="ti ti-check"></i>':''}</div>
-      </td>
-      <td style="color:var(--text2)">${c.album||'-'}</td>
-      <td style="color:var(--text2)">${c.frame||'-'}</td>
-      <td style="color:var(--text2)">${c.print||'-'}</td>
-      <td>${deadlineCell}</td>
+      <td class="group-start" style="color:var(--text2);text-align:center">${albumQty||'-'}</td>
+      <td style="color:var(--text2);text-align:center">${albumPage||'-'}</td>
+      <td style="color:var(--text2);text-align:center">${c.frame||'-'}</td>
+      <td style="color:var(--text2);text-align:center">${c.print||'-'}</td>
+      <td class="group-start">${deadlineCell}</td>
       <td>${ddayCell}</td>
-      <td style="color:var(--text2)">${fDate(c.orderDate)}</td>
+      <td class="group-start" style="color:var(--text2)">${fDate(c.orderDate)}</td>
       <td style="color:var(--text2)">${c.orderer||'-'}</td>
       <td style="color:var(--text2)">${fDate(c.shipDate)}</td>
       <td style="color:var(--text2)">${c.delivery||'-'}</td>
       <td style="color:var(--text2);font-size:11px">${c.tracking||'-'}</td>
-      <td style="color:var(--text2)">${fDate(c.contactDate)}</td>
-      <td style="color:var(--text2);font-size:11px">${c.memo||'-'}</td>
+      <td class="group-start" style="color:var(--text2)">${fDate(c.contactDate)}</td>
+      <td style="color:var(--text2);font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis">${c.memo||'-'}</td>
     </tr>`;
   }).join('');
 }
@@ -645,43 +656,40 @@ function renderMain(){
 function renderAlerts(){
   const list=getAlerts().sort((a,b)=>(a._dl||'').localeCompare(b._dl||''));
   const nl=document.getElementById('notify-list');
-  if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off" style="display:block"></i><p>알람 없음</p></div>';return;}
-  nl.innerHTML=list.map(c=>{
-    const isOver=c._days<0;
-    return `<div class="notify-item ${isOver?'urgent':'warn'}">
-      <div class="notify-icon ${isOver?'':'warn'}"><i class="ti ${isOver?'ti-alert-circle':'ti-clock'}"></i></div>
-      <div class="notify-info">
-        <div class="notify-title">${c.bride} · ${c.groom} ${c._type?'('+c._type+')':''} — ${isOver?'셀렉 기한 초과':'D-'+c._days}</div>
-        <div class="notify-desc">마감: ${fDate(c._dl)} · ${c.type} · 담당: ${c.artist||'-'}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <button class="btn btn-sm" onclick="openDetailTab('${c.id}','message')"><i class="ti ti-message"></i> 메시지</button>
-        <button class="btn btn-sm btn-primary" onclick="openDetailTab('${c.id}','progress')"><i class="ti ti-arrow-right"></i> 진행</button>
-      </div>
-    </div>`;
-  }).join('');
+  if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off"></i><p>현재 알람 없음</p></div>';return;}
+  nl.innerHTML=list.map(c=>{const isOver=c._d<0;return`<div class="notify-item ${isOver?'urgent':'warn'}">
+    <div class="notify-icon ${isOver?'':'warn'}"><i class="ti ${isOver?'ti-alert-circle':'ti-clock'}"></i></div>
+    <div class="notify-info">
+      <div class="notify-title">${c.bride} · ${c.groom} ${c._t?'('+c._t+')':''} — ${isOver?'셀렉 기한 초과':'D-'+c._d}</div>
+      <div class="notify-desc">마감: ${fDate(c._dl)} · ${c.type} · 담당: ${c.artist||'-'}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <button class="btn btn-sm" onclick="openDetailTab('${c.id}','message')"><i class="ti ti-message"></i> 메시지</button>
+      <button class="btn btn-sm btn-primary" onclick="openDetailTab('${c.id}','progress')"><i class="ti ti-arrow-right"></i> 진행</button>
+    </div>
+  </div>`;}).join('');
 }
 
-// ── TOGGLE MAIN CHECK ──────────────────────
 async function toggleMainCheck(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
   c.mainCheck=!(c.mainCheck==='true'||c.mainCheck===true);
   await saveToSheet(c);renderMain();
 }
 
-// ── MODALS ──────────────────────────────────
 async function saveNewRow(){
   const bride=document.getElementById('nr-bride').value.trim();
   const groom=document.getElementById('nr-groom').value.trim();
   if(!bride||!groom){alert('신부/신랑 이름을 입력해주세요');return;}
+  const qty=document.getElementById('nr-albumqty').value.trim();
+  const pg=document.getElementById('nr-albump').value.trim();
+  const albumStr=qty&&pg?qty+'권'+pg+'p':qty||pg?qty||pg:'';
   const nc={
-    id:genId(),
-    bride,groom,
+    id:genId(),bride,groom,
     type:document.getElementById('nr-type').value,
     artist:document.getElementById('nr-artist').value,
     shootDate:document.getElementById('nr-shoot').value,
     weddingDate:document.getElementById('nr-wedding').value,
-    album:document.getElementById('nr-album').value,
+    album:albumStr,
     frame:document.getElementById('nr-frame').value,
     print:document.getElementById('nr-print').value,
     memo:document.getElementById('nr-memo').value,
@@ -693,8 +701,7 @@ async function saveNewRow(){
   STAGES.forEach((_,i)=>nc['stageDate_'+i]='');
   clients.push(nc);
   await saveToSheet(nc);
-  // 입력 초기화
-  ['bride','groom','album','print','memo'].forEach(f=>document.getElementById('nr-'+f).value='');
+  ['bride','groom','albumqty','albump','print','memo'].forEach(f=>{const el=document.getElementById('nr-'+f);if(el)el.value='';});
   document.getElementById('nr-shoot').value='';
   document.getElementById('nr-wedding').value='';
   document.getElementById('nr-frame').value='';
@@ -702,65 +709,8 @@ async function saveNewRow(){
   renderAll();
 }
 
-function openNewClient(){
-  currentId=null;
-  document.getElementById('modal-client-title').textContent='신규 고객 등록';
-  ['bride','groom','phone','email','memo'].forEach(f=>document.getElementById('f-'+f).value='');
-  document.getElementById('f-type').value='스촬';
-  document.getElementById('f-artist').value='설민';
-  document.getElementById('f-shoot').value='';
-  document.getElementById('f-wedding').value='';
-  document.getElementById('f-album').value='';
-  document.getElementById('f-frame').value='';
-  document.getElementById('modal-client').classList.add('open');
-}
-
-function editCurrentClient(){
-  const c=clients.find(x=>x.id===currentId);if(!c)return;
-  closeModal('modal-detail');
-  document.getElementById('modal-client-title').textContent='고객 정보 수정';
-  document.getElementById('f-bride').value=c.bride||'';
-  document.getElementById('f-groom').value=c.groom||'';
-  document.getElementById('f-type').value=c.type||'스촬';
-  document.getElementById('f-artist').value=c.artist||'설민';
-  document.getElementById('f-shoot').value=c.shootDate||'';
-  document.getElementById('f-wedding').value=c.weddingDate||'';
-  document.getElementById('f-phone').value=c.phone||'';
-  document.getElementById('f-email').value=c.email||'';
-  document.getElementById('f-album').value=c.album||'';
-  document.getElementById('f-frame').value=c.frame||'';
-  document.getElementById('f-memo').value=c.memo||'';
-  document.getElementById('modal-client').classList.add('open');
-}
-
-async function saveClient(){
-  const bride=document.getElementById('f-bride').value.trim();
-  const groom=document.getElementById('f-groom').value.trim();
-  if(!bride||!groom){alert('신부/신랑 이름 입력');return;}
-  const data={bride,groom,type:document.getElementById('f-type').value,artist:document.getElementById('f-artist').value,shootDate:document.getElementById('f-shoot').value,weddingDate:document.getElementById('f-wedding').value,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),album:document.getElementById('f-album').value,frame:document.getElementById('f-frame').value,memo:document.getElementById('f-memo').value.trim()};
-  if(currentId){
-    const idx=clients.findIndex(x=>x.id===currentId);
-    clients[idx]={...clients[idx],...data};
-    await saveToSheet(clients[idx]);
-  } else {
-    const nc={...data,id:genId(),stage:0,created:new Date().toISOString().slice(0,10),sendDate:'',selectDeadline:'',orderDate:'',shipDate:'',delivery:'',print:'',tracking:'',orderMemo:'',mainCheck:'',orderer:'',contactDate:'',extra:''};
-    STAGES.forEach((_,i)=>nc['stageDate_'+i]='');
-    clients.push(nc);
-    await saveToSheet(nc);
-  }
-  closeModal('modal-client');renderAll();
-}
-
-async function deleteCurrentClient(){
-  if(!confirm('삭제하시겠습니까?'))return;
-  await deleteFromSheet(currentId);
-  clients=clients.filter(c=>c.id!==currentId);
-  closeModal('modal-detail');renderAll();
-}
-
 function openDetail(id){
-  currentId=id;
-  const c=clients.find(x=>x.id===id);if(!c)return;
+  currentId=id;const c=clients.find(x=>x.id===id);if(!c)return;
   document.getElementById('detail-title').textContent=c.bride+' · '+c.groom;
   document.getElementById('delete-btn').style.display=isAdmin?'':'none';
   renderProgress(c);renderOrder(c);renderMessage(c);renderInfo(c);
@@ -768,7 +718,6 @@ function openDetail(id){
   document.getElementById('modal-detail').classList.add('open');
 }
 function openDetailTab(id,tab){openDetail(id);setTimeout(()=>switchTab(tab),50);}
-
 function switchTab(tab){
   document.querySelectorAll('.mtab').forEach((t,i)=>t.classList.toggle('active',['progress','order','message','info'][i]===tab));
   ['progress','order','message','info'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('active',t===tab));
@@ -779,23 +728,17 @@ function renderProgress(c){
     const skipped=i===5&&c.stage>=6&&!c['stageDate_5'];
     const done=i<c.stage&&!skipped,curr=i===c.stage;
     const line=i<STAGES.length-1?`<div class="tl-line ${done?'done':''}"></div>`:'';
-    return `<div class="tl-step"><div class="tl-dot-wrap">
-      <div class="tl-dot ${done?'done':curr?'current':skipped?'skipped':''}" onclick="setStage('${c.id}',${i})" title="${s}">
-        ${done?'<i class="ti ti-check" style="font-size:9px"></i>':skipped?'—':i+1}
-      </div>
-      <div class="tl-label ${curr?'current':''}" style="${skipped?'text-decoration:line-through;color:var(--text3)':''}">${s}</div>
-    </div>${line}</div>`;
+    return`<div class="tl-step"><div class="tl-dot-wrap"><div class="tl-dot ${done?'done':curr?'current':skipped?'skipped':''}" onclick="setStage('${c.id}',${i})" title="${s}">${done?'<i class="ti ti-check" style="font-size:9px"></i>':skipped?'—':i+1}</div><div class="tl-label ${curr?'current':''}" style="${skipped?'text-decoration:line-through':''}">${s}</div></div>${line}</div>`;
   }).join('');
-
   document.getElementById('tab-progress').innerHTML=`
-    <div style="margin-bottom:16px"><div style="font-size:10px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em">진행 단계</div><div class="timeline">${tl}</div></div>
+    <div style="margin-bottom:16px"><div style="font-size:10px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em;font-weight:600">진행 단계</div><div class="timeline">${tl}</div></div>
     ${c.stage===0?`
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;">
-      <div style="font-size:12px;font-weight:500;color:var(--accent);margin-bottom:8px">원본 전달 날짜 입력 후 버튼 클릭</div>
+    <div style="background:var(--accent-bg);border:1px solid rgba(139,105,20,0.2);border-radius:var(--radius);padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:8px">원본 전달 날짜 입력 후 버튼 클릭</div>
       <div style="display:flex;gap:8px"><input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1"><button class="btn btn-primary" onclick="saveSendDateAndAdvance('${c.id}')"><i class="ti ti-arrow-right"></i> 원본 전달 완료 → 셀렉 대기</button></div>
     </div>`:`
     <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px;">
-      <span style="font-size:11px;color:var(--text3)">원본 전달 날짜</span>
+      <span style="font-size:11px;color:var(--text2);font-weight:500">원본 전달 날짜</span>
       <input type="date" id="send-date-inp" value="${c.sendDate||''}" style="width:160px" onchange="saveSendDate('${c.id}')">
       <span style="font-size:10px;color:var(--text3)">변경 시 자동 저장</span>
     </div>`}
@@ -804,7 +747,7 @@ function renderProgress(c){
         <button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-refresh"></i> 재수정 있음</button>
         <button class="btn btn-success" onclick="skipToConfirm('${c.id}')"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
       `:c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
-      ${c.stage===8?`<div style="font-size:12px;color:var(--success);font-weight:500">✓ 완료</div>`:''}
+      ${c.stage===8?`<div style="font-size:12px;color:var(--success);font-weight:600">✓ 완료</div>`:''}
       ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
     </div>
     <div class="detail-section"><div class="detail-section-title">단계별 날짜 기록</div>
@@ -815,14 +758,14 @@ function renderProgress(c){
 function renderOrder(c){
   const mainChecked=c.mainCheck==='true'||c.mainCheck===true;
   document.getElementById('tab-order').innerHTML=`
-  <div style="background:rgba(200,169,126,0.08);border:1px solid rgba(200,169,126,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+  <div style="background:var(--accent-bg);border:1px solid rgba(139,105,20,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
     <input type="checkbox" id="od-mainCheck" ${mainChecked?'checked':''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)">
-    <div><div style="font-size:12px;font-weight:500;color:var(--accent)">메인 체크</div><div style="font-size:11px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능</div></div>
+    <div><div style="font-size:12px;font-weight:600;color:var(--accent)">메인 체크</div><div style="font-size:11px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능 상태</div></div>
   </div>
   <div class="form-grid">
     <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
-    <div class="form-group"><label>발주자</label><input type="text" id="od-orderer" value="${c.orderer||''}" placeholder="담당자"></div>
-    <div class="form-group"><label>배송일/방문일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
+    <div class="form-group"><label>발주자</label><input type="text" id="od-orderer" value="${c.orderer||''}" placeholder="담당자 이름"></div>
+    <div class="form-group"><label>배송일 / 방문일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
     <div class="form-group"><label>운송 방법</label>
       <select id="od-delivery" style="width:100%">
         <option ${c.delivery==='방문 수령'?'selected':''}>방문 수령</option>
@@ -830,11 +773,18 @@ function renderOrder(c){
         <option ${c.delivery==='퀵'?'selected':''}>퀵</option>
       </select>
     </div>
-    <div class="form-group"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="운송장 번호"></div>
+    <div class="form-group"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="택배 운송장 번호"></div>
     <div class="form-group"><label>고객 연락 날짜</label><input type="date" id="od-contactDate" value="${c.contactDate||''}"></div>
-    <div class="form-group"><label>앨범</label><input type="text" id="od-album2" value="${c.album||''}" placeholder="1권20p"></div>
-    <div class="form-group"><label>액자</label><input type="text" id="od-frame2" value="${c.frame||''}" placeholder="12x18inch"></div>
-    <div class="form-group"><label>인화 수량</label><input type="text" id="od-print" value="${c.print||''}" placeholder="20장"></div>
+    <div class="form-group"><label>앨범 (권수/페이지)</label><input type="text" id="od-album2" value="${c.album||''}" placeholder="예: 1권20p"></div>
+    <div class="form-group"><label>액자 크기</label>
+      <select id="od-frame2" style="width:100%">
+        <option value="">없음</option>
+        <option ${c.frame==='12x18inch'?'selected':''} value="12x18inch">12x18 inch</option>
+        <option ${c.frame==='20x30inch'?'selected':''} value="20x30inch">20x30 inch</option>
+        <option ${c.frame==='30x46cm'?'selected':''} value="30x46cm">30x46 cm</option>
+      </select>
+    </div>
+    <div class="form-group"><label>인화 (장수)</label><input type="text" id="od-print" value="${c.print||''}" placeholder="예: 20장"></div>
     <div class="form-group"><label>기타 제작물</label><input type="text" id="od-extra" value="${c.extra||''}" placeholder="스냅합본 등"></div>
     <div class="form-group full"><label>발주 메모</label><textarea id="od-orderMemo">${c.orderMemo||''}</textarea></div>
   </div>
@@ -844,15 +794,14 @@ function renderOrder(c){
 }
 
 function renderMessage(c){
-  const dl=calcDeadline(c);
-  const months=c.type==='본식'?2:1;
+  const dl=calcDeadline(c);const months=c.type==='본식'?2:1;
   const m1=`안녕하세요, ${c.bride}님 😊\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 다가오고 있어 안내 드립니다.\n\n${dl?dl.replace(/-/g,'.'):'기한'} 까지 셀렉이 도착하지 않을 경우 담당 작가가 직접 셀렉하여 작업을 진행하게 됩니다.\n\n빠른 확인 부탁드립니다 🙏\n감사합니다.\nTAKEMIND`;
   const m2=`안녕하세요, ${c.bride}님.\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 경과하였습니다.\n계약 조건에 따라 담당 작가가 직접 셀렉하여 작업을 진행하게 되었음을 안내 드립니다.\n\n작업 완료 후 다시 연락드리겠습니다.\n감사합니다.\nTAKEMIND`;
   const m3=`안녕하세요,\n\n리터칭 작업 요청 드립니다.\n\n고객명: ${c.bride} · ${c.groom}\n촬영일: ${fDate(c.shootDate)}\n상품: ${c.type}\n\n색보정 파일 기준으로 진행해 주세요.\n감사합니다.\nTAKEMIND ${c.artist||''}`;
   document.getElementById('tab-message').innerHTML=`<div style="display:flex;flex-direction:column;gap:14px">
-    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 셀렉 기한 임박</div><div class="msg-box" id="msg1">${m1}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg1')"><i class="ti ti-copy"></i></button></div></div>
-    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 기한 초과 (임의 셀렉)</div><div class="msg-box" id="msg2">${m2}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg2')"><i class="ti ti-copy"></i></button></div></div>
-    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">리터쳐 작업 의뢰</div><div class="msg-box" id="msg3">${m3}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg3')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:600">고객 안내 — 셀렉 기한 임박</div><div class="msg-box" id="msg1">${m1}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg1')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:600">고객 안내 — 기한 초과 (임의 셀렉)</div><div class="msg-box" id="msg2">${m2}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg2')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:600">리터쳐 작업 의뢰</div><div class="msg-box" id="msg3">${m3}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg3')"><i class="ti ti-copy"></i></button></div></div>
   </div>`;
 }
 
@@ -874,17 +823,13 @@ function renderInfo(c){
     <div class="detail-row"><span class="detail-key">이메일</span><span class="detail-val">${c.email||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">앨범</span><span class="detail-val">${c.album||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">액자</span><span class="detail-val">${c.frame||'-'}</span></div>
+    <div class="detail-row"><span class="detail-key">인화</span><span class="detail-val">${c.print||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val">${c.stage===1?(dl||'-')+' ('+ddayStr(days)+')':'-'}${dl2&&c.stage===1?' / 본식 '+dl2+' ('+ddayStr(days2)+')':''}</span></div>
     <div class="detail-row"><span class="detail-key">메모</span><span class="detail-val" style="white-space:pre-wrap">${c.memo||'-'}</span></div>
   </div>`;
 }
 
-function copyMsg(id){
-  const el=document.getElementById(id);
-  const btn=el.querySelector('.copy-btn');
-  const text=el.childNodes[0].textContent.trim();
-  navigator.clipboard.writeText(text).then(()=>{btn.innerHTML='<i class="ti ti-check"></i>';setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);});
-}
+function copyMsg(id){const el=document.getElementById(id);const btn=el.querySelector('.copy-btn');const text=el.childNodes[0].textContent.trim();navigator.clipboard.writeText(text).then(()=>{btn.innerHTML='<i class="ti ti-check"></i>';setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);});}
 
 async function saveSendDateAndAdvance(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
@@ -893,35 +838,27 @@ async function saveSendDateAndAdvance(id){
   c.sendDate=dateVal;c.selectDeadline=calcDeadline(c);c['stageDate_0']=dateVal;c.stage=1;
   await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
-
 async function saveSendDate(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
-  c.sendDate=document.getElementById('send-date-inp').value;
-  c.selectDeadline=calcDeadline(c);
+  c.sendDate=document.getElementById('send-date-inp').value;c.selectDeadline=calcDeadline(c);
   await saveToSheet(c);renderInfo(c);renderAll();
 }
-
 async function advanceStage(id){
   const c=clients.find(x=>x.id===id);if(!c||c.stage>=8)return;
-  c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);
-  c.stage++;
+  c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);c.stage++;
   if(c.stage===7)c.orderDate=c.orderDate||new Date().toISOString().slice(0,10);
   await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
-
 async function skipToConfirm(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
   c['stageDate_5']='';c['stageDate_6']=new Date().toISOString().slice(0,10);c.stage=6;
   await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
-
 async function setStage(id,stage){
   const c=clients.find(x=>x.id===id);if(!c)return;
   if(stage<c.stage)for(let i=stage;i<STAGES.length;i++)c['stageDate_'+i]='';
-  c.stage=stage;
-  await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
+  c.stage=stage;await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
-
 async function saveOrderData(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
   const btn=document.getElementById('order-save-btn');
@@ -944,6 +881,37 @@ async function saveOrderData(id){
   renderAll();
 }
 
+function editCurrentClient(){
+  const c=clients.find(x=>x.id===currentId);if(!c)return;
+  closeModal('modal-detail');
+  document.getElementById('modal-client-title').textContent='고객 정보 수정';
+  document.getElementById('f-bride').value=c.bride||'';
+  document.getElementById('f-groom').value=c.groom||'';
+  document.getElementById('f-type').value=c.type||'스촬';
+  document.getElementById('f-artist').value=c.artist||'설민';
+  document.getElementById('f-shoot').value=c.shootDate||'';
+  document.getElementById('f-wedding').value=c.weddingDate||'';
+  document.getElementById('f-phone').value=c.phone||'';
+  document.getElementById('f-email').value=c.email||'';
+  document.getElementById('f-album').value=c.album||'';
+  document.getElementById('f-frame').value=c.frame||'';
+  document.getElementById('f-print').value=c.print||'';
+  document.getElementById('f-memo').value=c.memo||'';
+  document.getElementById('modal-client').classList.add('open');
+}
+async function saveClient(){
+  const bride=document.getElementById('f-bride').value.trim();
+  const groom=document.getElementById('f-groom').value.trim();
+  if(!bride||!groom){alert('신부/신랑 이름 입력');return;}
+  const data={bride,groom,type:document.getElementById('f-type').value,artist:document.getElementById('f-artist').value,shootDate:document.getElementById('f-shoot').value,weddingDate:document.getElementById('f-wedding').value,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),album:document.getElementById('f-album').value,frame:document.getElementById('f-frame').value,print:document.getElementById('f-print').value,memo:document.getElementById('f-memo').value.trim()};
+  if(currentId){const idx=clients.findIndex(x=>x.id===currentId);clients[idx]={...clients[idx],...data};await saveToSheet(clients[idx]);}
+  closeModal('modal-client');renderAll();
+}
+async function deleteCurrentClient(){
+  if(!confirm('삭제하시겠습니까?'))return;
+  await deleteFromSheet(currentId);clients=clients.filter(c=>c.id!==currentId);
+  closeModal('modal-detail');renderAll();
+}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 </script>
 </body>

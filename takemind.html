@@ -6,361 +6,310 @@
 <title>TAKEMIND 워크플로우</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
-  :root {
-    --bg: #0e0e0e; --bg2: #161616; --bg3: #1e1e1e; --bg4: #262626;
-    --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.14);
-    --text: #f0f0f0; --text2: #999; --text3: #666;
-    --accent: #c8a97e; --accent2: #e8c99e;
-    --danger: #e05252; --warning: #e8a530; --success: #52b788; --info: #5b9bd5;
-    --radius: 8px; --radius-lg: 12px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; font-size: 14px; line-height: 1.6; }
+:root {
+  --bg:#0e0e0e; --bg2:#161616; --bg3:#1e1e1e; --bg4:#262626;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13);
+  --text:#f0f0f0; --text2:#999; --text3:#555;
+  --accent:#c8a97e; --accent2:#e8c99e;
+  --danger:#e05252; --warning:#e8a530; --success:#52b788; --info:#5b9bd5;
+  --radius:6px; --radius-lg:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:13px;line-height:1.5;}
 
-  .lock-screen { position: fixed; inset: 0; background: var(--bg); z-index: 999; display: flex; align-items: center; justify-content: center; }
-  .lock-box { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 40px; width: 340px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-  .lock-logo { font-family: 'Georgia',serif; font-size: 20px; letter-spacing: 0.2em; color: var(--accent); text-align: center; }
-  .lock-logo span { display: block; font-size: 11px; letter-spacing: 0.08em; color: var(--text3); margin-top: 4px; font-family: sans-serif; }
-  .lock-box input[type=password] { background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 10px 14px; font-size: 14px; outline: none; width: 100%; text-align: center; letter-spacing: 0.1em; }
-  .lock-box input[type=password]:focus { border-color: var(--accent); }
-  .lock-error { font-size: 12px; color: var(--danger); min-height: 16px; }
+/* LOCK */
+.lock-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;}
+.lock-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px;width:320px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.lock-logo{font-family:'Georgia',serif;font-size:18px;letter-spacing:0.2em;color:var(--accent);text-align:center;}
+.lock-logo span{display:block;font-size:10px;letter-spacing:0.1em;color:var(--text3);margin-top:4px;font-family:sans-serif;}
+.lock-box input[type=password]{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:9px 12px;font-size:13px;outline:none;width:100%;text-align:center;letter-spacing:0.1em;}
+.lock-box input[type=password]:focus{border-color:var(--accent);}
+.lock-error{font-size:12px;color:var(--danger);min-height:16px;}
 
-  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; height: 56px; gap: 24px; position: sticky; top: 0; z-index: 100; }
-  .logo { font-family: 'Georgia',serif; font-size: 16px; letter-spacing: 0.15em; color: var(--accent); white-space: nowrap; }
-  .logo span { color: var(--text3); font-size: 11px; letter-spacing: 0.05em; display: block; margin-top: -2px; }
-  .header-tabs { display: flex; gap: 4px; flex: 1; }
-  .header-tab { padding: 6px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; color: var(--text2); border: none; background: none; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-  .header-tab:hover { color: var(--text); background: var(--bg3); }
-  .header-tab.active { color: var(--accent); background: rgba(200,169,126,0.1); }
-  .header-right { display: flex; gap: 8px; align-items: center; }
-  .sync-status { font-size: 11px; color: var(--text3); display: flex; align-items: center; gap: 5px; }
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
-  .sync-dot.syncing { background: var(--warning); animation: pulse 1s infinite; }
-  .sync-dot.error { background: var(--danger); }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* HEADER */
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;height:48px;gap:16px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Georgia',serif;font-size:14px;letter-spacing:0.15em;color:var(--accent);white-space:nowrap;}
+.header-tabs{display:flex;gap:2px;flex:1;}
+.htab{padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;color:var(--text2);border:none;background:none;transition:all 0.15s;display:inline-flex;align-items:center;gap:5px;}
+.htab:hover{color:var(--text);background:var(--bg3);}
+.htab.active{color:var(--accent);background:rgba(200,169,126,0.1);}
+.header-right{display:flex;gap:6px;align-items:center;}
+.sync-status{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px;}
+.sync-dot{width:5px;height:5px;border-radius:50%;background:var(--success);}
+.sync-dot.syncing{background:var(--warning);animation:pulse 1s infinite;}
+.sync-dot.error{background:var(--danger);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
-  .btn { padding: 7px 14px; border-radius: var(--radius); font-size: 13px; cursor: pointer; border: 1px solid var(--border2); background: var(--bg3); color: var(--text); transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
-  .btn:hover { background: var(--bg4); }
-  .btn:active { transform: scale(0.95); opacity: 0.85; }
-  .btn-primary { background: var(--accent); color: #1a1008; border-color: var(--accent); font-weight: 600; }
-  .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
-  .btn-primary:active { transform: scale(0.95); }
-  .btn-sm { padding: 4px 10px; font-size: 12px; }
-  .btn-ghost { background: none; border-color: transparent; color: var(--text2); }
-  .btn-ghost:hover { background: var(--bg3); color: var(--text); border-color: var(--border); }
-  .btn-danger { background: rgba(224,82,82,0.1); border-color: rgba(224,82,82,0.3); color: var(--danger); }
-  .sidebar-item:active { transform: scale(0.97); }
+/* BUTTONS */
+.btn{padding:6px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text);transition:all 0.12s;display:inline-flex;align-items:center;gap:5px;}
+.btn:hover{background:var(--bg4);}
+.btn:active{transform:scale(0.96);}
+.btn-primary{background:var(--accent);color:#1a1008;border-color:var(--accent);font-weight:600;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-sm{padding:3px 8px;font-size:11px;}
+.btn-ghost{background:none;border-color:transparent;color:var(--text2);}
+.btn-ghost:hover{background:var(--bg3);color:var(--text);}
+.btn-danger{background:rgba(224,82,82,0.1);border-color:rgba(224,82,82,0.3);color:var(--danger);}
+.btn-success{background:rgba(82,183,136,0.15);border-color:rgba(82,183,136,0.4);color:var(--success);}
 
-  .app { display: flex; height: calc(100vh - 56px); overflow: hidden; }
-  .sidebar { width: 210px; background: var(--bg2); border-right: 1px solid var(--border); padding: 16px 12px; overflow-y: auto; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; }
-  .main { flex: 1; overflow-y: auto; padding: 24px; }
+/* LOADING */
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+.loading-overlay p{font-size:12px;color:var(--text2);}
+.spinner{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .sidebar-section { font-size: 10px; letter-spacing: 0.1em; color: var(--text3); padding: 8px 8px 4px; text-transform: uppercase; margin-top: 8px; }
-  .sidebar-item { padding: 8px 10px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; gap: 8px; color: var(--text2); font-size: 13px; transition: all 0.15s; }
-  .sidebar-item:hover { background: var(--bg3); color: var(--text); }
-  .sidebar-item.active { background: rgba(200,169,126,0.12); color: var(--accent); }
-  .sidebar-item i { font-size: 16px; }
-  .sidebar-badge { margin-left: auto; font-size: 11px; background: var(--danger); color: #fff; border-radius: 10px; padding: 1px 6px; min-width: 18px; text-align: center; }
-  .sidebar-badge.warn { background: var(--warning); color: #1a1008; }
+/* STATS */
+.stats-bar{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;}
+.stat-label{font-size:10px;color:var(--text3);margin-bottom:4px;}
+.stat-value{font-size:20px;font-weight:500;}
+.stat-value.danger{color:var(--danger);}
+.stat-value.warn{color:var(--warning);}
+.stat-value.ok{color:var(--success);}
 
-  .stats-bar { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-bottom: 24px; }
-  .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; }
-  .stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.05em; margin-bottom: 6px; }
-  .stat-value { font-size: 24px; font-weight: 500; }
-  .stat-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
-  .stat-value.danger { color: var(--danger); }
-  .stat-value.warn { color: var(--warning); }
-  .stat-value.ok { color: var(--success); }
+/* TOOLBAR */
+.toolbar{display:flex;gap:6px;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.toolbar input[type=text]{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 10px;font-size:12px;width:180px;outline:none;}
+.toolbar input[type=text]:focus{border-color:var(--accent);}
+.toolbar input::placeholder{color:var(--text3);}
+select{background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:5px 8px;font-size:12px;outline:none;cursor:pointer;}
+select:focus{border-color:var(--accent);}
+.tsep{flex:1;}
 
-  .filter-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-  .filter-bar input[type=text] { background: var(--bg2); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 7px 12px; font-size: 13px; width: 200px; outline: none; }
-  .filter-bar input[type=text]:focus { border-color: var(--accent); }
-  .filter-bar input[type=text]::placeholder { color: var(--text3); }
-  select { background: var(--bg2); border: 1px solid var(--border); color: var(--text); border-radius: var(--radius); padding: 7px 10px; font-size: 13px; outline: none; cursor: pointer; }
-  select:focus { border-color: var(--accent); }
-  .filter-sep { flex: 1; }
+/* MAIN TABLE */
+.table-container{overflow:auto;height:calc(100vh - 48px - 80px - 44px);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead{position:sticky;top:0;z-index:10;}
+thead th{background:var(--bg3);color:var(--text3);font-weight:500;padding:7px 8px;text-align:left;font-size:10px;letter-spacing:0.04em;border-bottom:1px solid var(--border2);border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none;}
+thead th:hover{color:var(--text);}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.08s;cursor:pointer;}
+tbody tr:hover{background:rgba(255,255,255,0.03);}
+tbody tr.row-done{opacity:0.4;}
+tbody td{padding:6px 8px;vertical-align:middle;border-right:1px solid var(--border);white-space:nowrap;overflow:hidden;max-width:200px;text-overflow:ellipsis;}
+tbody td.editable:hover{background:rgba(200,169,126,0.06);}
 
-  .table-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-  thead th { background: var(--bg3); color: var(--text3); font-weight: 500; padding: 10px 12px; text-align: left; font-size: 11px; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; cursor: pointer; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--bg3); }
-  tbody td { padding: 10px 12px; vertical-align: middle; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* BADGES */
+.stage-pill{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:10px;font-weight:500;white-space:nowrap;}
+.s0{background:rgba(91,155,213,0.15);color:var(--info);}
+.s1{background:rgba(200,169,126,0.15);color:var(--accent);}
+.s2{background:rgba(232,165,48,0.15);color:var(--warning);}
+.s3{background:rgba(232,165,48,0.15);color:var(--warning);}
+.s4{background:rgba(82,183,136,0.12);color:var(--success);}
+.s5{background:rgba(224,82,82,0.12);color:var(--danger);}
+.s6{background:rgba(82,183,136,0.2);color:var(--success);}
+.s7{background:rgba(91,155,213,0.15);color:var(--info);}
+.s8{background:rgba(82,183,136,0.25);color:var(--success);}
 
-  .stage-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 100px; font-size: 11px; font-weight: 500; white-space: nowrap; }
-  .s0{background:rgba(91,155,213,0.15);color:var(--info)}
-  .s1{background:rgba(200,169,126,0.15);color:var(--accent)}
-  .s2{background:rgba(232,165,48,0.15);color:var(--warning)}
-  .s3{background:rgba(232,165,48,0.15);color:var(--warning)}
-  .s4{background:rgba(82,183,136,0.12);color:var(--success)}
-  .s5{background:rgba(224,82,82,0.15);color:var(--danger)}
-  .s6{background:rgba(82,183,136,0.2);color:var(--success)}
-  .s7{background:rgba(91,155,213,0.15);color:var(--info)}
-  .s8{background:rgba(82,183,136,0.25);color:var(--success)}
-  .type-badge { display:inline-block; padding:2px 7px; border-radius:4px; font-size:11px; }
-  .type-ss{background:rgba(91,155,213,0.12);color:var(--info)}
-  .type-ws{background:rgba(200,169,126,0.12);color:var(--accent)}
-  .type-both{background:rgba(82,183,136,0.12);color:var(--success)}
-  .dday{font-size:12px;font-weight:500}
-  .dday.overdue{color:var(--danger)}
-  .dday.urgent{color:var(--warning)}
-  .dday.safe{color:var(--success)}
-  .dday.na{color:var(--text3)}
+.type-pill{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;}
+.tp-ss{background:rgba(91,155,213,0.12);color:var(--info);}
+.tp-ws{background:rgba(200,169,126,0.12);color:var(--accent);}
+.tp-both{background:rgba(82,183,136,0.12);color:var(--success);}
+.tp-other{background:var(--bg4);color:var(--text2);}
 
-  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:200; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; }
-  .modal-bg.open { display:flex; }
-  .modal { background:var(--bg2); border:1px solid var(--border2); border-radius:var(--radius-lg); width:100%; max-width:720px; }
-  .modal-header { padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-  .modal-title { font-size:16px; font-weight:500; }
-  .modal-body { padding:24px; display:flex; flex-direction:column; gap:20px; }
-  .modal-footer { padding:16px 24px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
-  .modal-tabs { display:flex; gap:4px; border-bottom:1px solid var(--border); padding:0 24px; }
-  .modal-tab { padding:10px 14px; font-size:13px; cursor:pointer; color:var(--text2); border-bottom:2px solid transparent; margin-bottom:-1px; transition:all 0.15s; }
-  .modal-tab:hover{color:var(--text)}
-  .modal-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
-  .tab-content{display:none}
-  .tab-content.active{display:block}
+.dday{font-size:11px;font-weight:600;}
+.dday.overdue{color:var(--danger);}
+.dday.urgent{color:var(--warning);}
+.dday.safe{color:var(--success);}
+.dday.na{color:var(--text3);}
 
-  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .form-group { display:flex; flex-direction:column; gap:6px; }
-  .form-group.full { grid-column:1/-1; }
-  label { font-size:12px; color:var(--text2); }
-  input[type=text],input[type=date],input[type=tel],textarea { background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:var(--radius); padding:8px 12px; font-size:13px; outline:none; width:100%; font-family:inherit; }
-  input[type=text]:focus,input[type=date]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--accent)}
-  input[type=date]{color-scheme:dark}
-  textarea{resize:vertical;min-height:60px}
+.check-circle{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.12s;}
+.check-circle.on{background:var(--success);border-color:var(--success);}
+.check-circle i{font-size:10px;color:#fff;}
 
-  .timeline { display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding-bottom:4px; }
-  .tl-step { display:flex; align-items:center; flex-shrink:0; }
-  .tl-dot-wrap { display:flex; flex-direction:column; align-items:center; gap:4px; }
-  .tl-dot { width:28px; height:28px; border-radius:50%; border:2px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--text3); background:var(--bg3); cursor:pointer; transition:all 0.15s; flex-shrink:0; }
-  .tl-dot.done{background:var(--success);border-color:var(--success);color:#fff}
-  .tl-dot.current{background:var(--accent);border-color:var(--accent);color:#1a1008;box-shadow:0 0 0 3px rgba(200,169,126,0.25)}
-  .tl-label{font-size:10px;color:var(--text3);text-align:center;max-width:56px;line-height:1.3}
-  .tl-label.current{color:var(--accent)}
-  .tl-line{width:24px;height:2px;background:var(--border);margin-top:-20px;flex-shrink:0}
-  .tl-line.done{background:var(--success)}
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);width:100%;max-width:680px;}
+.modal-header{padding:16px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:15px;font-weight:500;}
+.modal-body{padding:20px;display:flex;flex-direction:column;gap:16px;}
+.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:6px;}
+.modal-tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);padding:0 20px;}
+.mtab{padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.12s;}
+.mtab:hover{color:var(--text);}
+.mtab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
 
-  .detail-section{border:1px solid var(--border);border-radius:var(--radius);padding:16px}
-  .detail-section-title{font-size:11px;letter-spacing:0.08em;color:var(--text3);margin-bottom:12px;text-transform:uppercase}
-  .detail-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
-  .detail-row:last-child{border-bottom:none}
-  .detail-key{color:var(--text3);min-width:100px;flex-shrink:0}
-  .detail-val{color:var(--text);flex:1}
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:11px;color:var(--text2);}
+input[type=text],input[type=date],input[type=tel],textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);padding:7px 10px;font-size:12px;outline:none;width:100%;font-family:inherit;}
+input[type=text]:focus,input[type=date]:focus,input[type=tel]:focus,textarea:focus{border-color:var(--accent);}
+input[type=date]{color-scheme:dark;}
+textarea{resize:vertical;min-height:60px;}
 
-  .alert-box{background:rgba(224,82,82,0.08);border:1px solid rgba(224,82,82,0.25);border-radius:var(--radius);padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
-  .alert-box.warn{background:rgba(232,165,48,0.08);border-color:rgba(232,165,48,0.25)}
-  .alert-box i{color:var(--danger);font-size:16px;flex-shrink:0;margin-top:1px}
-  .alert-box.warn i{color:var(--warning)}
-  .alert-box p{font-size:13px}
-  .alert-box p strong{display:block;margin-bottom:3px}
+/* TIMELINE */
+.timeline{display:flex;align-items:flex-start;overflow-x:auto;padding-bottom:4px;gap:0;}
+.tl-step{display:flex;align-items:center;flex-shrink:0;}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.tl-dot{width:24px;height:24px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text3);background:var(--bg3);cursor:pointer;transition:all 0.12s;flex-shrink:0;}
+.tl-dot.done{background:var(--success);border-color:var(--success);color:#fff;}
+.tl-dot.current{background:var(--accent);border-color:var(--accent);color:#1a1008;box-shadow:0 0 0 3px rgba(200,169,126,0.2);}
+.tl-dot.skipped{background:var(--bg4);border-color:var(--border);color:var(--text3);}
+.tl-label{font-size:9px;color:var(--text3);text-align:center;max-width:52px;line-height:1.3;}
+.tl-label.current{color:var(--accent);}
+.tl-line{width:20px;height:2px;background:var(--border);margin-top:-18px;flex-shrink:0;}
+.tl-line.done{background:var(--success);}
 
-  .msg-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;position:relative}
-  .copy-btn{position:absolute;top:8px;right:8px}
+/* DETAIL */
+.detail-section{border:1px solid var(--border);border-radius:var(--radius);padding:12px;}
+.detail-section-title{font-size:10px;letter-spacing:0.08em;color:var(--text3);margin-bottom:10px;text-transform:uppercase;}
+.detail-row{display:flex;align-items:flex-start;gap:8px;padding:4px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.detail-row:last-child{border-bottom:none;}
+.detail-key{color:var(--text3);min-width:90px;flex-shrink:0;font-size:11px;}
+.detail-val{color:var(--text);flex:1;}
 
-  .notify-list{display:flex;flex-direction:column;gap:8px}
-  .notify-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
-  .notify-item.urgent{border-color:rgba(224,82,82,0.3)}
-  .notify-item.warn{border-color:rgba(232,165,48,0.3)}
-  .notify-icon{width:32px;height:32px;border-radius:50%;background:rgba(224,82,82,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .notify-icon.warn{background:rgba(232,165,48,0.1)}
-  .notify-icon i{font-size:16px;color:var(--danger)}
-  .notify-icon.warn i{color:var(--warning)}
-  .notify-info{flex:1}
-  .notify-title{font-size:13px;font-weight:500}
-  .notify-desc{font-size:12px;color:var(--text2);margin-top:2px}
+/* ALERT */
+.alert-box{background:rgba(224,82,82,0.08);border:1px solid rgba(224,82,82,0.2);border-radius:var(--radius);padding:10px 12px;display:flex;gap:8px;align-items:flex-start;}
+.alert-box.warn{background:rgba(232,165,48,0.08);border-color:rgba(232,165,48,0.2);}
+.alert-box i{color:var(--danger);font-size:14px;flex-shrink:0;margin-top:1px;}
+.alert-box.warn i{color:var(--warning);}
+.alert-box p{font-size:12px;}
+.alert-box p strong{display:block;margin-bottom:2px;}
 
-  .empty-state{text-align:center;padding:60px 20px;color:var(--text3)}
-  .empty-state i{font-size:32px;margin-bottom:12px;opacity:0.4}
-  .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-  .loading-overlay p{font-size:13px;color:var(--text2)}
-  .spinner{width:32px;height:32px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+/* MSG */
+.msg-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;position:relative;}
+.copy-btn{position:absolute;top:6px;right:6px;}
 
-  ::-webkit-scrollbar{width:6px;height:6px}
-  ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+/* NOTIFY */
+.notify-list{display:flex;flex-direction:column;gap:8px;padding:16px;}
+.notify-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;gap:10px;align-items:flex-start;}
+.notify-item.urgent{border-color:rgba(224,82,82,0.3);}
+.notify-item.warn{border-color:rgba(232,165,48,0.3);}
+.notify-icon{width:28px;height:28px;border-radius:50%;background:rgba(224,82,82,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.notify-icon.warn{background:rgba(232,165,48,0.1);}
+.notify-icon i{font-size:14px;color:var(--danger);}
+.notify-icon.warn i{color:var(--warning);}
+.notify-info{flex:1;}
+.notify-title{font-size:12px;font-weight:500;}
+.notify-desc{font-size:11px;color:var(--text2);margin-top:2px;}
+
+.empty-state{text-align:center;padding:48px;color:var(--text3);}
+.empty-state i{font-size:28px;margin-bottom:10px;opacity:0.3;}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px;}
 </style>
 </head>
 <body>
 
+<div class="loading-overlay" id="loading-overlay" style="display:none">
+  <div class="spinner"></div>
+  <p>구글 시트에서 불러오는 중…</p>
+</div>
+
 <div class="lock-screen" id="lock-screen">
   <div class="lock-box">
-    <div class="lock-logo">TAKEMIND <span>PHOTOGRAPHY · WORKFLOW</span></div>
+    <div class="lock-logo">TAKEMIND<span>PHOTOGRAPHY · WORKFLOW</span></div>
     <input type="password" id="lock-input" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')checkPassword()">
     <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="checkPassword()"><i class="ti ti-lock-open"></i> 입장</button>
     <div class="lock-error" id="lock-error"></div>
   </div>
 </div>
 
-<div class="loading-overlay" id="loading-overlay" style="display:none;">
-  <div class="spinner"></div>
-  <p>구글 시트에서 데이터 불러오는 중…</p>
-</div>
-
 <header>
-  <div class="logo">TAKEMIND <span>PHOTOGRAPHY</span></div>
+  <div class="logo">TAKEMIND</div>
   <div class="header-tabs">
-    <button class="header-tab active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> 대시보드</button>
-    <button class="header-tab" onclick="showPage('clients')"><i class="ti ti-users"></i> 고객 관리</button>
-    <button class="header-tab" onclick="showPage('orders')"><i class="ti ti-package"></i> 발주 관리</button>
-    <button class="header-tab" onclick="showPage('alerts')"><i class="ti ti-bell"></i> 알람 <span id="alert-header-badge" style="display:none;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:11px;margin-left:4px;"></span></button>
+    <button class="htab active" onclick="showPage('main')"><i class="ti ti-table"></i> 전체 현황</button>
+    <button class="htab" onclick="showPage('alerts')"><i class="ti ti-bell"></i> 알람 <span id="alert-badge" style="display:none;background:var(--danger);color:#fff;border-radius:10px;padding:1px 5px;font-size:10px;margin-left:3px;"></span></button>
   </div>
   <div class="header-right">
     <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">연결됨</span></div>
-    <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()" title="새로고침"><i class="ti ti-refresh"></i></button>
-    <button class="btn btn-primary" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
+    <button class="btn btn-sm btn-ghost" onclick="loadFromSheet()"><i class="ti ti-refresh"></i></button>
+    <button class="btn btn-primary btn-sm" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
   </div>
 </header>
 
-<div class="app">
-  <aside class="sidebar">
-    <div class="sidebar-section">진행 단계</div>
-    <div class="sidebar-item active" onclick="filterStage('all',this)"><i class="ti ti-list"></i> 전체 <span class="sidebar-badge" id="sb-all">0</span></div>
-    <div class="sidebar-item" onclick="filterStage(0,this)"><i class="ti ti-camera"></i> 원본 전달 대기</div>
-    <div class="sidebar-item" onclick="filterStage(1,this)"><i class="ti ti-cursor-text"></i> 셀렉 대기 <span class="sidebar-badge warn" id="sb-1">0</span></div>
-    <div class="sidebar-item" onclick="filterStage(2,this)"><i class="ti ti-palette"></i> 색보정 중</div>
-    <div class="sidebar-item" onclick="filterStage(3,this)"><i class="ti ti-wand"></i> 리터칭 중</div>
-    <div class="sidebar-item" onclick="filterStage(4,this)"><i class="ti ti-eye"></i> 고객 확인 중</div>
-    <div class="sidebar-item" onclick="filterStage(5,this)"><i class="ti ti-refresh"></i> 재수정 중</div>
-    <div class="sidebar-item" onclick="filterStage(6,this)"><i class="ti ti-check"></i> 컨펌 완료</div>
-    <div class="sidebar-item" onclick="filterStage(7,this)"><i class="ti ti-truck"></i> 제작/발주</div>
-    <div class="sidebar-item" onclick="filterStage(8,this)"><i class="ti ti-circle-check"></i> 완료</div>
-    <div class="sidebar-section">알람</div>
-    <div class="sidebar-item" onclick="showPage('alerts')"><i class="ti ti-alert-triangle"></i> 기한 임박/초과 <span class="sidebar-badge" id="sb-alert">0</span></div>
-  </aside>
-
-  <main class="main">
-    <!-- DASHBOARD -->
-    <div id="page-dashboard">
-      <div class="stats-bar" id="stats-bar"></div>
-      <div class="filter-bar">
-        <input type="text" id="search-input" placeholder="신부/신랑 이름 검색…" oninput="renderTable()">
-        <select id="filter-stage" onchange="renderTable()">
-          <option value="all">전체 단계</option>
-          <option value="0">원본 전달 대기</option>
-          <option value="1">셀렉 대기</option>
-          <option value="2">색보정 중</option>
-          <option value="3">리터칭 중</option>
-          <option value="4">고객 확인 중</option>
-          <option value="5">재수정 중</option>
-          <option value="6">컨펌 완료</option>
-          <option value="7">제작/발주</option>
-          <option value="8">완료</option>
-        </select>
-        <select id="filter-type" onchange="renderTable()">
-          <option value="all">전체 상품</option>
-          <option value="스촬">스촬</option>
-          <option value="본식">본식</option>
-          <option value="스촬+본식">스촬+본식</option>
-          <option value="가족사진">가족사진</option>
-          <option value="리마인드">리마인드</option>
-          <option value="돌스냅">돌스냅</option>
-        </select>
-        <select id="sort-col" onchange="renderTable()">
-          <option value="shootDate">촬영일순</option>
-          <option value="weddingDate">본식일순</option>
-          <option value="selectDeadline">셀렉마감순</option>
-          <option value="created">등록순</option>
-        </select>
-        <div class="filter-sep"></div>
-        <label style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;cursor:pointer;">
-          <input type="checkbox" id="hide-done" onchange="renderTable()" style="width:auto;"> 완료 숨기기
-        </label>
-        <span id="row-count" style="font-size:12px;color:var(--text3);"></span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th style="width:40px;">#</th>
-            <th style="width:120px;">신부 · 신랑</th>
-            <th style="width:75px;">상품</th>
-            <th style="width:90px;">촬영일</th>
-            <th style="width:90px;">본식일</th>
-            <th style="width:140px;">진행 단계</th>
-            <th style="width:100px;">셀렉 마감</th>
-            <th style="width:75px;">D-Day</th>
-            <th style="width:85px;">담당 작가</th>
-            <th style="width:60px;">앨범</th>
-            <th style="width:55px;">액자</th>
-          </tr></thead>
-          <tbody id="client-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- CLIENTS -->
-    <div id="page-clients" style="display:none">
-      <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;">
-        <h2 style="font-size:18px;font-weight:500;">전체 고객 목록</h2>
-        <button class="btn btn-primary" onclick="openNewClient()"><i class="ti ti-plus"></i> 신규 등록</button>
-      </div>
-      <div class="filter-bar">
-        <input type="text" id="search-input2" placeholder="이름 검색…" oninput="renderTable2()">
-        <select id="filter-year" onchange="renderTable2()">
-          <option value="all">전체 연도</option>
-          <option value="2025">2025</option>
-          <option value="2026">2026</option>
-          <option value="2027">2027</option>
-        </select>
-        <div class="filter-sep"></div>
-        <span id="row-count2" style="font-size:12px;color:var(--text3);"></span>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th style="width:40px;">#</th>
-            <th style="width:130px;">신부 · 신랑</th>
-            <th style="width:75px;">상품</th>
-            <th style="width:100px;">촬영일</th>
-            <th style="width:100px;">본식일</th>
-            <th style="width:150px;">진행 단계</th>
-            <th style="width:90px;">담당 작가</th>
-            <th style="width:110px;">연락처</th>
-            <th style="width:85px;">등록일</th>
-          </tr></thead>
-          <tbody id="client-tbody2"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ORDERS -->
-    <div id="page-orders" style="display:none">
-      <div style="margin-bottom:20px;">
-        <h2 style="font-size:18px;font-weight:500;">발주 관리</h2>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr>
-            <th style="width:120px;">신부 · 신랑</th>
-            <th style="width:95px;">발주 날짜</th>
-            <th style="width:75px;">앨범</th>
-            <th style="width:65px;">액자</th>
-            <th style="width:70px;">인화</th>
-            <th style="width:100px;">제작 상태</th>
-            <th style="width:95px;">발송 예정일</th>
-            <th style="width:90px;">운송</th>
-            <th style="width:110px;">운송장</th>
-            <th style="width:140px;">참고사항</th>
-          </tr></thead>
-          <tbody id="order-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ALERTS -->
-    <div id="page-alerts" style="display:none">
-      <div style="margin-bottom:20px;">
-        <h2 style="font-size:18px;font-weight:500;margin-bottom:6px;">알람 센터</h2>
-        <p style="font-size:13px;color:var(--text3);">셀렉 기한 D-2부터 알람 발생. 기한 초과 시 임의 셀렉 후 진행.</p>
-      </div>
-      <div class="notify-list" id="notify-list"></div>
-    </div>
-  </main>
+<!-- MAIN PAGE -->
+<div id="page-main">
+  <div class="stats-bar" id="stats-bar"></div>
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="신부/신랑 검색…" oninput="renderMain()">
+    <select id="f-stage" onchange="renderMain()">
+      <option value="all">전체 단계</option>
+      <option value="0">원본 전달 대기</option>
+      <option value="1">셀렉 대기</option>
+      <option value="2">색보정 중</option>
+      <option value="3">리터칭 중</option>
+      <option value="4">고객 확인 중</option>
+      <option value="5">재수정 중</option>
+      <option value="6">컨펌 완료</option>
+      <option value="7">제작/발주</option>
+      <option value="8">완료</option>
+    </select>
+    <select id="f-type" onchange="renderMain()">
+      <option value="all">전체 상품</option>
+      <option value="스촬">스촬</option>
+      <option value="본식">본식</option>
+      <option value="스촬+본식">스촬+본식</option>
+      <option value="가족사진">가족사진</option>
+      <option value="리마인드">리마인드</option>
+      <option value="돌스냅">돌스냅</option>
+    </select>
+    <select id="f-artist" onchange="renderMain()">
+      <option value="all">전체 작가</option>
+      <option value="설민">설민</option>
+      <option value="이광민">이광민</option>
+      <option value="홍진석">홍진석</option>
+      <option value="신성진">신성진</option>
+      <option value="양선호">양선호</option>
+    </select>
+    <select id="f-sort" onchange="renderMain()">
+      <option value="shootDate">촬영일순</option>
+      <option value="weddingDate">본식일순</option>
+      <option value="selectDeadline">셀렉마감순</option>
+      <option value="created">등록순</option>
+    </select>
+    <div class="tsep"></div>
+    <label style="font-size:11px;color:var(--text2);display:flex;align-items:center;gap:5px;cursor:pointer;">
+      <input type="checkbox" id="hide-done" onchange="renderMain()" style="width:auto;"> 완료 숨기기
+    </label>
+    <span id="row-count" style="font-size:11px;color:var(--text3);"></span>
+  </div>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:32px;">#</th>
+          <th style="width:70px;">담당</th>
+          <th style="width:65px;">신부</th>
+          <th style="width:65px;">신랑</th>
+          <th style="width:60px;">상품</th>
+          <th style="width:75px;" onclick="setSort('shootDate')">촬영일 ↕</th>
+          <th style="width:75px;" onclick="setSort('weddingDate')">본식일 ↕</th>
+          <th style="width:110px;">진행 단계</th>
+          <th style="width:38px;" title="메인체크">메인</th>
+          <th style="width:38px;" title="발주여부">발주</th>
+          <th style="width:55px;">앨범</th>
+          <th style="width:55px;">액자</th>
+          <th style="width:40px;">인화</th>
+          <th style="width:80px;" onclick="setSort('selectDeadline')">셀렉마감 ↕</th>
+          <th style="width:55px;">D-Day</th>
+          <th style="width:75px;">발주날짜</th>
+          <th style="width:60px;">발주자</th>
+          <th style="width:75px;">제송일</th>
+          <th style="width:70px;">운송</th>
+          <th style="width:80px;">운송장</th>
+          <th style="width:75px;">연락날짜</th>
+          <th style="width:200px;">참고사항</th>
+        </tr>
+      </thead>
+      <tbody id="main-tbody"></tbody>
+    </table>
+  </div>
 </div>
 
-<!-- NEW/EDIT CLIENT MODAL -->
+<!-- ALERTS PAGE -->
+<div id="page-alerts" style="display:none">
+  <div style="padding:16px 16px 0;font-size:14px;font-weight:500;">알람 센터</div>
+  <div class="notify-list" id="notify-list"></div>
+</div>
+
+<!-- NEW/EDIT MODAL -->
 <div class="modal-bg" id="modal-client">
   <div class="modal">
     <div class="modal-header">
@@ -371,17 +320,25 @@
       <div class="form-grid">
         <div class="form-group"><label>신부 이름 *</label><input type="text" id="f-bride" placeholder="홍길순"></div>
         <div class="form-group"><label>신랑 이름 *</label><input type="text" id="f-groom" placeholder="홍길동"></div>
-        <div class="form-group"><label>상품 종류 *</label>
+        <div class="form-group"><label>상품 *</label>
           <select id="f-type" style="width:100%">
-            <option value="스촬">스촬 (셀렉 1개월)</option>
-            <option value="본식">본식 (셀렉 2개월)</option>
-            <option value="스촬+본식">스촬 + 본식</option>
+            <option value="스촬">스촬 (1개월)</option>
+            <option value="본식">본식 (2개월)</option>
+            <option value="스촬+본식">스촬+본식</option>
             <option value="가족사진">가족사진</option>
             <option value="리마인드">리마인드</option>
             <option value="돌스냅">돌스냅</option>
           </select>
         </div>
-        <div class="form-group"><label>담당 작가 *</label><input type="text" id="f-artist" placeholder="작가 이름"></div>
+        <div class="form-group"><label>담당 작가 *</label>
+          <select id="f-artist" style="width:100%">
+            <option value="설민">설민</option>
+            <option value="이광민">이광민</option>
+            <option value="홍진석">홍진석</option>
+            <option value="신성진">신성진</option>
+            <option value="양선호">양선호</option>
+          </select>
+        </div>
         <div class="form-group"><label>촬영일</label><input type="date" id="f-shoot"></div>
         <div class="form-group"><label>본식일</label><input type="date" id="f-wedding"></div>
         <div class="form-group"><label>연락처 (신부)</label><input type="tel" id="f-phone" placeholder="010-0000-0000"></div>
@@ -404,7 +361,7 @@
             <option value="30x46cm">30x46 cm</option>
           </select>
         </div>
-        <div class="form-group full"><label>메모</label><textarea id="f-memo" placeholder="특이사항, 요청사항 등"></textarea></div>
+        <div class="form-group full"><label>참고사항 / 메모</label><textarea id="f-memo" placeholder="특이사항, 요청사항 등"></textarea></div>
       </div>
     </div>
     <div class="modal-footer">
@@ -416,25 +373,25 @@
 
 <!-- DETAIL MODAL -->
 <div class="modal-bg" id="modal-detail">
-  <div class="modal" style="max-width:800px">
+  <div class="modal" style="max-width:740px">
     <div class="modal-header">
-      <div class="modal-title" id="detail-title">고객 상세</div>
-      <div style="display:flex;gap:8px">
+      <div class="modal-title" id="detail-title"></div>
+      <div style="display:flex;gap:6px">
         <button class="btn btn-sm" onclick="editCurrentClient()"><i class="ti ti-edit"></i> 수정</button>
         <button class="btn btn-ghost btn-sm" onclick="closeModal('modal-detail')"><i class="ti ti-x"></i></button>
       </div>
     </div>
     <div class="modal-tabs">
-      <div class="modal-tab active" onclick="switchTab('info')">기본 정보</div>
-      <div class="modal-tab" onclick="switchTab('progress')">진행 관리</div>
-      <div class="modal-tab" onclick="switchTab('order')">발주 관리</div>
-      <div class="modal-tab" onclick="switchTab('message')">메시지 자동완성</div>
+      <div class="mtab active" onclick="switchTab('progress')">진행 관리</div>
+      <div class="mtab" onclick="switchTab('order')">발주 관리</div>
+      <div class="mtab" onclick="switchTab('message')">메시지</div>
+      <div class="mtab" onclick="switchTab('info')">기본 정보</div>
     </div>
     <div class="modal-body">
-      <div class="tab-content active" id="tab-info"></div>
-      <div class="tab-content" id="tab-progress"></div>
+      <div class="tab-content active" id="tab-progress"></div>
       <div class="tab-content" id="tab-order"></div>
       <div class="tab-content" id="tab-message"></div>
+      <div class="tab-content" id="tab-info"></div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-danger btn-sm" id="delete-btn" onclick="deleteCurrentClient()" style="display:none"><i class="ti ti-trash"></i> 삭제</button>
@@ -450,289 +407,239 @@ const STAGES = ['원본 전달 대기','셀렉 대기','색보정 중','리터�
 const SC = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
 const HEADERS = ['id','bride','groom','type','artist','shootDate','weddingDate','phone','email','album','frame','stage','sendDate','selectDeadline','orderDate','shipDate','delivery','print','tracking','orderMemo','memo','created','stageDate_0','stageDate_1','stageDate_2','stageDate_3','stageDate_4','stageDate_5','stageDate_6','stageDate_7','mainCheck','orderer','contactDate','extra'];
 
+const PW_ADMIN = 'sdgkjFfjsf12';
+const PW_STAFF = 'dsgadgkeE23!';
+let isAdmin = false;
 let clients = [];
 let currentId = null;
-let currentPage = 'dashboard';
+let sortCol = 'shootDate';
 
-function setSyncStatus(state) {
-  const dot = document.getElementById('sync-dot');
-  const txt = document.getElementById('sync-text');
-  dot.className = 'sync-dot' + (state==='syncing'?' syncing':state==='error'?' error':'');
-  txt.textContent = state==='syncing'?'동기화 중…':state==='error'?'연결 오류':'구글 시트 연동됨';
+// 클릭 사운드
+function playClick() {
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value=800; o.type='sine';
+    g.gain.setValueAtTime(0.12,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.07);
+    o.start(ctx.currentTime); o.stop(ctx.currentTime+0.07);
+  } catch(e){}
+}
+document.addEventListener('click',e=>{if(e.target.closest('.btn,.mtab,.htab,.tl-dot,.check-circle'))playClick();});
+
+function checkPassword() {
+  const val = document.getElementById('lock-input').value;
+  if(val===PW_ADMIN){isAdmin=true;}
+  else if(val===PW_STAFF){isAdmin=false;}
+  else{document.getElementById('lock-error').textContent='비밀번호가 틀렸습니다';document.getElementById('lock-input').value='';return;}
+  document.getElementById('lock-screen').style.display='none';
+  document.getElementById('loading-overlay').style.display='flex';
+  loadFromSheet();
 }
 
-async function loadFromSheet() {
+function setSyncStatus(s){
+  const d=document.getElementById('sync-dot'),t=document.getElementById('sync-text');
+  d.className='sync-dot'+(s==='syncing'?' syncing':s==='error'?' error':'');
+  t.textContent=s==='syncing'?'동기화 중…':s==='error'?'연결 오류':'구글 시트 연동됨';
+}
+
+async function loadFromSheet(){
   setSyncStatus('syncing');
-  try {
-    const res = await fetch(API + '?action=getAll');
-    const json = await res.json();
-    if (json.status === 'ok' && json.data.length > 1) {
-      const rows = json.data.slice(1);
-      clients = rows.map(r => {
-        const obj = {};
-        HEADERS.forEach((h,i) => obj[h] = r[i] !== undefined ? String(r[i]) : '');
-        obj.stage = parseInt(obj.stage) || 0;
-        return obj;
-      }).filter(c => c.id);
+  try{
+    const res=await fetch(API+'?action=getAll');
+    const json=await res.json();
+    if(json.status==='ok'&&json.data.length>1){
+      clients=json.data.slice(1).map(r=>{
+        const o={};
+        HEADERS.forEach((h,i)=>o[h]=r[i]!==undefined?String(r[i]):'');
+        o.stage=parseInt(o.stage)||0;
+        return o;
+      }).filter(c=>c.id);
     }
     setSyncStatus('ok');
-  } catch(e) {
-    setSyncStatus('error');
-    alert('구글 시트 연결 오류. 잠시 후 다시 시도해주세요.');
-  }
-  document.getElementById('loading-overlay').style.display = 'none';
-  renderDashboard();
+  }catch(e){setSyncStatus('error');alert('구글 시트 연결 오류');}
+  document.getElementById('loading-overlay').style.display='none';
+  renderAll();
 }
 
-async function saveToSheet(client) {
+async function saveToSheet(c){
   setSyncStatus('syncing');
-  try {
-    await fetch(API + '?action=save&row=' + encodeURIComponent(JSON.stringify(client)));
-    setSyncStatus('ok');
-  } catch(e) { setSyncStatus('error'); }
+  try{await fetch(API+'?action=save&row='+encodeURIComponent(JSON.stringify(c)));setSyncStatus('ok');}
+  catch(e){setSyncStatus('error');}
 }
-
-async function deleteFromSheet(id) {
+async function deleteFromSheet(id){
   setSyncStatus('syncing');
-  try {
-    await fetch(API + '?action=delete&id=' + id);
-    setSyncStatus('ok');
-  } catch(e) { setSyncStatus('error'); }
+  try{await fetch(API+'?action=delete&id='+id);setSyncStatus('ok');}
+  catch(e){setSyncStatus('error');}
 }
 
-function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 
-function calcDeadline(c) {
-  const raw = c.sendDate || c.shootDate;
-  if (!raw) return '';
-  const base = String(raw).length > 10 ? String(raw).slice(0,10) : String(raw);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(base)) return '';
-  const months = c.type === '본식' ? 2 : 1;
-  const d = new Date(base);
-  d.setMonth(d.getMonth() + months);
+function fDate(s){
+  if(!s)return'-';
+  const str=String(s);
+  const clean=str.length>10?str.slice(0,10):str;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(clean))return'-';
+  return clean.replace(/-/g,'.').slice(2);
+}
+
+function calcDeadline(c){
+  const raw=c.sendDate||c.shootDate;
+  if(!raw)return'';
+  const base=String(raw).length>10?String(raw).slice(0,10):String(raw);
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(base))return'';
+  const months=c.type==='본식'?2:1;
+  const d=new Date(base);
+  d.setMonth(d.getMonth()+months);
   return d.toISOString().slice(0,10);
 }
-
-function calcDeadlineSecond(c) {
-  if (c.type !== '스촬+본식') return '';
-  const raw = c.sendDate || c.shootDate;
-  if (!raw) return '';
-  const base = String(raw).length > 10 ? String(raw).slice(0,10) : String(raw);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(base)) return '';
-  const d = new Date(base);
-  d.setMonth(d.getMonth() + 2);
+function calcDeadline2(c){
+  if(c.type!=='스촬+본식')return'';
+  const raw=c.sendDate||c.shootDate;
+  if(!raw)return'';
+  const base=String(raw).length>10?String(raw).slice(0,10):String(raw);
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(base))return'';
+  const d=new Date(base);d.setMonth(d.getMonth()+2);
   return d.toISOString().slice(0,10);
 }
-
-function daysUntil(s) {
-  if (!s) return null;
-  const t = new Date(); t.setHours(0,0,0,0);
-  return Math.round((new Date(s) - t) / 86400000);
+function daysUntil(s){
+  if(!s)return null;
+  const t=new Date();t.setHours(0,0,0,0);
+  return Math.round((new Date(s)-t)/86400000);
 }
+function ddayStr(n){if(n===null)return'-';if(n<0)return'D+'+Math.abs(n);if(n===0)return'D-Day';return'D-'+n;}
+function ddayCls(n,stage){if(n===null||stage!==1)return'na';if(n<0)return'overdue';if(n<=2)return'urgent';return'safe';}
 
-function fDate(s) {
-  if (!s) return '-';
-  const str = String(s);
-  // ISO 형식 (2026-06-21T15:00:00.000Z) 처리
-  const clean = str.length > 10 ? str.slice(0, 10) : str;
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(clean)) return '-';
-  return clean.replace(/-/g, '.').slice(2);
-}
-
-function ddayStr(n) {
-  if (n === null) return '-';
-  if (n < 0) return 'D+'+Math.abs(n);
-  if (n === 0) return 'D-Day';
-  return 'D-'+n;
-}
-
-function ddayCls(n, stage) {
-  if (n === null || stage !== 1) return 'na';
-  if (n < 0) return 'overdue';
-  if (n <= 2) return 'urgent';
-  return 'safe';
-}
-
-// ── PAGES ──────────────────────────────────────────
-
-function showPage(name) {
-  currentPage = name;
-  ['dashboard','clients','orders','alerts'].forEach(p => {
-    document.getElementById('page-'+p).style.display = p===name ? '' : 'none';
-  });
-  document.querySelectorAll('.header-tab').forEach((t,i) => {
-    t.classList.toggle('active', ['dashboard','clients','orders','alerts'][i] === name);
-  });
-  if (name==='dashboard') renderDashboard();
-  if (name==='clients') renderTable2();
-  if (name==='orders') renderOrders();
-  if (name==='alerts') renderAlerts();
-}
-
-function filterStage(stage, el) {
-  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('filter-stage').value = stage === 'all' ? 'all' : String(stage);
-  showPage('dashboard');
-}
-
-// ── DASHBOARD ──────────────────────────────────────
-
-function renderDashboard() {
-  renderStats();
-  renderTable();
-  renderBadges();
-}
-
-function renderStats() {
-  const active = clients.filter(c=>c.stage<8).length;
-  const waiting = clients.filter(c=>c.stage===1).length;
-  const overdue = clients.filter(c=>{
-    if(c.stage!==1) return false;
-    return (daysUntil(calcDeadline(c))??1) < 0;
-  }).length;
-  const urgent = clients.filter(c=>{
-    if(c.stage!==1) return false;
+function getAlerts(){
+  const r=[];
+  clients.forEach(c=>{
+    if(c.stage!==1)return;
     const d=daysUntil(calcDeadline(c));
-    return d!==null && d>=0 && d<=2;
-  }).length;
-  const prod = clients.filter(c=>c.stage===7).length;
-  document.getElementById('stats-bar').innerHTML = `
-    <div class="stat-card"><div class="stat-label">전체 진행 중</div><div class="stat-value">${active}</div><div class="stat-sub">건</div></div>
-    <div class="stat-card"><div class="stat-label">셀렉 대기</div><div class="stat-value ${waiting?'warn':''}">${waiting}</div><div class="stat-sub">건</div></div>
-    <div class="stat-card"><div class="stat-label">기한 초과</div><div class="stat-value ${overdue?'danger':'ok'}">${overdue}</div><div class="stat-sub">즉시 조치 필요</div></div>
-    <div class="stat-card"><div class="stat-label">기한 임박 D-2</div><div class="stat-value ${urgent?'warn':'ok'}">${urgent}</div><div class="stat-sub">건</div></div>
-    <div class="stat-card"><div class="stat-label">제작/발주 중</div><div class="stat-value">${prod}</div><div class="stat-sub">건</div></div>
-  `;
-}
-
-function renderBadges() {
-  document.getElementById('sb-all').textContent = clients.length;
-  const sel = clients.filter(c=>c.stage===1).length;
-  const el1 = document.getElementById('sb-1');
-  el1.textContent = sel; el1.style.display = sel ? '' : 'none';
-  const alerts = getAlertClients().length;
-  const el2 = document.getElementById('sb-alert');
-  el2.textContent = alerts; el2.style.display = alerts ? '' : 'none';
-  const hb = document.getElementById('alert-header-badge');
-  hb.textContent = alerts; hb.style.display = alerts ? '' : 'none';
-}
-
-function getAlertClients() {
-  const result = [];
-  clients.forEach(c => {
-    if (c.stage !== 1) return;
-    const d = daysUntil(calcDeadline(c));
-    if (d !== null && d <= 2) result.push({...c, _alertType:'스촬', _days:d, _dl:calcDeadline(c)});
-    const d2 = daysUntil(calcDeadlineSecond(c));
-    if (d2 !== null && d2 <= 2) result.push({...c, _alertType:'본식', _days:d2, _dl:calcDeadlineSecond(c)});
+    if(d!==null&&d<=2)r.push({...c,_type:'스촬',_days:d,_dl:calcDeadline(c)});
+    const d2=daysUntil(calcDeadline2(c));
+    if(d2!==null&&d2<=2)r.push({...c,_type:'본식',_days:d2,_dl:calcDeadline2(c)});
   });
-  return result;
+  return r;
 }
 
-function renderTable() {
-  const search = document.getElementById('search-input').value.toLowerCase();
-  const stageVal = document.getElementById('filter-stage').value;
-  const typeVal = document.getElementById('filter-type').value;
-  const sortCol = document.getElementById('sort-col').value;
-  const hideDone = document.getElementById('hide-done').checked;
+// ── PAGES ──────────────────────────────────
+function showPage(name){
+  ['main','alerts'].forEach(p=>document.getElementById('page-'+p).style.display=p===name?'':'none');
+  document.querySelectorAll('.htab').forEach((t,i)=>t.classList.toggle('active',['main','alerts'][i]===name));
+  if(name==='alerts')renderAlerts();
+}
 
-  let list = clients.slice();
-  if (search) list = list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
-  if (stageVal !== 'all') list = list.filter(c=>c.stage===parseInt(stageVal));
-  if (typeVal !== 'all') list = list.filter(c=>c.type&&c.type.includes(typeVal));
-  if (hideDone) list = list.filter(c=>c.stage<8);
+function setSort(col){sortCol=col;document.getElementById('f-sort').value=col;renderMain();}
 
-  list.sort((a,b)=>(a[sortCol]||'').localeCompare(b[sortCol]||''));
+function renderAll(){renderStats();renderMain();renderAlertBadge();}
 
-  document.getElementById('row-count').textContent = list.length+'건';
-  const tbody = document.getElementById('client-tbody');
-  if (!list.length) { tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>등록된 고객이 없습니다</p></div></td></tr>'; return; }
+function renderStats(){
+  const active=clients.filter(c=>c.stage<8).length;
+  const sel=clients.filter(c=>c.stage===1).length;
+  const over=clients.filter(c=>{if(c.stage!==1)return false;const d=daysUntil(calcDeadline(c));return d!==null&&d<0;}).length;
+  const urg=clients.filter(c=>{if(c.stage!==1)return false;const d=daysUntil(calcDeadline(c));return d!==null&&d>=0&&d<=2;}).length;
+  const prod=clients.filter(c=>c.stage===7).length;
+  const done=clients.filter(c=>c.stage===8).length;
+  document.getElementById('stats-bar').innerHTML=`
+    <div class="stat-card"><div class="stat-label">진행 중</div><div class="stat-value">${active}</div></div>
+    <div class="stat-card"><div class="stat-label">셀렉 대기</div><div class="stat-value ${sel?'warn':''}">${sel}</div></div>
+    <div class="stat-card"><div class="stat-label">기한 초과</div><div class="stat-value ${over?'danger':'ok'}">${over}</div></div>
+    <div class="stat-card"><div class="stat-label">기한 임박 D-2</div><div class="stat-value ${urg?'warn':'ok'}">${urg}</div></div>
+    <div class="stat-card"><div class="stat-label">제작/발주 중</div><div class="stat-value">${prod}</div></div>
+    <div class="stat-card"><div class="stat-label">완료</div><div class="stat-value ok">${done}</div></div>`;
+}
 
-  tbody.innerHTML = list.map((c,i) => {
-    const dl = calcDeadline(c);
-    const dl2 = calcDeadlineSecond(c);
-    const days = c.stage===1 ? daysUntil(dl) : null;
-    const days2 = (c.stage===1 && dl2) ? daysUntil(dl2) : null;
-    const dc = ddayCls(days, c.stage);
-    const dc2 = ddayCls(days2, c.stage);
-    const isAlert = dc==='overdue'||dc==='urgent';
-    const isAlert2 = dc2==='overdue'||dc2==='urgent';
-    const rowBg = (isAlert||isAlert2) ? (dc==='overdue'||dc2==='overdue'?'background:rgba(224,82,82,0.04)':'background:rgba(232,165,48,0.04)') : '';
-    const deadlineCell = c.stage===1 ? (dl2 ? `<div style="font-size:11px">스촬 ${fDate(dl)}</div><div style="font-size:11px">본식 ${fDate(dl2)}</div>` : fDate(dl)) : '-';
-    const ddayCell = c.stage===1 ? (dl2 ? `<div><span class="dday ${dc}" style="font-size:11px">${ddayStr(days)}</span></div><div><span class="dday ${dc2}" style="font-size:11px">${ddayStr(days2)}</span></div>` : `<span class="dday ${dc}">${ddayStr(days)}</span>`) : '-';
-    return `<tr style="${rowBg}" onclick="openDetail('${c.id}')">
+function renderAlertBadge(){
+  const n=getAlerts().length;
+  const el=document.getElementById('alert-badge');
+  el.textContent=n;el.style.display=n?'':'none';
+}
+
+function renderMain(){
+  const search=document.getElementById('search').value.toLowerCase();
+  const fs=document.getElementById('f-stage').value;
+  const ft=document.getElementById('f-type').value;
+  const fa=document.getElementById('f-artist').value;
+  const sc=document.getElementById('f-sort').value;
+  const hideDone=document.getElementById('hide-done').checked;
+
+  let list=clients.slice();
+  if(search)list=list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
+  if(fs!=='all')list=list.filter(c=>c.stage===parseInt(fs));
+  if(ft!=='all')list=list.filter(c=>c.type&&c.type.includes(ft));
+  if(fa!=='all')list=list.filter(c=>c.artist===fa);
+  if(hideDone)list=list.filter(c=>c.stage<8);
+  list.sort((a,b)=>(a[sc]||'').localeCompare(b[sc]||''));
+
+  document.getElementById('row-count').textContent=list.length+'건';
+  const tbody=document.getElementById('main-tbody');
+  if(!list.length){tbody.innerHTML=`<tr><td colspan="22"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>데이터 없음</p></div></td></tr>`;return;}
+
+  tbody.innerHTML=list.map((c,i)=>{
+    const dl=calcDeadline(c);
+    const dl2=calcDeadline2(c);
+    const days=c.stage===1?daysUntil(dl):null;
+    const dc=ddayCls(days,c.stage);
+    const isOver=dc==='overdue',isUrg=dc==='urgent';
+    const rowBg=isOver?'background:rgba(224,82,82,0.04)':isUrg?'background:rgba(232,165,48,0.04)':'';
+    const isDone=c.stage===8;
+
+    const ddayCell=c.stage===1?(dl2?
+      `<div><span class="dday ${dc}" style="font-size:10px">${ddayStr(days)}</span></div><div><span class="dday ${ddayCls(daysUntil(dl2),1)}" style="font-size:10px">${ddayStr(daysUntil(dl2))}</span></div>`:
+      `<span class="dday ${dc}">${ddayStr(days)}</span>`):'-';
+
+    const deadlineCell=c.stage===1?(dl2?
+      `<div style="font-size:10px">${fDate(dl)}</div><div style="font-size:10px">${fDate(dl2)}</div>`:
+      fDate(dl)):'-';
+
+    const mainCheck=c.mainCheck==='true'||c.mainCheck===true;
+    const orderDone=c.orderDate&&c.orderDate!==''&&c.orderDate!=='-';
+
+    return `<tr style="${rowBg}" class="${isDone?'row-done':''}" onclick="openDetail('${c.id}')">
       <td style="color:var(--text3)">${i+1}</td>
-      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
-      <td><span class="type-badge ${c.type==='스촬'?'type-ss':c.type==='본식'?'type-ws':'type-both'}">${c.type||'-'}</span></td>
+      <td style="color:var(--text2)">${c.artist||'-'}</td>
+      <td style="font-weight:500">${c.bride}</td>
+      <td style="font-weight:500">${c.groom}</td>
+      <td><span class="type-pill ${c.type==='스촬'?'tp-ss':c.type==='본식'?'tp-ws':c.type==='스촬+본식'?'tp-both':'tp-other'}">${c.type||'-'}</span></td>
       <td style="color:var(--text2)">${fDate(c.shootDate)}</td>
       <td style="color:var(--text2)">${fDate(c.weddingDate)}</td>
-      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
-      <td style="color:var(--text2)">${deadlineCell}</td>
-      <td>${ddayCell}</td>
-      <td style="color:var(--text2)">${c.artist||'-'}</td>
+      <td><span class="stage-pill ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
+      <td style="text-align:center" onclick="event.stopPropagation();toggleMainCheck('${c.id}')">
+        <div class="check-circle ${mainCheck?'on':''}">${mainCheck?'<i class="ti ti-check"></i>':''}</div>
+      </td>
+      <td style="text-align:center">
+        <div class="check-circle ${orderDone?'on':''}">${orderDone?'<i class="ti ti-check"></i>':''}</div>
+      </td>
       <td style="color:var(--text2)">${c.album||'-'}</td>
       <td style="color:var(--text2)">${c.frame||'-'}</td>
+      <td style="color:var(--text2)">${c.print||'-'}</td>
+      <td>${deadlineCell}</td>
+      <td>${ddayCell}</td>
+      <td style="color:var(--text2)">${fDate(c.orderDate)}</td>
+      <td style="color:var(--text2)">${c.orderer||'-'}</td>
+      <td style="color:var(--text2)">${fDate(c.shipDate)}</td>
+      <td style="color:var(--text2)">${c.delivery||'-'}</td>
+      <td style="color:var(--text2);font-size:11px">${c.tracking||'-'}</td>
+      <td style="color:var(--text2)">${fDate(c.contactDate)}</td>
+      <td style="color:var(--text2);font-size:11px">${c.memo||'-'}</td>
     </tr>`;
   }).join('');
 }
 
-function renderTable2() {
-  const search = (document.getElementById('search-input2')?.value||'').toLowerCase();
-  const year = document.getElementById('filter-year')?.value||'all';
-  let list = clients.slice();
-  if (search) list=list.filter(c=>(c.bride+c.groom).toLowerCase().includes(search));
-  if (year!=='all') list=list.filter(c=>(c.shootDate||c.weddingDate||'').startsWith(year));
-  list.sort((a,b)=>(b.created||'').localeCompare(a.created||''));
-  document.getElementById('row-count2').textContent=list.length+'건';
-  const tbody=document.getElementById('client-tbody2');
-  if(!list.length){tbody.innerHTML='<tr><td colspan="9"><div class="empty-state"><i class="ti ti-users" style="display:block"></i><p>없습니다</p></div></td></tr>';return;}
-  tbody.innerHTML=list.map((c,i)=>`
-    <tr onclick="openDetail('${c.id}')">
-      <td style="color:var(--text3)">${i+1}</td>
-      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
-      <td><span class="type-badge ${c.type==='스촬'?'type-ss':c.type==='본식'?'type-ws':'type-both'}">${c.type||'-'}</span></td>
-      <td>${fDate(c.shootDate)}</td><td>${fDate(c.weddingDate)}</td>
-      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
-      <td style="color:var(--text2)">${c.artist||'-'}</td>
-      <td style="color:var(--text2)">${c.phone||'-'}</td>
-      <td style="color:var(--text3)">${fDate(c.created)}</td>
-    </tr>`).join('');
-}
-
-function renderOrders() {
-  const list = clients.filter(c=>c.stage>=6).sort((a,b)=>(a.orderDate||'').localeCompare(b.orderDate||''));
-  const tbody=document.getElementById('order-tbody');
-  if(!list.length){tbody.innerHTML='<tr><td colspan="10"><div class="empty-state"><i class="ti ti-package" style="display:block"></i><p>발주 건 없음</p></div></td></tr>';return;}
-  tbody.innerHTML=list.map(c=>`
-    <tr onclick="openDetail('${c.id}')">
-      <td style="font-weight:500">${c.bride} · ${c.groom}</td>
-      <td>${fDate(c.orderDate)}</td>
-      <td>${c.album||'-'}</td><td>${c.frame||'-'}</td><td>${c.print||'-'}</td>
-      <td><span class="stage-badge ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
-      <td>${fDate(c.shipDate)}</td>
-      <td>${c.delivery||'방문 수령'}</td>
-      <td style="font-size:12px;color:var(--text2)">${c.tracking||'-'}</td>
-      <td style="font-size:12px;color:var(--text2);max-width:140px;overflow:hidden;text-overflow:ellipsis">${c.orderMemo||'-'}</td>
-    </tr>`).join('');
-}
-
-function renderAlerts() {
-  const list = getAlertClients().sort((a,b)=>(a._dl||'').localeCompare(b._dl||''));
+function renderAlerts(){
+  const list=getAlerts().sort((a,b)=>(a._dl||'').localeCompare(b._dl||''));
   const nl=document.getElementById('notify-list');
-  if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off" style="display:block"></i><p>현재 알람 없음. 모든 일정이 정상입니다.</p></div>';return;}
+  if(!list.length){nl.innerHTML='<div class="empty-state"><i class="ti ti-bell-off" style="display:block"></i><p>알람 없음</p></div>';return;}
   nl.innerHTML=list.map(c=>{
-    const days=c._days;
-    const dl=c._dl;
-    const alertType=c._alertType||'';
-    const isOver=days<0;
+    const isOver=c._days<0;
     return `<div class="notify-item ${isOver?'urgent':'warn'}">
       <div class="notify-icon ${isOver?'':'warn'}"><i class="ti ${isOver?'ti-alert-circle':'ti-clock'}"></i></div>
       <div class="notify-info">
-        <div class="notify-title">${c.bride} · ${c.groom} ${alertType?'('+alertType+')':''} — ${isOver?'셀렉 기한 초과':'셀렉 기한 D-'+days}</div>
-        <div class="notify-desc">마감: ${fDate(dl)} · 상품: ${c.type} · 담당: ${c.artist||'-'}</div>
+        <div class="notify-title">${c.bride} · ${c.groom} ${c._type?'('+c._type+')':''} — ${isOver?'셀렉 기한 초과':'D-'+c._days}</div>
+        <div class="notify-desc">마감: ${fDate(c._dl)} · ${c.type} · 담당: ${c.artist||'-'}</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;flex-direction:column;gap:4px">
         <button class="btn btn-sm" onclick="openDetailTab('${c.id}','message')"><i class="ti ti-message"></i> 메시지</button>
         <button class="btn btn-sm btn-primary" onclick="openDetailTab('${c.id}','progress')"><i class="ti ti-arrow-right"></i> 진행</button>
       </div>
@@ -740,13 +647,20 @@ function renderAlerts() {
   }).join('');
 }
 
-// ── MODALS ──────────────────────────────────────────
+// ── TOGGLE MAIN CHECK ──────────────────────
+async function toggleMainCheck(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  c.mainCheck=!(c.mainCheck==='true'||c.mainCheck===true);
+  await saveToSheet(c);renderMain();
+}
 
-function openNewClient() {
-  currentId = null;
-  document.getElementById('modal-client-title').textContent = '신규 고객 등록';
-  ['bride','groom','artist','phone','email','memo'].forEach(f=>document.getElementById('f-'+f).value='');
+// ── MODALS ──────────────────────────────────
+function openNewClient(){
+  currentId=null;
+  document.getElementById('modal-client-title').textContent='신규 고객 등록';
+  ['bride','groom','phone','email','memo'].forEach(f=>document.getElementById('f-'+f).value='');
   document.getElementById('f-type').value='스촬';
+  document.getElementById('f-artist').value='설민';
   document.getElementById('f-shoot').value='';
   document.getElementById('f-wedding').value='';
   document.getElementById('f-album').value='';
@@ -754,14 +668,14 @@ function openNewClient() {
   document.getElementById('modal-client').classList.add('open');
 }
 
-function editCurrentClient() {
-  const c=clients.find(x=>x.id===currentId); if(!c) return;
+function editCurrentClient(){
+  const c=clients.find(x=>x.id===currentId);if(!c)return;
   closeModal('modal-detail');
   document.getElementById('modal-client-title').textContent='고객 정보 수정';
   document.getElementById('f-bride').value=c.bride||'';
   document.getElementById('f-groom').value=c.groom||'';
   document.getElementById('f-type').value=c.type||'스촬';
-  document.getElementById('f-artist').value=c.artist||'';
+  document.getElementById('f-artist').value=c.artist||'설민';
   document.getElementById('f-shoot').value=c.shootDate||'';
   document.getElementById('f-wedding').value=c.weddingDate||'';
   document.getElementById('f-phone').value=c.phone||'';
@@ -772,61 +686,135 @@ function editCurrentClient() {
   document.getElementById('modal-client').classList.add('open');
 }
 
-async function saveClient() {
+async function saveClient(){
   const bride=document.getElementById('f-bride').value.trim();
   const groom=document.getElementById('f-groom').value.trim();
-  if(!bride||!groom){alert('신부/신랑 이름을 입력해주세요');return;}
-  const data={bride,groom,type:document.getElementById('f-type').value,artist:document.getElementById('f-artist').value.trim(),shootDate:document.getElementById('f-shoot').value,weddingDate:document.getElementById('f-wedding').value,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),album:document.getElementById('f-album').value,frame:document.getElementById('f-frame').value,memo:document.getElementById('f-memo').value.trim()};
-  if (currentId) {
+  if(!bride||!groom){alert('신부/신랑 이름 입력');return;}
+  const data={bride,groom,type:document.getElementById('f-type').value,artist:document.getElementById('f-artist').value,shootDate:document.getElementById('f-shoot').value,weddingDate:document.getElementById('f-wedding').value,phone:document.getElementById('f-phone').value.trim(),email:document.getElementById('f-email').value.trim(),album:document.getElementById('f-album').value,frame:document.getElementById('f-frame').value,memo:document.getElementById('f-memo').value.trim()};
+  if(currentId){
     const idx=clients.findIndex(x=>x.id===currentId);
     clients[idx]={...clients[idx],...data};
     await saveToSheet(clients[idx]);
   } else {
-    const newC={...data,id:genId(),stage:0,created:new Date().toISOString().slice(0,10),selectDeadline:'',sendDate:'',orderDate:'',shipDate:'',delivery:'',print:'',tracking:'',orderMemo:''};
-    STAGES.forEach((_,i)=>newC['stageDate_'+i]='');
-    clients.push(newC);
-    await saveToSheet(newC);
+    const nc={...data,id:genId(),stage:0,created:new Date().toISOString().slice(0,10),sendDate:'',selectDeadline:'',orderDate:'',shipDate:'',delivery:'',print:'',tracking:'',orderMemo:'',mainCheck:'',orderer:'',contactDate:'',extra:''};
+    STAGES.forEach((_,i)=>nc['stageDate_'+i]='');
+    clients.push(nc);
+    await saveToSheet(nc);
   }
-  closeModal('modal-client');
-  renderDashboard();
+  closeModal('modal-client');renderAll();
 }
 
-async function deleteCurrentClient() {
-  if(!confirm('삭제하시겠습니까? 구글 시트에서도 삭제됩니다.')) return;
+async function deleteCurrentClient(){
+  if(!confirm('삭제하시겠습니까?'))return;
   await deleteFromSheet(currentId);
   clients=clients.filter(c=>c.id!==currentId);
-  closeModal('modal-detail');
-  renderDashboard();
+  closeModal('modal-detail');renderAll();
 }
 
-function openDetail(id) {
+function openDetail(id){
   currentId=id;
-  const c=clients.find(x=>x.id===id); if(!c) return;
+  const c=clients.find(x=>x.id===id);if(!c)return;
   document.getElementById('detail-title').textContent=c.bride+' · '+c.groom;
-  document.getElementById('delete-btn').style.display = isAdmin ? '' : 'none';
-  renderTabInfo(c); renderTabProgress(c); renderTabOrder(c); renderTabMessage(c);
-  switchTab('info');
+  document.getElementById('delete-btn').style.display=isAdmin?'':'none';
+  renderProgress(c);renderOrder(c);renderMessage(c);renderInfo(c);
+  switchTab('progress');
   document.getElementById('modal-detail').classList.add('open');
 }
+function openDetailTab(id,tab){openDetail(id);setTimeout(()=>switchTab(tab),50);}
 
-function openDetailTab(id, tab) {
-  openDetail(id);
-  setTimeout(()=>switchTab(tab),50);
+function switchTab(tab){
+  document.querySelectorAll('.mtab').forEach((t,i)=>t.classList.toggle('active',['progress','order','message','info'][i]===tab));
+  ['progress','order','message','info'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('active',t===tab));
 }
 
-function renderTabInfo(c) {
+function renderProgress(c){
+  const tl=STAGES.map((s,i)=>{
+    const skipped=i===5&&c.stage>=6&&!c['stageDate_5'];
+    const done=i<c.stage&&!skipped,curr=i===c.stage;
+    const line=i<STAGES.length-1?`<div class="tl-line ${done?'done':''}"></div>`:'';
+    return `<div class="tl-step"><div class="tl-dot-wrap">
+      <div class="tl-dot ${done?'done':curr?'current':skipped?'skipped':''}" onclick="setStage('${c.id}',${i})" title="${s}">
+        ${done?'<i class="ti ti-check" style="font-size:9px"></i>':skipped?'—':i+1}
+      </div>
+      <div class="tl-label ${curr?'current':''}" style="${skipped?'text-decoration:line-through;color:var(--text3)':''}">${s}</div>
+    </div>${line}</div>`;
+  }).join('');
+
+  document.getElementById('tab-progress').innerHTML=`
+    <div style="margin-bottom:16px"><div style="font-size:10px;color:var(--text3);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.06em">진행 단계</div><div class="timeline">${tl}</div></div>
+    ${c.stage===0?`
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:500;color:var(--accent);margin-bottom:8px">원본 전달 날짜 입력 후 버튼 클릭</div>
+      <div style="display:flex;gap:8px"><input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1"><button class="btn btn-primary" onclick="saveSendDateAndAdvance('${c.id}')"><i class="ti ti-arrow-right"></i> 원본 전달 완료 → 셀렉 대기</button></div>
+    </div>`:`
+    <div style="margin-bottom:14px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:var(--text3)">원본 전달 날짜</span>
+      <input type="date" id="send-date-inp" value="${c.sendDate||''}" style="width:160px" onchange="saveSendDate('${c.id}')">
+      <span style="font-size:10px;color:var(--text3)">변경 시 자동 저장</span>
+    </div>`}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      ${c.stage===4?`
+        <button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-refresh"></i> 재수정 있음</button>
+        <button class="btn btn-success" onclick="skipToConfirm('${c.id}')"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
+      `:c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
+      ${c.stage===8?`<div style="font-size:12px;color:var(--success);font-weight:500">✓ 완료</div>`:''}
+      ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
+    </div>
+    <div class="detail-section"><div class="detail-section-title">단계별 날짜 기록</div>
+      ${STAGES.map((s,i)=>{const d=c['stageDate_'+i];const disp=d?fDate(d.length>10?d.slice(0,10):d):'-';return`<div class="detail-row"><span class="detail-key">${s}</span><span class="detail-val">${disp}</span></div>`;}).join('')}
+    </div>`;
+}
+
+function renderOrder(c){
+  const mainChecked=c.mainCheck==='true'||c.mainCheck===true;
+  document.getElementById('tab-order').innerHTML=`
+  <div style="background:rgba(200,169,126,0.08);border:1px solid rgba(200,169,126,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
+    <input type="checkbox" id="od-mainCheck" ${mainChecked?'checked':''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)">
+    <div><div style="font-size:12px;font-weight:500;color:var(--accent)">메인 체크</div><div style="font-size:11px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능</div></div>
+  </div>
+  <div class="form-grid">
+    <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
+    <div class="form-group"><label>발주자</label><input type="text" id="od-orderer" value="${c.orderer||''}" placeholder="담당자"></div>
+    <div class="form-group"><label>배송일/방문일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
+    <div class="form-group"><label>운송 방법</label>
+      <select id="od-delivery" style="width:100%">
+        <option ${c.delivery==='방문 수령'?'selected':''}>방문 수령</option>
+        <option ${c.delivery==='택배'?'selected':''}>택배</option>
+        <option ${c.delivery==='퀵'?'selected':''}>퀵</option>
+      </select>
+    </div>
+    <div class="form-group"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="운송장 번호"></div>
+    <div class="form-group"><label>고객 연락 날짜</label><input type="date" id="od-contactDate" value="${c.contactDate||''}"></div>
+    <div class="form-group"><label>앨범</label><input type="text" id="od-album2" value="${c.album||''}" placeholder="1권20p"></div>
+    <div class="form-group"><label>액자</label><input type="text" id="od-frame2" value="${c.frame||''}" placeholder="12x18inch"></div>
+    <div class="form-group"><label>인화 수량</label><input type="text" id="od-print" value="${c.print||''}" placeholder="20장"></div>
+    <div class="form-group"><label>기타 제작물</label><input type="text" id="od-extra" value="${c.extra||''}" placeholder="스냅합본 등"></div>
+    <div class="form-group full"><label>발주 메모</label><textarea id="od-orderMemo">${c.orderMemo||''}</textarea></div>
+  </div>
+  <div style="margin-top:12px;display:flex;justify-content:flex-end">
+    <button id="order-save-btn" class="btn btn-primary" onclick="saveOrderData('${c.id}')"><i class="ti ti-device-floppy"></i> 발주 정보 저장</button>
+  </div>`;
+}
+
+function renderMessage(c){
   const dl=calcDeadline(c);
-  const dl2=calcDeadlineSecond(c);
-  const days=daysUntil(dl);
-  const days2=dl2?daysUntil(dl2):null;
-  const dc=ddayCls(days,c.stage);
-  const dc2=ddayCls(days2,c.stage);
+  const months=c.type==='본식'?2:1;
+  const m1=`안녕하세요, ${c.bride}님 😊\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 다가오고 있어 안내 드립니다.\n\n${dl?dl.replace(/-/g,'.'):'기한'} 까지 셀렉이 도착하지 않을 경우 담당 작가가 직접 셀렉하여 작업을 진행하게 됩니다.\n\n빠른 확인 부탁드립니다 🙏\n감사합니다.\nTAKEMIND`;
+  const m2=`안녕하세요, ${c.bride}님.\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 경과하였습니다.\n계약 조건에 따라 담당 작가가 직접 셀렉하여 작업을 진행하게 되었음을 안내 드립니다.\n\n작업 완료 후 다시 연락드리겠습니다.\n감사합니다.\nTAKEMIND`;
+  const m3=`안녕하세요,\n\n리터칭 작업 요청 드립니다.\n\n고객명: ${c.bride} · ${c.groom}\n촬영일: ${fDate(c.shootDate)}\n상품: ${c.type}\n\n색보정 파일 기준으로 진행해 주세요.\n감사합니다.\nTAKEMIND ${c.artist||''}`;
+  document.getElementById('tab-message').innerHTML=`<div style="display:flex;flex-direction:column;gap:14px">
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 셀렉 기한 임박</div><div class="msg-box" id="msg1">${m1}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg1')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 기한 초과 (임의 셀렉)</div><div class="msg-box" id="msg2">${m2}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg2')"><i class="ti ti-copy"></i></button></div></div>
+    <div><div style="font-size:10px;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">리터쳐 작업 의뢰</div><div class="msg-box" id="msg3">${m3}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg3')"><i class="ti ti-copy"></i></button></div></div>
+  </div>`;
+}
+
+function renderInfo(c){
+  const dl=calcDeadline(c);const dl2=calcDeadline2(c);
+  const days=daysUntil(dl);const days2=dl2?daysUntil(dl2):null;
   let alert='';
-  if(c.stage===1&&days!==null&&days<=2) alert+=`<div class="alert-box ${days<0?'':'warn'}" style="margin-bottom:8px"><i class="ti ${days<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days<0?'스촬 셀렉 기한 초과':'스촬 셀렉 기한 '+ddayStr(days)}</strong>${days<0?'담당 작가가 직접 셀렉하여 진행하세요.':'이틀 이내 마감. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
-  if(dl2&&c.stage===1&&days2!==null&&days2<=2) alert+=`<div class="alert-box ${days2<0?'':'warn'}" style="margin-bottom:12px"><i class="ti ${days2<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days2<0?'본식 셀렉 기한 초과':'본식 셀렉 기한 '+ddayStr(days2)}</strong>${days2<0?'담당 작가가 직접 셀렉하여 진행하세요.':'이틀 이내 마감. 고객에게 안내 메시지를 보내세요.'}</p></div>`;
-  const deadlineVal = c.stage===1 ? (dl2
-    ? `<div style="font-size:12px">스촬: ${dl||'-'} (${ddayStr(days)})</div><div style="font-size:12px">본식: ${dl2} (${ddayStr(days2)})</div>`
-    : `${dl||'-'} (${ddayStr(days)})`) : '-';
+  if(c.stage===1&&days!==null&&days<=2)alert+=`<div class="alert-box ${days<0?'':'warn'}" style="margin-bottom:8px"><i class="ti ${days<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>${days<0?'셀렉 기한 초과':'셀렉 D-'+days}</strong>${days<0?'즉시 임의 셀렉 진행':'이틀 이내 마감'}</p></div>`;
+  if(dl2&&c.stage===1&&days2!==null&&days2<=2)alert+=`<div class="alert-box ${days2<0?'':'warn'}" style="margin-bottom:8px"><i class="ti ${days2<0?'ti-alert-circle':'ti-clock'}"></i><p><strong>본식 ${days2<0?'기한 초과':'D-'+days2}</strong></p></div>`;
   document.getElementById('tab-info').innerHTML=alert+`<div class="detail-section">
     <div class="detail-section-title">기본 정보</div>
     <div class="detail-row"><span class="detail-key">신부</span><span class="detail-val">${c.bride}</span></div>
@@ -839,165 +827,58 @@ function renderTabInfo(c) {
     <div class="detail-row"><span class="detail-key">이메일</span><span class="detail-val">${c.email||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">앨범</span><span class="detail-val">${c.album||'-'}</span></div>
     <div class="detail-row"><span class="detail-key">액자</span><span class="detail-val">${c.frame||'-'}</span></div>
-    <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val">${deadlineVal}</span></div>
+    <div class="detail-row"><span class="detail-key">셀렉 마감</span><span class="detail-val">${c.stage===1?(dl||'-')+' ('+ddayStr(days)+')':'-'}${dl2&&c.stage===1?' / 본식 '+dl2+' ('+ddayStr(days2)+')':''}</span></div>
     <div class="detail-row"><span class="detail-key">메모</span><span class="detail-val" style="white-space:pre-wrap">${c.memo||'-'}</span></div>
   </div>`;
 }
 
-function renderTabProgress(c) {
-  const tl=STAGES.map((s,i)=>{
-    const skipped = i===5 && c.stage>=6 && !c['stageDate_5'];
-    const done=i<c.stage && !skipped, curr=i===c.stage;
-    const line=i<STAGES.length-1?`<div class="tl-line ${done?'done':''}"></div>`:'';
-    const dotStyle = skipped ? 'background:var(--bg4);border-color:var(--border2);color:var(--text3)' : '';
-    return `<div class="tl-step"><div class="tl-dot-wrap"><div class="tl-dot ${done?'done':curr?'current':''}" style="${dotStyle}" onclick="setStage('${c.id}',${i})" title="${s}">${done?'<i class="ti ti-check" style="font-size:12px"></i>':skipped?'—':i+1}</div><div class="tl-label ${curr?'current':''}" style="${skipped?'color:var(--text3);text-decoration:line-through':''}">${s}</div></div>${line}</div>`;
-  }).join('');
-  document.getElementById('tab-progress').innerHTML=`
-    <div style="margin-bottom:20px"><div class="detail-section-title" style="margin-bottom:12px">진행 단계 — 클릭하면 해당 단계로 이동</div><div class="timeline">${tl}</div></div>
-    ${c.stage===0 ? `
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px;">
-      <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--accent)">원본 전달 날짜 입력 후 버튼 클릭</div>
-      <div style="display:flex;gap:8px">
-        <input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1">
-        <button class="btn btn-primary" onclick="saveSendDateAndAdvance('${c.id}')"><i class="ti ti-arrow-right"></i> 원본 전달 완료 → 셀렉 대기</button>
-      </div>
-    </div>` : `
-    <div style="margin-bottom:16px;">
-      <label style="font-size:12px;color:var(--text2);display:block;margin-bottom:6px;">원본 전달 날짜</label>
-      <div style="display:flex;gap:8px"><input type="date" id="send-date-inp" value="${c.sendDate||''}" style="flex:1"><button class="btn" onclick="saveSendDate('${c.id}')"><i class="ti ti-device-floppy"></i> 저장</button></div>
-    </div>`}
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      ${c.stage===4 ? `
-        <button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-refresh"></i> 재수정 있음</button>
-        <button class="btn btn-primary" style="background:var(--success);border-color:var(--success)" onclick="skipToConfirm('${c.id}')"><i class="ti ti-check"></i> 재수정 없음 → 컨펌 완료</button>
-      ` : c.stage>0&&c.stage<8?`<button class="btn btn-primary" onclick="advanceStage('${c.id}')"><i class="ti ti-arrow-right"></i> 다음: ${STAGES[c.stage+1]||'완료'}</button>`:''}
-      ${c.stage===8?`<div style="font-size:13px;color:var(--success);font-weight:500;padding:8px 0">✓ 완료된 건입니다</div>`:''}
-      ${c.stage>0?`<button class="btn" onclick="setStage('${c.id}',${c.stage-1})"><i class="ti ti-arrow-left"></i> 이전 단계</button>`:''}
-    </div>
-    <div class="detail-section"><div class="detail-section-title">단계별 날짜 기록</div>
-      ${STAGES.map((s,i)=>{const d=c['stageDate_'+i];const disp=d?fDate(d.length>10?d.slice(0,10):d):'-';return`<div class="detail-row"><span class="detail-key">${s}</span><span class="detail-val" style="font-size:12px;color:var(--text2)">${disp}</span></div>`;}).join('')}
-    </div>`;
-}
-
-function renderTabOrder(c) {
-  const mainChecked = c.mainCheck==='true'||c.mainCheck===true;
-  document.getElementById('tab-order').innerHTML=`
-  <div style="background:rgba(200,169,126,0.08);border:1px solid rgba(200,169,126,0.25);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
-    <input type="checkbox" id="od-mainCheck" ${mainChecked?'checked':''} style="width:18px;height:18px;cursor:pointer;accent-color:var(--accent);">
-    <div>
-      <div style="font-size:13px;font-weight:500;color:var(--accent)">메인 체크</div>
-      <div style="font-size:12px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능 상태</div>
-    </div>
-  </div>
-  <div class="form-grid">
-    <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
-    <div class="form-group"><label>발주자</label><input type="text" id="od-orderer" value="${c.orderer||''}" placeholder="담당자 이름"></div>
-    <div class="form-group"><label>배송일 / 방문일</label><input type="date" id="od-shipDate" value="${c.shipDate||''}"></div>
-    <div class="form-group"><label>운송 방법</label>
-      <select id="od-delivery" style="width:100%">
-        <option ${c.delivery==='방문 수령'?'selected':''}>방문 수령</option>
-        <option ${c.delivery==='택배'?'selected':''}>택배</option>
-        <option ${c.delivery==='퀵'?'selected':''}>퀵</option>
-      </select>
-    </div>
-    <div class="form-group"><label>운송장 번호</label><input type="text" id="od-tracking" value="${c.tracking||''}" placeholder="택배 운송장 번호"></div>
-    <div class="form-group"><label>신랑신부 연락 날짜</label><input type="date" id="od-contactDate" value="${c.contactDate||''}"></div>
-    <div class="form-group"><label>앨범</label><input type="text" id="od-album2" value="${c.album||''}" placeholder="예: 1/20"></div>
-    <div class="form-group"><label>액자</label><input type="text" id="od-frame2" value="${c.frame||''}" placeholder="예: 12x18"></div>
-    <div class="form-group"><label>인화 수량</label><input type="text" id="od-print" value="${c.print||''}" placeholder="예: 20장"></div>
-    <div class="form-group"><label>기타 제작물</label><input type="text" id="od-extra" value="${c.extra||''}" placeholder="예: 스냅합본 등"></div>
-    <div class="form-group full"><label>발주 메모</label><textarea id="od-orderMemo">${c.orderMemo||''}</textarea></div>
-  </div>
-  <div style="margin-top:16px;display:flex;justify-content:flex-end">
-    <button id="order-save-btn" class="btn btn-primary" onclick="saveOrderData('${c.id}')"><i class="ti ti-device-floppy"></i> 발주 정보 저장</button>
-  </div>`;
-}
-
-function renderTabMessage(c) {
-  const dl=calcDeadline(c);
-  const months=c.type==='본식'?2:1;
-  const m1=`안녕하세요, ${c.bride}님 😊\nTAKEMIND입니다.\n\n원본 사진 전달 후 ${months}개월이 다가오고 있어 안내 드립니다.\n\n계약 시 안내드린 대로, ${dl?dl.replace(/-/g,'.'):'기한'} 까지 셀렉이 도착하지 않을 경우 담당 작가가 직접 셀렉하여 작업을 진행하게 됩니다.\n\n빠른 확인 부탁드립니다 🙏\n감사합니다.\nTAKEMIND`;
-  const m2=`안녕하세요, ${c.bride}님.\nTAKEMIND입니다.\n\n원본 사진을 전달해 드린 지 ${months}개월이 경과하였습니다.\n계약 조건에 따라 담당 작가가 직접 셀렉하여 작업을 진행하게 되었음을 안내 드립니다.\n\n작업 완료 후 다시 연락드리겠습니다.\n감사합니다.\nTAKEMIND`;
-  const m3=`안녕하세요,\n\n다음 파일 리터칭 작업 요청 드립니다.\n\n고객명: ${c.bride} · ${c.groom}\n촬영일: ${fDate(c.shootDate)}\n상품: ${c.type}\n\n색보정 파일 기준으로 진행해 주세요.\n감사합니다.\nTAKEMIND ${c.artist||''}`;
-  document.getElementById('tab-message').innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">
-    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 셀렉 기한 임박</div><div class="msg-box" id="msg1">${m1}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg1')"><i class="ti ti-copy"></i></button></div></div>
-    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">고객 안내 — 기한 초과 (임의 셀렉 진행)</div><div class="msg-box" id="msg2">${m2}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg2')"><i class="ti ti-copy"></i></button></div></div>
-    <div><div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">리터쳐 작업 의뢰</div><div class="msg-box" id="msg3">${m3}<button class="btn btn-sm copy-btn" onclick="copyMsg('msg3')"><i class="ti ti-copy"></i></button></div></div>
-  </div>`;
-}
-
-function copyMsg(id) {
+function copyMsg(id){
   const el=document.getElementById(id);
   const btn=el.querySelector('.copy-btn');
   const text=el.childNodes[0].textContent.trim();
-  navigator.clipboard.writeText(text).then(()=>{
-    btn.innerHTML='<i class="ti ti-check"></i>';
-    setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);
-  });
+  navigator.clipboard.writeText(text).then(()=>{btn.innerHTML='<i class="ti ti-check"></i>';setTimeout(()=>btn.innerHTML='<i class="ti ti-copy"></i>',1500);});
 }
 
-async function skipToConfirm(id) {
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  // 재수정 중(5단계) 날짜 기록 없이 컨펌 완료(6단계)로 바로 이동
-  c['stageDate_5'] = '';
-  c['stageDate_6'] = new Date().toISOString().slice(0,10);
-  c.stage = 6;
-  await saveToSheet(c);
-  renderTabProgress(c); renderTabInfo(c); renderDashboard();
+async function saveSendDateAndAdvance(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  const dateVal=document.getElementById('send-date-inp').value;
+  if(!dateVal){alert('날짜를 입력해주세요');return;}
+  c.sendDate=dateVal;c.selectDeadline=calcDeadline(c);c['stageDate_0']=dateVal;c.stage=1;
+  await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
 
-async function advanceStage(id) {
-  const c=clients.find(x=>x.id===id); if(!c||c.stage>=8) return;
-  c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);
-  c.stage++;
-  if(c.stage===7) c.orderDate=new Date().toISOString().slice(0,10);
-  await saveToSheet(c);
-  renderTabProgress(c); renderTabInfo(c); renderDashboard();
-}
-
-async function setStage(id, stage) {
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  // 이전 단계로 돌릴 때 해당 단계 이후 날짜 기록 삭제
-  if(stage < c.stage) {
-    for(let i=stage; i<STAGES.length; i++) {
-      c['stageDate_'+i] = '';
-    }
-  }
-  c.stage=stage;
-  await saveToSheet(c);
-  renderTabProgress(c); renderTabInfo(c); renderDashboard();
-}
-
-async function saveSendDateAndAdvance(id) {
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  const dateVal = document.getElementById('send-date-inp').value;
-  if(!dateVal){ alert('날짜를 입력해주세요'); return; }
-  const btn = document.querySelector('#tab-progress .btn-primary');
-  if(btn){ btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…'; }
-  c.sendDate = dateVal;
-  c.selectDeadline = calcDeadline(c);
-  c['stageDate_0'] = dateVal;
-  c.stage = 1;
-  await saveToSheet(c);
-  renderTabProgress(c); renderTabInfo(c); renderDashboard();
-}
-
-async function saveSendDate(id) {
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  const btn = document.querySelector('#tab-progress .btn');
-  if(btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…'; }
+async function saveSendDate(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
   c.sendDate=document.getElementById('send-date-inp').value;
   c.selectDeadline=calcDeadline(c);
-  await saveToSheet(c);
-  if(btn) { btn.innerHTML='<i class="ti ti-check"></i> 저장됨'; btn.style.background='var(--success)'; btn.style.color='#fff'; btn.style.borderColor='var(--success)'; }
-  setTimeout(()=>{ if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-device-floppy"></i> 저장';btn.style.background='';btn.style.color='';btn.style.borderColor='';} }, 2000);
-  renderTabInfo(c); renderDashboard();
+  await saveToSheet(c);renderInfo(c);renderAll();
 }
 
-async function saveOrderData(id) {
-  const c=clients.find(x=>x.id===id); if(!c) return;
-  const btn = document.getElementById('order-save-btn');
-  if(btn) { btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…'; }
+async function advanceStage(id){
+  const c=clients.find(x=>x.id===id);if(!c||c.stage>=8)return;
+  c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);
+  c.stage++;
+  if(c.stage===7)c.orderDate=c.orderDate||new Date().toISOString().slice(0,10);
+  await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
+}
+
+async function skipToConfirm(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  c['stageDate_5']='';c['stageDate_6']=new Date().toISOString().slice(0,10);c.stage=6;
+  await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
+}
+
+async function setStage(id,stage){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  if(stage<c.stage)for(let i=stage;i<STAGES.length;i++)c['stageDate_'+i]='';
+  c.stage=stage;
+  await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
+}
+
+async function saveOrderData(id){
+  const c=clients.find(x=>x.id===id);if(!c)return;
+  const btn=document.getElementById('order-save-btn');
+  if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…';}
   c.mainCheck=document.getElementById('od-mainCheck').checked;
   c.orderDate=document.getElementById('od-orderDate').value;
   c.orderer=document.getElementById('od-orderer').value;
@@ -1011,68 +892,12 @@ async function saveOrderData(id) {
   c.extra=document.getElementById('od-extra').value;
   c.orderMemo=document.getElementById('od-orderMemo').value;
   await saveToSheet(c);
-  if(btn) { btn.innerHTML='<i class="ti ti-check"></i> 저장됨'; btn.style.background='var(--success)'; btn.style.color='#fff'; btn.style.borderColor='var(--success)'; }
-  setTimeout(()=>{ if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-device-floppy"></i> 발주 정보 저장';btn.style.background='';btn.style.color='';btn.style.borderColor='';} }, 2000);
+  if(btn){btn.innerHTML='<i class="ti ti-check"></i> 저장됨';btn.style.background='var(--success)';btn.style.color='#fff';btn.style.borderColor='var(--success)';}
+  setTimeout(()=>{if(btn){btn.disabled=false;btn.innerHTML='<i class="ti ti-device-floppy"></i> 발주 정보 저장';btn.style.background='';btn.style.color='';btn.style.borderColor='';}},2000);
+  renderAll();
 }
 
-function switchTab(tab) {
-  document.querySelectorAll('.modal-tab').forEach((t,i)=>{
-    t.classList.toggle('active',['info','progress','order','message'][i]===tab);
-  });
-  ['info','progress','order','message'].forEach(t=>{
-    document.getElementById('tab-'+t).classList.toggle('active',t===tab);
-  });
-}
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-const PW_ADMIN = 'sdgkjFfjsf12';
-const PW_STAFF = 'dsgadgkeE23!';
-let isAdmin = false;
-
-// 클릭 사운드
-function playClick() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value = 800;
-    o.type = 'sine';
-    g.gain.setValueAtTime(0.15, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-    o.start(ctx.currentTime);
-    o.stop(ctx.currentTime + 0.08);
-  } catch(e) {}
-}
-
-document.addEventListener('click', e => {
-  if (e.target.closest('.btn') || e.target.closest('.sidebar-item') || e.target.closest('.tl-dot')) {
-    playClick();
-  }
-});
-
-function checkPassword() {
-  const val = document.getElementById('lock-input').value;
-  if (val === PW_ADMIN) {
-    isAdmin = true;
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('loading-overlay').style.display = 'flex';
-    loadFromSheet();
-  } else if (val === PW_STAFF) {
-    isAdmin = false;
-    document.getElementById('lock-screen').style.display = 'none';
-    document.getElementById('loading-overlay').style.display = 'flex';
-    loadFromSheet();
-  } else {
-    document.getElementById('lock-error').textContent = '비밀번호가 틀렸습니다';
-    document.getElementById('lock-input').value = '';
-    document.getElementById('lock-input').focus();
-  }
-}
-
-// ── INIT ────────────────────────────────────────────
-// loadFromSheet called after password check
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 </script>
 </body>
 </html>

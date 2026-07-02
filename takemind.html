@@ -633,8 +633,8 @@ function renderMain(){
       <td style="color:var(--text2)">${fDate(c.shootDate)}</td>
       <td style="color:var(--text2)">${fDate(c.weddingDate)}</td>
       <td class="group-start"><span class="stage-pill ${SC[c.stage]}">${STAGES[c.stage]}</span></td>
-      <td style="text-align:center" onclick="event.stopPropagation();toggleMainCheck('${c.id}')">
-        <div class="check-circle ${mainCheck?'on':''}">${mainCheck?'<i class="ti ti-check"></i>':''}</div>
+      <td style="text-align:center">
+        <div class="check-circle ${mainCheck?'on':''}" title="${mainCheck?'컨펌 완료':'미완료'}" style="cursor:default">${mainCheck?'<i class="ti ti-check"></i>':''}</div>
       </td>
       <td class="group-start" style="color:var(--text2);text-align:center">${albumQty||'-'}</td>
       <td style="color:var(--text2);text-align:center">${albumPage||'-'}</td>
@@ -759,8 +759,8 @@ function renderOrder(c){
   const mainChecked=c.mainCheck==='true'||c.mainCheck===true;
   document.getElementById('tab-order').innerHTML=`
   <div style="background:var(--accent-bg);border:1px solid rgba(139,105,20,0.2);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;">
-    <input type="checkbox" id="od-mainCheck" ${mainChecked?'checked':''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)">
-    <div><div style="font-size:12px;font-weight:600;color:var(--accent)">메인 체크</div><div style="font-size:11px;color:var(--text3)">NAS 확인 완료 → 제작 발주 가능 상태</div></div>
+    <div class="check-circle ${mainChecked?'on':''}" style="cursor:default;flex-shrink:0">${mainChecked?'<i class="ti ti-check"></i>':''}</div>
+    <div><div style="font-size:12px;font-weight:600;color:var(--accent)">메인 체크 — ${mainChecked?'컨펌 완료 ✓':'컨펌 대기 중'}</div><div style="font-size:11px;color:var(--text3)">컨펌 완료 단계가 되면 자동으로 체크됩니다</div></div>
   </div>
   <div class="form-grid">
     <div class="form-group"><label>발주 날짜</label><input type="date" id="od-orderDate" value="${c.orderDate||''}"></div>
@@ -846,12 +846,14 @@ async function saveSendDate(id){
 async function advanceStage(id){
   const c=clients.find(x=>x.id===id);if(!c||c.stage>=8)return;
   c['stageDate_'+c.stage]=new Date().toISOString().slice(0,10);c.stage++;
+  if(c.stage===6)c.mainCheck=true; // 컨펌 완료 시 메인체크 자동 ON
   if(c.stage===7)c.orderDate=c.orderDate||new Date().toISOString().slice(0,10);
   await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
 async function skipToConfirm(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
-  c['stageDate_5']='';c['stageDate_6']=new Date().toISOString().slice(0,10);c.stage=6;
+  c['stageDate_5']='';c['stageDate_6']=new Date().toISOString().slice(0,10);
+  c.stage=6;c.mainCheck=true; // 컨펌 완료 시 메인체크 자동 ON
   await saveToSheet(c);renderProgress(c);renderInfo(c);renderAll();
 }
 async function setStage(id,stage){
@@ -863,7 +865,6 @@ async function saveOrderData(id){
   const c=clients.find(x=>x.id===id);if(!c)return;
   const btn=document.getElementById('order-save-btn');
   if(btn){btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> 저장 중…';}
-  c.mainCheck=document.getElementById('od-mainCheck').checked;
   c.orderDate=document.getElementById('od-orderDate').value;
   c.orderer=document.getElementById('od-orderer').value;
   c.shipDate=document.getElementById('od-shipDate').value;
